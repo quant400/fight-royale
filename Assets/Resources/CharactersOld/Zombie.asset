@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ed2e787b5c3362489f587683dc10c55, type: 3}
+  m_Name: Zombie
+  m_EditorClassIdentifier: 
+  Name: Zombie
+  Mesh: {fileID: -1283820568726516060, guid: 431b4f3847b39e64abaa75675f7571fa, type: 3}
+  Texture: {fileID: 2800000, guid: 874730a05fd44704d9e865b525df2e41, type: 3}

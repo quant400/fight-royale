@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ed2e787b5c3362489f587683dc10c55, type: 3}
+  m_Name: Awoken One
+  m_EditorClassIdentifier: 
+  Name: Awoken One
+  Mesh: {fileID: -4716709658611782749, guid: d44813aa5b5c2b247b20f8b62959a79c, type: 3}
+  Texture: {fileID: 2800000, guid: ef3a78222d5c0eb4ba88d6d68d2e627c, type: 3}

@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ed2e787b5c3362489f587683dc10c55, type: 3}
+  m_Name: mr perfect
+  m_EditorClassIdentifier: 
+  Name: mr perfect
+  Asset: {fileID: 919132149155446097, guid: 502b9eabed00d3e4fa957ae300f10d83, type: 3}
+  Texture: {fileID: 2800000, guid: 7667438c612aed54b8c5f8af14c0e16d, type: 3}

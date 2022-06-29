@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="a2603b59-a38b-44ef-ad17-83d357ac5c84" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.CFC-BattleRoyale/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.CFC-BattleRoyale/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Art/Animations/PlayFabTP.controller" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Art/Animations/PlayFabTP.controller" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ExternalKit/MultiplayerPlayfabMirror/Prefabs/Multiplayer.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ExternalKit/MultiplayerPlayfabMirror/Prefabs/Multiplayer.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/InputSystem/CFCInputs.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/InputSystem/CFCInputs.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Environment/Academy/cadeira.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Environment/Academy/cadeira.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Players/Player_Prefab.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Players/Player_Prefab.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/MenuManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/MenuManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/MultiplayerPlayfab/CFCAuth.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/MultiplayerPlayfab/CFCAuth.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/MultiplayerPlayfab/PlayerBehaviour.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/MultiplayerPlayfab/PlayerBehaviour.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TPFightingController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/TPFightingController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TimerManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/TimerManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ThrowableBehavior.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ThrowableBehavior.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Scenes/Game/Game.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Scenes/Game/Game.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Scenes/Game/Menu.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Scenes/Game/Menu.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="ProjectId" id="29jEJCSadKfdutxkDqGsqGg1oMg" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a2603b59-a38b-44ef-ad17-83d357ac5c84" name="Changes" comment="" />
+      <created>1653618026526</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1653618026526</updated>
+      <workItem from="1653618041871" duration="1854000" />
+      <workItem from="1653619999629" duration="1848000" />
+      <workItem from="1653622632469" duration="1470000" />
+      <workItem from="1653929841750" duration="654000" />
+      <workItem from="1653983644013" duration="1030000" />
+      <workItem from="1654063205265" duration="1769000" />
+      <workItem from="1654065055856" duration="1739000" />
+      <workItem from="1654066891259" duration="1731000" />
+      <workItem from="1654068701687" duration="579000" />
+      <workItem from="1654107640676" duration="4011000" />
+      <workItem from="1654145140026" duration="1597000" />
+      <workItem from="1654147056654" duration="1767000" />
+      <workItem from="1654148910340" duration="1844000" />
+      <workItem from="1654402373012" duration="1818000" />
+      <workItem from="1654404244397" duration="1798000" />
+      <workItem from="1654406179020" duration="1888000" />
+      <workItem from="1654487998498" duration="1756000" />
+      <workItem from="1654489819739" duration="1822000" />
+      <workItem from="1654491810116" duration="1944000" />
+      <workItem from="1654493808077" duration="1771000" />
+      <workItem from="1654495677339" duration="1770000" />
+      <workItem from="1654497520677" duration="1756000" />
+      <workItem from="1654499326904" duration="802000" />
+      <workItem from="1654663641111" duration="600000" />
+      <workItem from="1654665904268" duration="1772000" />
+      <workItem from="1654667773309" duration="1950000" />
+      <workItem from="1654669769996" duration="1766000" />
+      <workItem from="1654671587908" duration="1816000" />
+      <workItem from="1654673455500" duration="1762000" />
+      <workItem from="1654675264036" duration="1797000" />
+      <workItem from="1654677163043" duration="1265000" />
+      <workItem from="1654755375972" duration="1648000" />
+      <workItem from="1654757191741" duration="1831000" />
+      <workItem from="1654759094034" duration="1194000" />
+      <workItem from="1654833383633" duration="1817000" />
+      <workItem from="1654835410322" duration="902000" />
+      <workItem from="1654838244115" duration="1802000" />
+      <workItem from="1654840159410" duration="1829000" />
+      <workItem from="1654842135525" duration="1771000" />
+      <workItem from="1655614955265" duration="1643000" />
+      <workItem from="1655616809394" duration="1763000" />
+      <workItem from="1655618635824" duration="1767000" />
+      <workItem from="1655620452970" duration="1840000" />
+      <workItem from="1655622370986" duration="1741000" />
+      <workItem from="1655624164758" duration="661000" />
+      <workItem from="1655697048121" duration="1766000" />
+      <workItem from="1655698859288" duration="1772000" />
+      <workItem from="1655700768066" duration="1742000" />
+      <workItem from="1655702585924" duration="1761000" />
+      <workItem from="1655704531305" duration="1777000" />
+      <workItem from="1655706687341" duration="1444000" />
+      <workItem from="1655708600545" duration="1786000" />
+      <workItem from="1655712283347" duration="322000" />
+      <workItem from="1656302684811" duration="1668000" />
+      <workItem from="1656304505696" duration="1407000" />
+      <workItem from="1656306429318" duration="1762000" />
+      <workItem from="1656308473336" duration="1841000" />
+      <workItem from="1656310390145" duration="516000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+</project>

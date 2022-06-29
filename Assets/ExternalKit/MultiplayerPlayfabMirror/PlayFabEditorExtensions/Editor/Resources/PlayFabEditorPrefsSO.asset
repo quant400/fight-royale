@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 756b696c8f7152541ae2d4176fd85ba2, type: 3}
+  m_Name: PlayFabEditorPrefsSO
+  m_EditorClassIdentifier: 
+  DevAccountEmail: pro@cryptofightclub.io
+  DevAccountToken: 1xw9pxi4ytgnqb1r6673xriur4ayjwnpe8ff6d5dqi8yn6qc8fdbxininck5iqjwenmisirifwttqiwjzru8mo1sbi944u6n4ezmzmsfajsmye7izrr1a1d7ha9u93tmqtsksjjkdppx8mi7pcqcsa8wxnermnxszwy8f85wnfr98fh3pffs7gnikxfmyety8mayp19s
+  SelectedStudio: My Game Studio
+  SdkPath: Assets/ExternalKit/MultiplayerPlayfabMirror/PlayFabSdk
+  EdExPath: 
+  LocalCloudScriptPath: 
+  PanelIsShown: 0
+  curMainMenuIdx: 1
+  curSubMenuIdx: 0

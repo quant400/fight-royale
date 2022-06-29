@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ed2e787b5c3362489f587683dc10c55, type: 3}
+  m_Name: Postal
+  m_EditorClassIdentifier: 
+  Name: Postal
+  Mesh: {fileID: 6977009407566167325, guid: fdb442bd4c9558f439a19931c32c040a, type: 3}
+  Texture: {fileID: 2800000, guid: 445c352c03a936a4e94e9b254e42890b, type: 3}

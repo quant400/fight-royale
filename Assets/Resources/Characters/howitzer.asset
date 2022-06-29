@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ed2e787b5c3362489f587683dc10c55, type: 3}
+  m_Name: howitzer
+  m_EditorClassIdentifier: 
+  Name: howitzer
+  Asset: {fileID: 919132149155446097, guid: ebcb4802a08c55e43aab5e95f84b62e9, type: 3}
+  Texture: {fileID: 2800000, guid: 466e8cc7e5203984ca6b0f39fc1e5c79, type: 3}

@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ed2e787b5c3362489f587683dc10c55, type: 3}
+  m_Name: Marble Man
+  m_EditorClassIdentifier: 
+  Name: Marble Man
+  Mesh: {fileID: -7149496252668368379, guid: ae1784ffc8254fa44b12211dc275ca52, type: 3}
+  Texture: {fileID: 2800000, guid: 6e33bba0992f736429c15e3ef9c74220, type: 3}
+  isAvailable: 1

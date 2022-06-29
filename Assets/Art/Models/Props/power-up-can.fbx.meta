@@ -1,0 +1,190 @@
+fileFormatVersion: 2
+guid: 5ab51d3cc75ed464b871490c21f58021
+ModelImporter:
+  serializedVersion: 20200
+  internalIDToNameTable:
+  - first:
+      74: 1921799323460640223
+    second: power up can|detail-can
+  - first:
+      74: -809031174767580868
+    second: power up can|detalhe.001Action
+  - first:
+      74: -5443977080664198599
+    second: power up can|logo-power-up-can
+  - first:
+      74: 673242084522914233
+    second: power up can|power up canAction
+  - first:
+      74: -2303292829817345119
+    second: detalhe|detail-can
+  - first:
+      74: -4580857788358313904
+    second: detalhe|detalhe.001Action
+  - first:
+      74: 5961183039480072352
+    second: detalhe|logo-power-up-can
+  - first:
+      74: -3673841207404564862
+    second: detalhe|power up canAction
+  - first:
+      74: 1193904063910362704
+    second: power up can-log|detail-can
+  - first:
+      74: 5072709301140478081
+    second: power up can-log|detalhe.001Action
+  - first:
+      74: -6687894068241706649
+    second: power up can-log|logo-power-up-can
+  - first:
+      74: -5253184689417316247
+    second: power up can-log|power up canAction
+  - first:
+      74: -262946591416095580
+    second: detalhe.001|detail-can
+  - first:
+      74: -7221990688378934961
+    second: detalhe.001|detalhe.001Action
+  - first:
+      74: -6149399161847899122
+    second: detalhe.001|logo-power-up-can
+  - first:
+      74: 7096101120432711303
+    second: detalhe.001|power up canAction
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: bg_detail
+    second: {fileID: 2100000, guid: b2137f9d37f6ece4887943269b7d6c3e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: icon_detail
+    second: {fileID: 2100000, guid: fa4341ba391287349b5b66fec39d0315, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: power-up-can_logo
+    second: {fileID: 2100000, guid: e85af9e6d97470143879eaebd0fd4c8c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: power-up-can_material
+    second: {fileID: 2100000, guid: 93d9f301a1e3d5340af2bbbf52876146, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Logo - Copia
+    second: {fileID: 2800000, guid: 475b3e1165168e049ac659637e2ed4fd, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: power-up-heal_albedo
+    second: {fileID: 2800000, guid: 726e2bbe2223e6e4eb9b1383dd83638f, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: power-up-heal_detalhe
+    second: {fileID: 2800000, guid: f4705206931b41a40ab1d546939828a4, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: power-up_detalhe
+    second: {fileID: 2800000, guid: 83ed40978033b284c86f316bdc406b86, type: 3}
+  materials:
+    materialImportMode: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

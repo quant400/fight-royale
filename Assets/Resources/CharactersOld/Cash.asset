@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ed2e787b5c3362489f587683dc10c55, type: 3}
+  m_Name: Cash
+  m_EditorClassIdentifier: 
+  Name: Cash
+  Mesh: {fileID: 7334972132835027387, guid: 5ff0ae1d9a9794d4986093026e3ecd7a, type: 3}
+  Texture: {fileID: 2800000, guid: f90f3096328811c4ebefddc977dfd538, type: 3}
