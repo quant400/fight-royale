@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 9016861437244732261}
   - component: {fileID: 5000073551534837257}
   - component: {fileID: 1352660948724114777}
+  - component: {fileID: 584438733076358886}
   m_Layer: 7
   m_Name: cadeira
   m_TagString: Untagged
@@ -145,7 +146,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
-  syncInterval: 0.1
+  syncInterval: 0.05
   clientAuthority: 1
   localPositionSensitivity: 0.01
   localRotationSensitivity: 0.01
@@ -171,6 +172,18 @@ MonoBehaviour:
   collider: {fileID: -7991394579763987237}
   _throwForce: 7500
   _isDanger: 0
+--- !u!114 &584438733076358886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3390423301432730683}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d9166e3f4cd0b14ba3183fd02923667, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &9161484272866447160
 GameObject:
   m_ObjectHideFlags: 0

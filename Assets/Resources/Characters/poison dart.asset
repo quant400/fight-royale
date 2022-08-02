@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: poison dart
   m_EditorClassIdentifier: 
   Name: poison dart
-  Asset: {fileID: 919132149155446097, guid: c2553667d34246b4e82f3716ecedd8d8, type: 3}
-  Texture: {fileID: 2800000, guid: 341b0242fb1103c49a66e6969542e45c, type: 3}
+  Asset: {fileID: 919132149155446097, guid: 87ba1fbcefa42594b808c0dd453cabc8, type: 3}
+  Texture: {fileID: 2800000, guid: 9308a3b1be33b774b8df86db16018b93, type: 3}

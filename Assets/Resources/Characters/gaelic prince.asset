@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: gaelic prince
   m_EditorClassIdentifier: 
   Name: gaelic prince
-  Asset: {fileID: 919132149155446097, guid: 1ded283023ab6824fab5d6a2cfdbb3ab, type: 3}
-  Texture: {fileID: 2800000, guid: 2f4c8c7e38f3c4b40889df3517575296, type: 3}
+  Asset: {fileID: 919132149155446097, guid: 48f011096b5739b48ab934e494193b2a, type: 3}
+  Texture: {fileID: 2800000, guid: 22ccf5dbb56e7494daa0aa1f6cbd6c3b, type: 3}

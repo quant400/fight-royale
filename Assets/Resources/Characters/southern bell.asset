@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: southern bell
   m_EditorClassIdentifier: 
   Name: southern bell
-  Asset: {fileID: 919132149155446097, guid: 8c2b89337a4e8b84e86f21e141284f0c, type: 3}
-  Texture: {fileID: 2800000, guid: b29f318157ca6fc4eac6d2d0002070ab, type: 3}
+  Asset: {fileID: 919132149155446097, guid: 78e19d7861918f04ba8b0dec5be360b6, type: 3}
+  Texture: {fileID: 2800000, guid: b5121514a5cc9664da3f10330d8f96d6, type: 3}

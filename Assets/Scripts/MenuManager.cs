@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
+using Cinemachine;
+using Mirror;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,6 +14,7 @@ public class MenuManager : MonoBehaviour
 
     [Header("UI MENU")]
     [SerializeField] private Button Button_LevelReset;
+    [SerializeField] private Button Button_LevelResetServer;
 
     [Header("UI TUTORIAL")]
     [SerializeField] private GameObject GO_Tutorial;
@@ -18,10 +22,22 @@ public class MenuManager : MonoBehaviour
     [Header("UI K.O")]
     [SerializeField] private GameObject GO_KO;
     [SerializeField] Button Button_KO;
+    [SerializeField] Button Button_CamViewer;
+    
+    [Header("UI WINNER")]
+    [SerializeField] private GameObject GO_Winner;
+    [SerializeField] Button Button_Winner;
 
-    [Header("UI Time")]
+    [Header("UI TIME")]
     [SerializeField] private GameObject GO_Time;
     [SerializeField] private TMP_Text Text_Time;
+    [SerializeField] private TimerManager _timerManager;
+
+    [Header("UI LEADERBOARD")]
+
+    [SerializeField] private Leaderboard_Manager Daily;
+    [SerializeField] private Leaderboard_Manager AllTime;
+
 
     public enum ThemeTime
     {
@@ -46,7 +62,52 @@ public class MenuManager : MonoBehaviour
     void Start()
     {
         Button_LevelReset.onClick.AddListener(OnReset);
-        Button_KO.onClick.AddListener(OnReset);
+        Button_LevelResetServer.onClick.AddListener(OnResetServer);
+        Button_KO.onClick.AddListener(OnQuit);
+        Button_Winner.onClick.AddListener(OnQuit);
+        Button_CamViewer.onClick.AddListener(OnChangeViewer);
+
+    }
+    public void ShowLeaderboardsAllTime()
+    {
+        try
+        {
+
+            Connection_Manager.Instance.GetLeaderboardAllTime(()=>
+            {
+                AllTime.OnCreate(Data_Manager.Instance.leaderboard_AllTime.scoreboards);
+            },(erro)=> 
+            {
+                AllTime.transform.parent.gameObject.SetActive(false);
+                Debug.Log(erro); 
+            }
+            );  
+        }
+        catch (Exception e)
+        {
+            Debug.Log("ShowLeaderboardsAllTime -> " +  e);
+        }
+            
+    }
+
+    public void ShowLeaderboardsDaily()
+    {
+        try
+        {
+            Connection_Manager.Instance.GetLeaderboardDaily(() =>
+            {
+                Daily.OnCreate(Data_Manager.Instance.leaderboard_Daily.scoreboards);
+            }, (erro) =>
+            {
+                Daily.transform.parent.gameObject.SetActive(false);
+                Debug.Log(erro);
+            }
+            );
+        }
+        catch (Exception e)
+        {
+            Debug.Log("ShowLeaderboardsDaily  -> " + e);
+        }
 
     }
 
@@ -63,13 +124,56 @@ public class MenuManager : MonoBehaviour
     }
     public void ShowKO(bool show = true)
     {
+        currentCam = 0;
         GO_KO.SetActive(show);
+    }
+    public void ShowWinner(bool show = true)
+    {
+        GO_Winner.SetActive(show);
+    }
+
+
+    private int currentCam;
+    private void OnChangeViewer()
+    {
+        try
+        {
+            var listCamTarget = GameObject.FindGameObjectsWithTag("CinemachineTarget").ToList();
+
+            if(listCamTarget != null && listCamTarget.Count > 0)
+            {
+                if(currentCam >= listCamTarget.Count)
+                {
+                    currentCam = 0;
+                }
+
+                Camera_Manager.Instance.followCam.Follow = listCamTarget[currentCam].transform;
+                currentCam++;
+            }
+        }
+        catch (Exception e)
+        {
+            currentCam = 0;
+            Debug.Log("OnChangeViewer " + e.Message);
+        }
     }
     private void OnReset()
     {
         ShowKO(false);
         CFCNetworkManager.singleton.StopClient();
         SceneManager.LoadScene("Game");
+    }
+    private void OnQuit()
+    {
+        ShowWinner(false);
+        CFCNetworkManager.singleton.StopClient();
+        SceneManager.LoadScene("Menu");
+    }
+    
+    private void OnResetServer()
+    {
+        var localPlayer = FindObjectsOfType<PlayerBehaviour>().First(aux=> aux.isLocalPlayer);
+        localPlayer.ResetServer();
     }
     private void OpenLink(string url)
     {

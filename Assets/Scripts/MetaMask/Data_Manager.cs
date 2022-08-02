@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using CFC.Serializable;
 using UnityEngine;
+using UnityEngine.InputSystem.LowLevel;
 
 public class Data_Manager : MonoBehaviour
 {
@@ -10,17 +12,26 @@ public class Data_Manager : MonoBehaviour
     public string accountId;
     public string contractId;
 
+    public int currentNftId;
+
     public Account selectedAccount => GetSelectedAccount();
     private Account _selectedAccount;
-
     [SerializeField] private RootAccount userAccount;
+
+    //Leaderboard
+    public CFC.Serializable.Leaderboard.RootLeaderboard leaderboard_AllTime;
+    public CFC.Serializable.Leaderboard.RootLeaderboard leaderboard_Daily;
 
     public void Awake()
     {
         if (Instance == null)
         {
-            DontDestroyOnLoad(this.gameObject);
             Instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+            Destroy(this.gameObject);
         }
     }
 
@@ -51,9 +62,23 @@ public class Data_Manager : MonoBehaviour
         Debug.Log("Starting the account");
         try
         {
-            Debug.Log(json);
+            //Debug.Log(json);
 
             var tempAccounts = JsonUtility.FromJson<RootAccount>(json);
+
+            tempAccounts.accounts = tempAccounts.accounts.OrderBy(aux => aux.name).ToList();
+
+            List<string> names = new List<string>();
+
+            foreach (var account in tempAccounts.accounts)
+            {
+                account.name = account.name.Replace(".", "")
+                    .Replace("-"," ")
+                    .Replace("'","");
+                names.Add(account.name);
+            }
+            
+            //System.IO.File.WriteAllText(Application.dataPath+"/data names.txt", string.Join("\n",names));
 
             if (tempAccounts.accounts.Count > 0)
             {
@@ -76,19 +101,21 @@ public class Data_Manager : MonoBehaviour
 
     }
 
-
     private Account GetSelectedAccount()
     {
-        if (_selectedAccount == null)
+        if (_selectedAccount == null || true)
         {
-
             _selectedAccount = userAccount.accounts
                 .FirstOrDefault(a => a.name.ToLower().Equals(Character_Manager.Instance.GetCurrentCharacter.Name.ToLower()));
-            return _selectedAccount;
         }
 
+        currentNftId = _selectedAccount.id;
+        
         return _selectedAccount;
     }
+    
+    
+
 }
 
 

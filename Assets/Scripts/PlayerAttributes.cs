@@ -30,14 +30,21 @@ public class PlayerAttributes : MonoBehaviour
         {
             const string key = "edition";
             var att = GetAttribute(key);
-            Debug.Log(att);
             var allFighterCategory = Resources.LoadAll("FighterCategory", typeof(FighterCategory)).Cast<FighterCategory>().ToList();
-            Debug.Log(allFighterCategory.ToString());
             _category = allFighterCategory.FirstOrDefault(f => f.name.ToLower().Equals(att.value.ToLower()));
             Debug.Log(_category);
+            SetAtkSpeed(_category.Speed/100 + 1);
             return _category;
         }
+        
         return _category;
+    }
+
+    private void SetAtkSpeed(float speed)
+    {
+        if (!_player.isLocalPlayer) return;
+        Debug.Log(speed);
+        _player.anim.SetFloat("AtkSpeed", speed);
     }
 
     private float GetBaseValue(string key)
@@ -90,7 +97,7 @@ public class PlayerAttributes : MonoBehaviour
 
     public float Block(float damage)
     {
-        var trueDamage = Mathf.Clamp(damage - _baseBlockDef, 0, 50);
+        var trueDamage = Mathf.Clamp(damage - _baseBlockDef, 1, 50);
         return trueDamage;
     }
 
@@ -106,21 +113,34 @@ public class PlayerAttributes : MonoBehaviour
         switch (power.Attribute.Code)
         {
             case CodeAttributePower.HEAL:
-                _player._pStatsController.SetHealth(Mathf.Clamp(currentHealth + (_baseHealth * power.Attribute.Value), 1, 100));
+                _player.CmdAddHealth(_baseHealth * power.Attribute.Value);
                 break;
-            case CodeAttributePower.ATK:
-            case CodeAttributePower.DEF:
             case CodeAttributePower.SPEED:
+                StartCoroutine(AddPower(power, (result) =>
+                {
+                    if (result)
+                    {
+                        SetAtkSpeed((_category.Speed/100+1) * (power.Attribute.Value + 1));
+                    }
+                    else
+                    {
+                        SetAtkSpeed((_category.Speed/100+1));
+                    }
+                }));
+                break;
+            default:
                 StartCoroutine(AddPower(power));
                 break;
         }
 
     }
 
-    private IEnumerator AddPower(PowerUp power)
+    private IEnumerator AddPower(PowerUp power, Action<bool> powerUpAction = null)
     {
         activePowerUps.Add(power);
+        powerUpAction?.Invoke(true);
         yield return new WaitForSeconds(power.Attribute.Duration);
+        powerUpAction?.Invoke(false);
         activePowerUps.Remove(power);
 
     }

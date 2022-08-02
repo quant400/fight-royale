@@ -42,7 +42,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Punch",
+                    "name": "Attack",
                     "type": "PassThrough",
                     "id": "e8aee99d-dbf8-4d62-b2c5-a5356484e33a",
                     "expectedControlType": "",
@@ -51,7 +51,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Kick",
+                    "name": "ToggleAttack",
                     "type": "PassThrough",
                     "id": "48a71bed-fa43-48f4-98ac-f18a239eebfc",
                     "expectedControlType": "",
@@ -262,7 +262,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
-                    "action": "Punch",
+                    "action": "Attack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -273,18 +273,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Punch",
+                    "action": "Attack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "1cfc12b6-7b88-4ea9-9a0c-24f1effae056",
-                    "path": "<Keyboard>/f",
+                    "path": "<Keyboard>/q",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
-                    "action": "Kick",
+                    "action": "ToggleAttack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -295,7 +295,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Kick",
+                    "action": "ToggleAttack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

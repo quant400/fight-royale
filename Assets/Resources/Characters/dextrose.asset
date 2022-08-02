@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: dextrose
   m_EditorClassIdentifier: 
   Name: dextrose
-  Asset: {fileID: 919132149155446097, guid: ff0f69c9fa7665648bc0269e51185904, type: 3}
-  Texture: {fileID: 2800000, guid: ce6ef09ef3c93404ea7376a7cadbc693, type: 3}
+  Asset: {fileID: 919132149155446097, guid: f1e6af02198defe44b65b188e787072e, type: 3}
+  Texture: {fileID: 2800000, guid: 7cde0df1eca7246418a2c2e27c99108b, type: 3}

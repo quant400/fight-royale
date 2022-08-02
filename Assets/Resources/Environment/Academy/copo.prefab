@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 795902870187003527}
   - component: {fileID: -583122244486588271}
   - component: {fileID: -6985141408838788871}
+  - component: {fileID: 8375612705034967209}
   m_Layer: 7
   m_Name: copo
   m_TagString: Untagged
@@ -113,3 +114,15 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &8375612705034967209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3690721315883332171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d9166e3f4cd0b14ba3183fd02923667, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

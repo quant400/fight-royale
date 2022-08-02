@@ -20,6 +20,10 @@ public class BGM_Manager : MonoBehaviour
             Instance = this;
             _audioSource = this.gameObject.GetComponent<AudioSource>();
         }
+        else
+        {
+            Destroy(this.gameObject);
+        }
     }
 
 

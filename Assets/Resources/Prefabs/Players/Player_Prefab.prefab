@@ -2251,7 +2251,6 @@ MonoBehaviour:
     m_Bits: 128
   _throwTargetTransform: {fileID: 7938487491364553600}
   _carryTransformChild: {fileID: 8017567617649068653}
-  throwForce: 1000
 --- !u!143 &9071112424790293551
 CharacterController:
   m_ObjectHideFlags: 0
@@ -2266,7 +2265,7 @@ CharacterController:
   m_Height: 1.5
   m_Radius: 0.28
   m_SlopeLimit: 45
-  m_StepOffset: 0.3
+  m_StepOffset: 0.4
   m_SkinWidth: 0.02
   m_MinMoveDistance: 0
   m_Center: {x: 0, y: 0.77, z: 0}
@@ -2370,8 +2369,8 @@ MonoBehaviour:
   analogMovement: 0
   cursorLocked: 1
   cursorInputForLook: 1
-  punch: 0
-  kick: 0
+  attack: 0
+  toggleAttack: 0
   action: 0
   block: 0
 --- !u!114 &9071112424790293545

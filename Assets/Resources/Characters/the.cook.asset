@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ed2e787b5c3362489f587683dc10c55, type: 3}
+  m_Name: the.cook
+  m_EditorClassIdentifier: 
+  Name: the cook
+  Asset: {fileID: 919132149155446097, guid: aba6174d9fabe86418feb96602b7e1f0, type: 3}
+  Texture: {fileID: 2800000, guid: 49a8d27eb13a0c342a38a2b69c18b5fe, type: 3}
+  isUnlocked: 0

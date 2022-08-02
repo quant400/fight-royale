@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3184295034840982791}
   - component: {fileID: 1585153097828748462}
   - component: {fileID: 7947855945362673116}
+  - component: {fileID: 5945654545131452283}
   m_Layer: 0
   m_Name: _BasePowerUp
   m_TagString: PowerUp
@@ -63,6 +64,21 @@ MonoBehaviour:
   syncInterval: 0.1
   PowerUp: {fileID: 11400000, guid: 7731f47059771754a8315240d75169d1, type: 2}
   isAvailable: 1
+--- !u!114 &5945654545131452283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3184295034840982788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21d3daac9c88b244ba5dce7913c56366, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  m_AssetId: 
 --- !u!1 &3664560049415633603
 GameObject:
   m_ObjectHideFlags: 0

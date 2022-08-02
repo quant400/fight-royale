@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: lil joe
   m_EditorClassIdentifier: 
   Name: lil joe
-  Asset: {fileID: 919132149155446097, guid: f723e0c06482242439d51ab537bbf39c, type: 3}
-  Texture: {fileID: 2800000, guid: e19aac9f38c88ce45be4404681ed35ac, type: 3}
+  Asset: {fileID: 919132149155446097, guid: 0ff3a30d4046f584a98159d842a5e5df, type: 3}
+  Texture: {fileID: 2800000, guid: bccc84b8e44f1f14ab1e5d150d694b57, type: 3}

@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: barbi
   m_EditorClassIdentifier: 
   Name: barbi
-  Asset: {fileID: 919132149155446097, guid: 43faa70047ee84346acc807bf7617212, type: 3}
-  Texture: {fileID: 2800000, guid: 27fe2b7a9d936b3479eb502ba0f7d990, type: 3}
+  Asset: {fileID: 919132149155446097, guid: 9498f1ed8f72e0648aa3b2df7191c4fd, type: 3}
+  Texture: {fileID: 2800000, guid: 8f0627ef07eec1549aa7173a7a92e456, type: 3}

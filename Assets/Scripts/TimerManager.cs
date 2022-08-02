@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class TimerManager : NetworkBehaviour
 {
@@ -17,7 +18,7 @@ public class TimerManager : NetworkBehaviour
     }
 
     [Header("Essencial")]
-    public DeadlyAreaManager deadlyAreaManager;
+    public CloseAreaManager CloseAreaManager;
     [Header("Timer")]
     public int MaxTime = 60;
     public int CriticalTime = 15;
@@ -31,7 +32,7 @@ public class TimerManager : NetworkBehaviour
     void Start()
     {
         Menu.ShowTime(true);
-        if(isServer && false) StartTime();
+        //if(isServer && false) StartTime();
     }
     
     
@@ -42,16 +43,17 @@ public class TimerManager : NetworkBehaviour
         ResetTime();
         
 
-        if (currentRound >= deadlyAreaManager.maxRound)
+        if (currentRound >= CloseAreaManager.maxRound-1)
         {
-            Console.WriteLine($"Entrou!");
+            Console.WriteLine($"Acabou!");
+            return;
             RpcResetDoors();
             currentRound = 0;
         }
         //else
             //RpcCloseDoor(currentRound);
             
-        Console.WriteLine($"{currentRound} > {deadlyAreaManager.maxRound}");
+        Console.WriteLine($"{currentRound} > {CloseAreaManager.maxRound}");
 
         _coroutineTimer = StartCoroutine(LoopTime(1, () =>
         {
@@ -84,7 +86,7 @@ public class TimerManager : NetworkBehaviour
 
     public void OnCurrentRoundChange(int oldValue, int newValue)
     {
-        deadlyAreaManager.UpdateAreas();
+        CloseAreaManager.UpdateAreas();
     }
 
     public void OnCurrentTimeChange(int oldValue, int newValue)
@@ -130,13 +132,13 @@ public class TimerManager : NetworkBehaviour
     [ClientRpc]
     public void RpcCloseDoor(int doorCount)
     {
-        deadlyAreaManager.CloseArea(doorCount);
+        CloseAreaManager.CloseArea(doorCount);
     }
     
     [ClientRpc]
     public void RpcResetDoors()
     {
-        deadlyAreaManager.ResetAreas();
+        CloseAreaManager.ResetAreas();
     }
 
 

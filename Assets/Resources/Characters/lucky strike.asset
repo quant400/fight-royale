@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: lucky strike
   m_EditorClassIdentifier: 
   Name: lucky strike
-  Asset: {fileID: 919132149155446097, guid: 23d8d1e3a6fa8f64f8de5a94246da8d4, type: 3}
-  Texture: {fileID: 2800000, guid: f5902aa0a0287d74ab3a85ea6c1f47b8, type: 3}
+  Asset: {fileID: 919132149155446097, guid: e3886f1b2eeab6a49848158487dce8b2, type: 3}
+  Texture: {fileID: 2800000, guid: 7aff8f1fb7f4da4488c358beba91c24d, type: 3}

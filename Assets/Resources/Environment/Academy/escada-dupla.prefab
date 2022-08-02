@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 8344558427046228086}
   - component: {fileID: 1624250290431384114}
   - component: {fileID: -3773410019123916845}
+  - component: {fileID: 7105962937419676013}
+  - component: {fileID: 6604023875625415393}
   m_Layer: 0
   m_Name: escada-dupla
   m_TagString: Untagged
@@ -96,3 +98,29 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -4007865998341887805, guid: 4743f7da15f093248a8cc25dde57fa73, type: 3}
+--- !u!65 &7105962937419676013
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 599161320626948224}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.7500005, y: 1.9705646, z: 3.3634348}
+  m_Center: {x: 0.15159559, y: -1.635729, z: 0.05861044}
+--- !u!65 &6604023875625415393
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 599161320626948224}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.7500005, y: 0.5434828, z: 1.3417368}
+  m_Center: {x: 0.15159559, y: -2.3492699, z: 2.3577962}

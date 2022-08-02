@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: lead gloves
   m_EditorClassIdentifier: 
   Name: lead gloves
-  Asset: {fileID: 919132149155446097, guid: d368ee60be02276468bd8d76e58c7a35, type: 3}
-  Texture: {fileID: 2800000, guid: 287a9ff25e7993e48a2c5a50268c2ec4, type: 3}
+  Asset: {fileID: 919132149155446097, guid: 3cd6ab216416d3d4991d94ad968aa6ca, type: 3}
+  Texture: {fileID: 2800000, guid: f9365d0fd53c98645aeacf9a32781d89, type: 3}

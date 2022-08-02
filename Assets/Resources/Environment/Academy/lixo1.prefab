@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6082949616928259152}
   - component: {fileID: 5325162988929761888}
   - component: {fileID: -6032119690764766323}
+  - component: {fileID: 7227991278167518992}
   m_Layer: 7
   m_Name: lixo1
   m_TagString: Untagged
@@ -113,3 +114,15 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &7227991278167518992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3656517749490561098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d9166e3f4cd0b14ba3183fd02923667, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

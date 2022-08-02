@@ -10,13 +10,14 @@ public class Character_Manager : MonoBehaviour
 
     public static Character_Manager Instance;
 
-    [SerializeField] public Character lockCharacter;
     [SerializeField] private List<Character> _characters = new List<Character>();
     [SerializeField] private Character _selectedCharacter;
 
     public List<Character> GetCharacters => _characters;
+    public List<Character> GetUnlockedCharacters => _characters.Where(aux=>aux.isUnlocked).ToList();
     public Character GetCurrentCharacter => _selectedCharacter;
     public int GetCurrentCharacterIndex => _characters.IndexOf(_selectedCharacter);
+    public int GetUnlockedCurrentCharacterIndex => _characters.Where(aux=>aux.isUnlocked).ToList().IndexOf(_selectedCharacter);
 
     public UnityEvent OnCharacterChanged;
 
@@ -48,21 +49,28 @@ public class Character_Manager : MonoBehaviour
         try
         {
             var loaderCharacter = Resources.LoadAll<Character>("Characters");
-
+            
+            List<string> names = new List<string>();
+            
             foreach (Character character in loaderCharacter)
             {
-                var containCharacter = accCharacter.Any(auxAccC => auxAccC.name.ToLower().Equals(character.Name));
+                var containCharacter = accCharacter.Any(auxAccC => auxAccC.name.ToLower().Equals(character.Name.ToLower()));
+                _characters.Add(character);
+                
+                names.Add(character.Name);
 
                 if (containCharacter)
                 {
-                    //Debug.Log($"{character.name} Unlocked");
-                    _characters.Add(character);
+                    character.isUnlocked = true;
                 }
                 else
                 {
-                    //Debug.Log($"{character.name} Locked");
+                    character.isUnlocked = false;
                 }
             }
+            
+            //System.IO.File.WriteAllText(Application.dataPath+"/model names.txt", string.Join("\n",names));
+
         }
         catch (System.Exception e)
         {
@@ -81,6 +89,7 @@ public class Character_Manager : MonoBehaviour
     {
         _selectedCharacter = _characters.FirstOrDefault(auxCharacter => auxCharacter.Name.Equals(name));
         OnCharacterChanged?.Invoke();
+        var test = Data_Manager.Instance.selectedAccount;
     }
 
 }

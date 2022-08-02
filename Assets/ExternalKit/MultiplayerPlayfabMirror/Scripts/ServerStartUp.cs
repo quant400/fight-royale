@@ -11,10 +11,8 @@ public class ServerStartUp : MonoBehaviour
 {
 
 	public Configuration configuration;
-
 	private List<ConnectedPlayer> _connectedPlayers;
 	public UnityNetworkServer UNetServer;
-
 	public Mirror.NetworkManager networkManager;
 
 	void Start()

@@ -1,4 +1,4 @@
-﻿#if true && UNITY_EDITOR
+﻿
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,6 +7,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEditor;
 
+#if true && UNITY_EDITOR
 public class PrefabGenerator : MonoBehaviour
 {
 
@@ -55,6 +56,8 @@ public class PrefabGenerator : MonoBehaviour
                 throw;
             }
         }
+        
+        
 
         private static void ReplaceGameObject(GameObject oldGameObject)
         {

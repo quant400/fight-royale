@@ -6,10 +6,12 @@ using System.Linq;
 using CFC;
 using Cinemachine;
 using Mirror;
+using PlayFab;
 using StarterAssets;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerBehaviour : NetworkBehaviour
@@ -49,12 +51,14 @@ public class PlayerBehaviour : NetworkBehaviour
     {
         if (isClient)
             SetupComponents();
+        
+        Debug.Log(_pAttributes.category);
 
         _pStatsController.SetHealth(pHealth);
         if (isLocalPlayer)
         {
             _skinController.SetUpSkin(Character_Manager.Instance.GetCurrentCharacter.name);
-            pColor = Color_Manager.pallete.RandomPlayerColor();
+            pColor = Color_Manager.Instance.pallete.RandomPlayerColor();
         }
 
 
@@ -73,7 +77,7 @@ public class PlayerBehaviour : NetworkBehaviour
         switch (other.gameObject.tag)
         {
             case "DeadlyArea":
-                Death();
+                Death(null);
                 break;
             case "PowerUp":
                 _pAttributes.OnPowerUp(other.GetComponent<PowerUpBehavior>().GetPowerUp());
@@ -100,7 +104,6 @@ public class PlayerBehaviour : NetworkBehaviour
             Camera_Manager.Instance.followCam.m_Follow = _camTarget;
             ChatGlobal_Manager.Instance.player = this;
             _pAttributes.gameObject.SetActive(true);
-            Debug.Log(_pAttributes.category);
         }
     }
 
@@ -136,18 +139,45 @@ public class PlayerBehaviour : NetworkBehaviour
         }
     }*/
 
-    public void OnDeath()
+    public void OnDeath(NetworkIdentity killerIdentity)
     {
         if (isLocalPlayer)
+        {
             MenuManager.Instance.ShowKO();
+            CmdOnDeath(killerIdentity);
+        }
+
     }
 
-    private void Death()
+    private void Death(NetworkIdentity killerIdentity)
     {
         _tpFightingControler.Die();
         _cControler.enabled = false;
         _pInput.enabled = false;
-        OnDeath();
+        OnDeath(killerIdentity);
+    }
+    
+    public void OnWin()
+    {
+        if (isLocalPlayer)
+        {
+            MenuManager.Instance.ShowWinner();
+        }
+
+    }
+
+    private void Win()
+    {
+        _tpFightingControler.Win();
+        _cControler.enabled = false;
+        _pInput.enabled = false;
+        OnWin();
+    }
+
+    [ClientRpc]
+    public void RpcWin()
+    {
+        Win();
     }
 
     public void DoCall(string callId)
@@ -167,15 +197,16 @@ public class PlayerBehaviour : NetworkBehaviour
 
     public override void OnStartServer()
     {
-        pName = (string)connectionToClient.authenticationData;
+        pName = ((CFCAuth.AuthRequestMessage)connectionToClient.authenticationData).authUsername;
+        GameManager.Instance.analytics.AddPlayer(((CFCAuth.AuthRequestMessage)connectionToClient.authenticationData).nftId,netIdentity);
     }
 
     #region Commands
 
     [ClientRpc]
-    void RpcDamage(float damage)
+    void RpcDamage(NetworkIdentity dealerIdentity, float damage)
     {
-        Debug.Log($"RpcDamage: Receive {damage} on {pName}");
+        Debug.Log($"RpcDamage: Receive {damage} on {pName}: {dealerIdentity}");
 
         var finalDamage = pIsBlocking ? _pAttributes.Block(damage) : damage;
 
@@ -190,15 +221,26 @@ public class PlayerBehaviour : NetworkBehaviour
         }
         else
         {
-            currentHealth = 0;
-            Death();
+            Death(dealerIdentity);
         }
 
-        Debug.Log($"CmdHealth? {pName} {isServer}");
+        //Debug.Log($"CmdHealth? {pName} {isServer}");
 
         if (hasAuthority)
-            CmdSetHealth(currentHealth);
+            CmdRemoveHealth(dealerIdentity, finalDamage);
 
+    }
+
+    [ClientRpc]
+    public void RpcQuitMatch()
+    {
+        QuitMatch();
+    }
+    
+    public void QuitMatch()
+    {
+        CFCNetworkManager.singleton.StopClient();
+        SceneManager.LoadScene("Menu");
     }
 
     /*[ClientRpc]
@@ -214,24 +256,46 @@ public class PlayerBehaviour : NetworkBehaviour
     }*/
 
     [Command]
-    public void CmdSetHealth(float newHealth)
+    public void CmdRemoveHealth(NetworkIdentity dealerIdentity, float value)
     {
-        pHealth = newHealth;
+        try
+        {
+            pHealth  = Mathf.Clamp(pHealth-value, 0,100);
+            GameManager.Instance.analytics.AddDamageDealt(dealerIdentity, value);
+            GameManager.Instance.analytics.AddDamageReceived(netIdentity, value);
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+        }
+        
+    }
+    
+    [Command]
+    public void CmdAddHealth(float value)
+    {
+        pHealth = Mathf.Clamp(pHealth+value, 0,100);
     }
 
     [Command]
-    public void CmdOnDamage(NetworkIdentity targetIdentity, float damage)
+    public void CmdOnDamage(NetworkIdentity dealerIdentity, NetworkIdentity targetIdentity, float damage)
     {
-        OnDamage(targetIdentity, damage);
+        OnDamage(dealerIdentity, targetIdentity, damage);
     }
     
-    public void OnDamage(NetworkIdentity targetIdentity, float damage)
+    public void OnDamage(NetworkIdentity dealerIdentity, NetworkIdentity targetIdentity, float damage)
     {
+        if (GameManager.Instance.match.currentState != MatchManager.MatchState.InGame)
+        { 
+            damage = 0.0f; 
+        }
+
         var target = targetIdentity.GetComponent<PlayerBehaviour>();
-        Debug.Log($"CmdOnDamage: Receive {damage} damage on {target.pName}");
+        var dealer = dealerIdentity.GetComponent<PlayerBehaviour>();
+        Debug.Log($"CmdOnDamage: Receive {damage} damage on {target.pName} from {dealer.pName}");
         if (!isServer) return;
 
-        target.RpcDamage(damage);
+        target.RpcDamage(dealerIdentity, damage);
     }
 
     [Command]
@@ -265,6 +329,41 @@ public class PlayerBehaviour : NetworkBehaviour
         ChatGlobal_Manager.Instance.CreateMessage(playerName, color, message);
     }
     
+    public void ResetServer()
+    {
+        CmdResetServer();
+    }
+
+    [Command]
+    private void CmdResetServer()
+    {
+        _ResetServer();
+    }
+
+    private void _ResetServer()
+    {
+        CFCNetworkManager.singleton.ServerChangeScene(SceneManager.GetActiveScene().name);
+        CFCNetworkManager.singleton.StopServer();
+        //NetworkServer.Reset();
+    }
+
+    [Command]
+    private void CmdOnDeath(NetworkIdentity killerIdentity)
+    {
+        GameManager.Instance.analytics.AddKill(killerIdentity, netIdentity);
+        GameManager.Instance.CheckWinner();
+    }
+    
+    [TargetRpc]
+    public void TargetChangePlayerPosition(Vector3 pos)
+    {
+        Debug.Log($"Move to {pos}");
+        anim.enabled = false;
+        transform.position = pos;
+        anim.enabled = true;
+
+    }
+
     #region Throwable
     
     [Command]

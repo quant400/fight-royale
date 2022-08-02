@@ -12,15 +12,20 @@ public class LobbyManager : MonoBehaviour
 
     [SerializeField] private TMP_InputField nameInputField;
     [SerializeField] private Button loginButton;
+    
+    [SerializeField] private Configuration config;
 
-    void Awake()
+    void Start()
     {
-        loginButton.onClick.AddListener(OnLogin);
+        //loginButton.onClick.AddListener(()=>OnLogin(nameInputField.text));
+        if(config.buildType != BuildType.REMOTE_SERVER && config.buildType != BuildType.LOCAL_SERVER)
+            OnLogin(Character_Manager.Instance.GetCurrentCharacter.Name);
     }
 
-    void OnLogin()
+    void OnLogin(string name)
     {
-        _auth.playerName = nameInputField.text;
+        _auth.playerName = name;
+        _auth.playerId = Data_Manager.Instance.currentNftId;
         clientStartUp.OnLoginUserButtonClick();
     }
 }

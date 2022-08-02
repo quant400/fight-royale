@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: big joe
   m_EditorClassIdentifier: 
   Name: big joe
-  Asset: {fileID: 919132149155446097, guid: df9733c13f376d94f9f7251de23fb3c6, type: 3}
-  Texture: {fileID: 2800000, guid: 175f3dacae0891c4a9dc84e086ab8496, type: 3}
+  Asset: {fileID: 919132149155446097, guid: 95716ad1b3016f34a8f3dbafc1181a69, type: 3}
+  Texture: {fileID: 2800000, guid: 7b87379723229d14ca5e3c1d89678112, type: 3}

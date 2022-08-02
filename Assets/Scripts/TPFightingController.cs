@@ -21,6 +21,7 @@ public class TPFightingController : MonoBehaviour
     private bool isAttack;
     private bool isPunch;
     private bool isBlocking;
+    private bool toggleAttack = true; //true = punch, false = kick
 
     [SerializeField]private bool m_comboPossible = false;
     [SerializeField]private int m_comboStep = 0;
@@ -54,17 +55,22 @@ public class TPFightingController : MonoBehaviour
         
         if (isBlocking) return;
         
-        if (_inputs.punch)
+        if (_inputs.attack)
         {
-            Punch();
-            _inputs.punch = false;
+            if (_isCarrying)
+                Throw();
+            else if(toggleAttack)
+                Punch();
+            else
+                Kick();
+            _inputs.attack = false;
         }
 
 
-        if (_inputs.kick)
+        if (_inputs.toggleAttack)
         {
-            Kick();
-            _inputs.kick = false;
+            toggleAttack = !toggleAttack;
+            _inputs.toggleAttack = false;
         }
 
         if (_inputs.action)
@@ -87,7 +93,7 @@ public class TPFightingController : MonoBehaviour
         {
             isAttack = true;
             isPunch = true;
-            _anim.Play("Punch 1");
+            PlayAttackAnimation("Punch 1");
             m_comboStep = 1;
             return;
         }
@@ -98,16 +104,21 @@ public class TPFightingController : MonoBehaviour
             m_comboStep += 1;
         }
     }
-    
+
+    private void PlayAttackAnimation(string animName)
+    {
+        _anim.Play(animName);
+    }
+
     public void Combo()
     {
         switch (m_comboStep)
         {
             case 2:
-                _anim.Play("Punch 2");
+                PlayAttackAnimation("Punch 2");
                 break;
             case 3:
-                _anim.Play("Punch 3");
+                PlayAttackAnimation("Punch 3");
                 break;
         }
     }
@@ -133,10 +144,11 @@ public class TPFightingController : MonoBehaviour
         if (!_tpController.Grounded) return;
 
         if (isAttack) return;
-			
+
+        isPunch = false;
         isAttack = true;
 
-        _anim.Play("Kick");
+        PlayAttackAnimation("Kick");
     }
 
     public void TakeDamage()
@@ -154,6 +166,11 @@ public class TPFightingController : MonoBehaviour
     public void Die()
     {
         _anim.Play("Death");
+    }
+    
+    public void Win()
+    {
+        //_anim.Play("Win");
     }
 
     
@@ -184,7 +201,7 @@ public class TPFightingController : MonoBehaviour
 
     public void DealDamage(float damage, PlayerBehaviour target)
     {
-            _player.CmdOnDamage(target.netIdentity, damage);
+            _player.CmdOnDamage(_player.netIdentity, target.netIdentity, damage);
             Debug.Log($"DealDamage: {_player.pName} deal {damage} damage on {target.pName}");
     }
 
@@ -233,7 +250,7 @@ public class TPFightingController : MonoBehaviour
         _isCarrying = true;
         _carryingObject = throwable;
         //_carryTransformChild.target = throwable.transform;
-        _carryingObject.Carry(_throwTargetTransform);
+        _carryingObject.Carry(_player.netIdentity,_throwTargetTransform);
         _anim.SetLayerWeight(_anim.GetLayerIndex("UpperBody"), 1);
     }
 

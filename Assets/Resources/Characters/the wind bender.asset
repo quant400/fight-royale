@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: the wind bender
   m_EditorClassIdentifier: 
   Name: the wind bender
-  Asset: {fileID: 919132149155446097, guid: f457b8d945241db4892d8b98b9f35e91, type: 3}
-  Texture: {fileID: 2800000, guid: 4aa55edebdf08754cb3ee53bfa97a992, type: 3}
+  Asset: {fileID: 919132149155446097, guid: a51a01c2fc7a7b3429073ae5340fff9d, type: 3}
+  Texture: {fileID: 2800000, guid: ee5b40c929bcd9d4abd9ce73491dcb88, type: 3}

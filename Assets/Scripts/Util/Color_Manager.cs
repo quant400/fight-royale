@@ -4,12 +4,19 @@ using UnityEngine;
 
 public class Color_Manager : MonoBehaviour
 {
-    [SerializeField] private  ColorPalette _palette;
-    public static ColorPalette pallete;
+    public ColorPalette pallete;
+    public static Color_Manager Instance;
 
-    void Awake()
+    public void Awake()
     {
-        pallete = _palette;
-        DontDestroyOnLoad(gameObject);
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
     }
 }

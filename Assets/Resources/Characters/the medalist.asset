@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: the medalist
   m_EditorClassIdentifier: 
   Name: the medalist
-  Asset: {fileID: 919132149155446097, guid: a58482f213dd15946a7d37c7b82c1dc7, type: 3}
-  Texture: {fileID: 2800000, guid: ad37405745930f04ba1edf9861533811, type: 3}
+  Asset: {fileID: 919132149155446097, guid: 80444d52c76376f4bab77526891c40fe, type: 3}
+  Texture: {fileID: 2800000, guid: b084b157f64c2d148a089171e66c01e2, type: 3}

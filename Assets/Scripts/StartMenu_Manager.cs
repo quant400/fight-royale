@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,11 +8,17 @@ using UnityEngine.UI;
 
 public class StartMenu_Manager : MonoBehaviour
 {
+    [Header("UI")]
+
+    [SerializeField] private GameObject panel_OnLoading;
+    [SerializeField] private GameObject panel_OnSucess;
+    [SerializeField] private GameObject panel_OnFail;
     [SerializeField] private Button select_Button;
-    [SerializeField] private GameObject loading_GO;
-    [SerializeField] private GameObject alert_GO;
+
+    [Header("Components")]
     [SerializeField] private Skin_Controller skinCharacter;
-    private  const string _gameScene = "Game";
+    [SerializeField] private TMP_Text text_Version;
+    private const string _gameScene = "Game";
     
     void Awake()
     {
@@ -20,37 +27,47 @@ public class StartMenu_Manager : MonoBehaviour
 
     void Start()
     {
+        text_Version.text = "Version - " + Application.version;
         skinCharacter.SetUpSkin();
     }
 
     private void SetUpUI()
     {
-        
         select_Button.onClick.AddListener(OnSelectClick);
     }
 
     void OnSelectClick()
     {
-        OpenGame();
+        Connection_Manager.Instance.SearchAvailableLobby(OnLoading, OnSuccess, OnFail);
     }
 
-    void OpenGame()
+    void OnLoading()
     {
+        panel_OnLoading.SetActive(true);
+    }
+
+    void OnSuccess()
+    {
+        panel_OnLoading.SetActive(false);
+        panel_OnSucess.SetActive(true);
         StartCoroutine(LoadScene());
+    }
+
+    void OnFail()
+    {
+        panel_OnSucess.SetActive(false);
+        panel_OnLoading.SetActive(false);
+        panel_OnFail.SetActive(true);
     }
 
     IEnumerator LoadScene()
     {
-        loading_GO.SetActive(true);
-
+        yield return new WaitForSeconds(1.25f);
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(_gameScene);
-
         while (!asyncLoad.isDone)
         {
-            yield return null;
+            yield return new WaitForSeconds(0.025f);
         }
-        
-        loading_GO.SetActive(false);
-    }
 
+    }
 }

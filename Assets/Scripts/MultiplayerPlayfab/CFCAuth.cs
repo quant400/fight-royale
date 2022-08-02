@@ -9,12 +9,14 @@ public class CFCAuth : NetworkAuthenticator
     private readonly HashSet<NetworkConnection> connectionsPendingDisconnect = new HashSet<NetworkConnection>();
 
     [Header("Client Username")] public string playerName;
+    public int playerId;
     
     #region Messages
 
     public class AuthRequestMessage : MessageBase
     {
         public string authUsername;
+        public int nftId;
     }
 
     public class AuthResponseMessage : MessageBase
@@ -43,11 +45,13 @@ public class CFCAuth : NetworkAuthenticator
 
         if (connectionsPendingDisconnect.Contains(conn)) return;
 
-        if (!PlayerBehaviour.playerNames.Contains(msg.authUsername) || true)
+        if ((!PlayerBehaviour.playerNames.Contains(msg.authUsername) || true) &&
+            GameManager.Instance.match.currentState == MatchManager.MatchState.Lobby)
         {
             PlayerBehaviour.playerNames.Add(msg.authUsername);
+            //GameManager.Instance.analytics.AddPlayer(msg.nftId,conn.identity);
 
-            conn.authenticationData = msg.authUsername;
+            conn.authenticationData = msg;
 
             AuthResponseMessage authResponseMessage = new AuthResponseMessage
             {
@@ -101,7 +105,8 @@ public class CFCAuth : NetworkAuthenticator
     {
         AuthRequestMessage authRequestMessage = new AuthRequestMessage
         {
-            authUsername = playerName
+            authUsername = playerName,
+            nftId = playerId
         };
 
         conn.Send(authRequestMessage);

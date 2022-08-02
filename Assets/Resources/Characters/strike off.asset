@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: strike off
   m_EditorClassIdentifier: 
   Name: strike off
-  Asset: {fileID: 919132149155446097, guid: fbef5321fcca04c4a8054b62b6515846, type: 3}
-  Texture: {fileID: 2800000, guid: a852f5cbf2592ba4b906997551f73354, type: 3}
+  Asset: {fileID: 919132149155446097, guid: 8cbc6a114d9510a498662f78d192363e, type: 3}
+  Texture: {fileID: 2800000, guid: 7d9956058abd6a84a9c10680f1fcaeee, type: 3}

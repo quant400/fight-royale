@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Runtime.InteropServices;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 
 public class CustomWebLogin : MonoBehaviour
@@ -25,7 +23,7 @@ public class CustomWebLogin : MonoBehaviour
 
     private string _account;
 
-    private CustomWalletLogin walletLogin => Connection_Manager.Instance.WalletLogin;
+    private API_CryptoFightClub Api_CryptoFightClub => Connection_Manager.Instance.Api_CryptoFightClub;
 
 
 #if UNITY_WEBGL
@@ -75,7 +73,7 @@ public class CustomWebLogin : MonoBehaviour
             // reset login message
             SetConnectAccount("");
             // load next scene
-            walletLogin.OnSignIn(OnEnter, OnFailToSignIn);
+            Api_CryptoFightClub.OnSignIn(OnEnter, OnFailToSignIn);
         }
         catch (Exception e)
         {
@@ -102,13 +100,28 @@ public class CustomWebLogin : MonoBehaviour
 
     public void OnGuest()
     {
-        //account0x846b257a244141ecb5c65d7c8a122a72a5564c38
-        _account = "account0x846b257a244141ecb5c65d7c8a122a72a5564c38";
-        OnEnter("Guest");
+        //Versão com conta base
+        //_account = "account0x846b257a244141ecb5c65d7c8a122a72a5564c38";
+        //OnEnter("Guest");
+        //return;
 
+        //Versão com todos os personagens
+        try
+        {
+            TextAsset targetFile = Resources.Load<TextAsset>("Json/AllAccounts");
 
+            if (targetFile != null)
+            {
+                var json = "{ \"accounts\": " + targetFile.text + "}" ;
+                Data_Manager.Instance.StartAccount(json, OnSuccessToSingIn, OnFailToSignIn);
+            }
+
+        }
+        catch (Exception e)
+        {
+            OnFailToSignIn(e.Message);
+        }
     }
-
 
     private void OnEnter(string contract)
     {
@@ -120,7 +133,7 @@ public class CustomWebLogin : MonoBehaviour
             Debug.Log("account -> " + _account);
 
             //Tratar o ID do metaMask
-            walletLogin.GetAccount((json) =>
+            Api_CryptoFightClub.GetAccount((json) =>
             {
                 Data_Manager.Instance.StartAccount(json, OnSuccessToSingIn, OnFailToSignIn);
             }
@@ -140,6 +153,7 @@ public class CustomWebLogin : MonoBehaviour
         panelError.SetActive(false);
         panelSelection.SetActive(true);
         BGM_Manager.Instance.PlaySong();
+
     }
 
     private void OnFailToSignIn(string error)

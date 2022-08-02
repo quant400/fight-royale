@@ -12,8 +12,8 @@ namespace CFC
 	[RequireComponent(typeof(TPFightingController))]
 	public class CFCInputs : StarterAssetsInputs
 	{
-		public bool punch;
-		public bool kick;
+		public bool attack;
+		public bool toggleAttack;
 		public bool action;
 		public bool block;
 
@@ -24,25 +24,25 @@ namespace CFC
 			_currentEventSys = EventSystem.current;
 		}
 
-		private void OnPunch(InputValue value)
+		private void OnAttack(InputValue value)
 		{
-			if (CheckInputField())
+			if (CheckCanMove())
 			{
-				PunchInput(value.isPressed);
+				AttackInput(value.isPressed);
 			}
 		}
 		
-		private void OnKick(InputValue value)
+		private void OnToggleAttack(InputValue value)
 		{
-			if (CheckInputField())
+			if (CheckCanMove())
 			{
-				KickInput(value.isPressed);
+				ToggleAttackInput(value.isPressed);
 			}
 		}
 		
 		private void OnAction(InputValue value)
 		{
-			if (CheckInputField())
+			if (CheckCanMove())
 			{
 				ActionInput(value.isPressed);
 			}
@@ -50,31 +50,31 @@ namespace CFC
 		
 		private void OnBlock(InputValue value)
 		{
-		    if(CheckInputField())
+		    if(CheckCanMove())
 		    {
 		    	BlockInput(value.isPressed);
 		    }
 		}
 		
-		private void PunchInput(bool newAttackState)
+		private void AttackInput(bool newAttackState)
 		{
-			if (CheckInputField())
+			if (CheckCanMove())
 			{
-				punch = newAttackState;
+				attack = newAttackState;
 			}
 		}
 		
-		private void KickInput(bool newAttackState)
+		private void ToggleAttackInput(bool newToggleAttackState)
 		{
-			if (CheckInputField())
+			if (CheckCanMove())
 			{
-				kick = newAttackState;
+				toggleAttack = newToggleAttackState;
 			}
 		}
 		
 		private void ActionInput(bool newActionState)
 		{
-			if (CheckInputField())
+			if (CheckCanMove())
 			{
 				action = newActionState;
 			}
@@ -82,15 +82,26 @@ namespace CFC
 		
 		private void BlockInput(bool newBlockState)
 		{
-			if (CheckInputField())
+			if (CheckCanMove())
 			{
 				block = newBlockState;
 			}
 		}
 
-		private bool CheckInputField()
+		private bool CheckCanMove()
 		{
 			MenuManager.Instance.ShowTutorial(false);
+			return CheckState() && CheckInputField();
+		}
+
+		private bool CheckState()
+		{
+			return GameManager.Instance.currentMatchState != 1 &&
+			       GameManager.Instance.currentMatchState != 3;
+		}
+
+		private bool CheckInputField()
+		{
 			return _currentEventSys?.currentSelectedGameObject?.GetComponent<TMP_InputField>() == null;
 		}
 	}

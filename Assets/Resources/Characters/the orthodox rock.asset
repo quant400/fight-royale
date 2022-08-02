@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: the orthodox rock
   m_EditorClassIdentifier: 
   Name: the orthodox rock
-  Asset: {fileID: 919132149155446097, guid: 53d1e89f47e1d664cb1e09d5301e67ce, type: 3}
-  Texture: {fileID: 2800000, guid: 30fba246a08fb954ebf29c06595936e4, type: 3}
+  Asset: {fileID: 919132149155446097, guid: ee3d053e390049c49aa769f28daf5764, type: 3}
+  Texture: {fileID: 2800000, guid: b141f7bbff78c3e4190c539fa8020174, type: 3}

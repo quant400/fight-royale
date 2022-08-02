@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: peasant jack
   m_EditorClassIdentifier: 
   Name: peasant jack
-  Asset: {fileID: 919132149155446097, guid: 6f203e21ff7e44f4996b4e5923f1139f, type: 3}
-  Texture: {fileID: 2800000, guid: 97bb6810eb016544c91afa02f1f3dd96, type: 3}
+  Asset: {fileID: 919132149155446097, guid: dda280bf224606a4bbb2a9580e462a7a, type: 3}
+  Texture: {fileID: 2800000, guid: c36d2c9ca498a2e45ba301854d9110be, type: 3}

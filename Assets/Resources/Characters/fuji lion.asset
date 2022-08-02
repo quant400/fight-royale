@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: fuji lion
   m_EditorClassIdentifier: 
   Name: fuji lion
-  Asset: {fileID: 919132149155446097, guid: 681d04f278b30324db7cabae96dd4854, type: 3}
-  Texture: {fileID: 2800000, guid: 9399df2960c903a438697c8e357b4e02, type: 3}
+  Asset: {fileID: 919132149155446097, guid: 7e058edac5db8064abdb58a6dfe26275, type: 3}
+  Texture: {fileID: 2800000, guid: b0ffa83f34e6fbc468364b4aa2d1fb96, type: 3}

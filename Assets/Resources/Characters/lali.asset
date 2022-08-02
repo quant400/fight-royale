@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: lali
   m_EditorClassIdentifier: 
   Name: lali
-  Asset: {fileID: 919132149155446097, guid: 178f09802c835b34586962e410a591c6, type: 3}
-  Texture: {fileID: 2800000, guid: 21fd9b0558e47c745b30d60334ed8aac, type: 3}
+  Asset: {fileID: 919132149155446097, guid: 04e978491813ab64e9ca722d40196dc0, type: 3}
+  Texture: {fileID: 2800000, guid: d96a598af09ad3c4d832c10828dc155b, type: 3}
