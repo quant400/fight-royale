@@ -72,10 +72,9 @@ public class ButtonInfoHolder : MonoBehaviour
             display.sprite = Resources.Load(Path.Combine("DisplaySprites/Display", charName), typeof(Sprite)) as Sprite;
             display.color = new Color(225, 225, 225, 225);
             displayBG.sprite = selectedCharBG[int.Parse(background.sprite.name)];
-            //CSV.DisablePlay();
-            //CSV.UpdateSelected(transform.GetSiblingIndex());
+            Character_Manager.Instance.ChangeCharacter(charName.Replace('-', ' '));
             UpdateInfo();
-            //currentSelected.SetCurrent(charPic.sprite, bgIndex);
+           
         }
        
     }
@@ -88,7 +87,7 @@ public class ButtonInfoHolder : MonoBehaviour
 
 
     void UpdateInfo()
-    {
+    { 
         nameText.text = charName.ToUpper();
         //Invoke("UpdateSessionInfo", 1.5f);
        
