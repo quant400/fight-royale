@@ -8654,6 +8654,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7174127213001769173, guid: 6729c163af2ca3b4ca895947a301f316,
+        type: 3}
+      propertyPath: inGameUI
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 7174127213563622015, guid: 6729c163af2ca3b4ca895947a301f316,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -8663,6 +8668,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: New UI Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 7174127214310805428, guid: 6729c163af2ca3b4ca895947a301f316,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7174127214310805448, guid: 6729c163af2ca3b4ca895947a301f316,
         type: 3}
