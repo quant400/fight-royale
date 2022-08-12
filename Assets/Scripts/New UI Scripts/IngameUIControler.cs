@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class IngameUIControler : MonoBehaviour
 {
-    public static IngameUIControler instance;
+    //public static IngameUIControler instance;
     [SerializeField]
     AudioSource musicAudioSource;
     public bool sfxMuted = false;
@@ -28,7 +28,7 @@ public class IngameUIControler : MonoBehaviour
     [SerializeField]
     TMPro.TMP_InputField chatinput;
     bool chatOpen=false;
-    private void Awake()
+   /* private void Awake()
     {
         if (instance == null)
         {
@@ -40,7 +40,7 @@ public class IngameUIControler : MonoBehaviour
 
         DontDestroyOnLoad(this);
 
-    }
+    }*/
     private void Start()
     {
         musicAudioSource = BGM_Manager.Instance.GetComponent<AudioSource>();
