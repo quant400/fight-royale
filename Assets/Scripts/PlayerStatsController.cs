@@ -24,4 +24,8 @@ public class PlayerStatsController : MonoBehaviour
         _healthBar.fillAmount = health / 100;
     }
 
+    public void SetHealthBar(Image newBar)
+    {
+        _healthBar = newBar;
+    }
 }
