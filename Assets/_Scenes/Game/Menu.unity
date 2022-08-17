@@ -700,7 +700,7 @@ MonoBehaviour:
   baseURL: https://C5FA3.playfabapi.com/
   SecretKey: 3W4J5SK6W8GWHZKMH89GAP3FS1CN5YF83436XAFMXMKGCMJASW
   Region: EastUS
-  _BuildId: 6b37f8e5-1e34-43a1-bbcb-29adc56d85f5
+  _BuildId: c28a5d3b-8def-45a2-b3ae-bd00d506ea78
   EntityToken: 
   EntityTokenResponse:
     code: 0
