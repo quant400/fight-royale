@@ -14,13 +14,11 @@ public class LocalPlayerCanvas : MonoBehaviour
     {
         if(GetComponentInParent<PlayerBehaviour>().isLocalPlayer)
         {
-            Debug.Log(2);
             OtherCanvas.SetActive(false);
             GetComponentInParent<PlayerStatsController>().SetHealthBar(localPlayerHealth);
         }
         else
         {
-            Debug.Log(4);
             gameObject.SetActive(false);
         }
     }
