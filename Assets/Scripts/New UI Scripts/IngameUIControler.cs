@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Mirror;
 
 public class IngameUIControler : MonoBehaviour
 {
-    //public static IngameUIControler instance;
+    public static IngameUIControler instance;
     [SerializeField]
     AudioSource musicAudioSource;
     public bool sfxMuted = false;
@@ -28,7 +29,14 @@ public class IngameUIControler : MonoBehaviour
     [SerializeField]
     TMPro.TMP_InputField chatinput;
     bool chatOpen=false;
-   /* private void Awake()
+
+    [SerializeField]
+    Transform playerDisplayHolder;
+    [SerializeField]
+    GameObject playerDisplayObject;
+    Dictionary<NetworkIdentity,Image> playerMap;
+
+    private void Awake()
     {
         if (instance == null)
         {
@@ -38,9 +46,9 @@ public class IngameUIControler : MonoBehaviour
         else
             Destroy(this.gameObject);
 
-        DontDestroyOnLoad(this);
+        
 
-    }*/
+    }
     private void Start()
     {
         musicAudioSource = BGM_Manager.Instance.GetComponent<AudioSource>();
@@ -75,10 +83,10 @@ public class IngameUIControler : MonoBehaviour
        
     }
 
-   
 
 
 
+    #region Toggle_Buttons
 
     public void MuteSFX()
     {
@@ -158,4 +166,36 @@ public class IngameUIControler : MonoBehaviour
         chatObject.transform.GetChild(1).gameObject.SetActive(false);
         chatObject.transform.GetChild(2).gameObject.SetActive(false);
     }
+    #endregion Toggle_Buttons
+
+    #region Player_Display
+
+    public void AddPlayer(NetworkIdentity p)
+    {
+        Debug.Log("Called");
+        var obj= Instantiate(playerDisplayObject, playerDisplayHolder);
+        playerMap[p] = obj.transform.GetChild(2).GetChild(0).GetComponent<Image>();
+        obj.GetComponent<PlayerDisplayScript>().SetChar(p.name);
+    }
+
+    public void AddPlayers(NetworkIdentity[] p)
+    {
+        foreach(NetworkIdentity n in p)
+        {
+            if(!n.isLocalPlayer)
+            {
+                var obj = Instantiate(playerDisplayObject, playerDisplayHolder);
+                playerMap[n] = obj.transform.GetChild(2).GetChild(0).GetComponent<Image>();
+                obj.GetComponent<PlayerDisplayScript>().SetChar(n.name);
+            }
+        }
+    }
+
+    public void UpdatePLayerHealth(NetworkIdentity p,float damage)
+    {
+        playerMap[p].fillAmount -= damage / 100f;
+    }
+
+    
+    #endregion Player_Display
 }
