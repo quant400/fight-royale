@@ -35,6 +35,19 @@ public class Data_Manager : MonoBehaviour
         }
     }
 
+    public bool isValidAccount()
+    {
+        if (string.IsNullOrEmpty(accountId) || string.IsNullOrEmpty(contractId))
+        {
+            Debug.Log("NOT SEND SCORE - ACCOUNT INVALID");
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
     private void SetAccount(RootAccount tempAccount)
     {
         if (userAccount.accounts.Count == 0)
@@ -73,11 +86,11 @@ public class Data_Manager : MonoBehaviour
             foreach (var account in tempAccounts.accounts)
             {
                 account.name = account.name.Replace(".", "")
-                    .Replace("-"," ")
-                    .Replace("'","");
+                    .Replace("-", " ")
+                    .Replace("'", "");
                 names.Add(account.name);
             }
-            
+
             //System.IO.File.WriteAllText(Application.dataPath+"/data names.txt", string.Join("\n",names));
 
             if (tempAccounts.accounts.Count > 0)
@@ -106,15 +119,22 @@ public class Data_Manager : MonoBehaviour
         if (_selectedAccount == null || true)
         {
             _selectedAccount = userAccount.accounts
-                .FirstOrDefault(a => a.name.ToLower().Equals(Character_Manager.Instance.GetCurrentCharacter.Name.ToLower()));
+                .FirstOrDefault(a =>
+                    a.name.ToLower().Equals(Character_Manager.Instance.GetCurrentCharacter.Name.ToLower()));
         }
 
         currentNftId = _selectedAccount.id;
-        
+
         return _selectedAccount;
     }
-    
-    
+
+    public string GetWalletNfts()
+    {
+        return string.Join(";", userAccount.accounts.Select(auxAccount => auxAccount.id));
+    }
+
+
+
 
 }
 

@@ -92,7 +92,7 @@ public class CFCNetworkManager : NetworkManager
         // you can send the message here, or wherever else you want
         CharacterCustomizationMsg characterMessage = new CharacterCustomizationMsg()
         {
-            skinName = Character_Manager.Instance.GetCurrentCharacter.name
+            skinName = Character_Manager.Instance.GetCurrentCharacter.Name
         };
 
         dollyCam.Priority = 0;

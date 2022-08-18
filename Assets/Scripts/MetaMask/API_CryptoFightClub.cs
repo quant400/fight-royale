@@ -87,12 +87,14 @@ public class API_CryptoFightClub : MonoBehaviour
             onSuccess?.Invoke(json);
         }
     }
-    public void PostScore(Action<string> onSuccess, Action<string> onFail,string data)
+    public void PostScore(int id,Action<string> onSuccess, Action<string> onFail)
     {
+        string data = "{\"id\":" + id +"}";
         StartCoroutine(ActionPostScore(onSuccess, onFail, data));
     }
     private IEnumerator ActionPostScore(Action<string> onSuccess, Action<string> onFail, string data)
     {
+
         string urlToCall = string.Format(baseURL + "game/sdk/pvp/score");
         
         UnityWebRequest www = CreateRequestPOST(urlToCall, data);
@@ -109,7 +111,8 @@ public class API_CryptoFightClub : MonoBehaviour
     }
     public void PostStartSession(string data, Action<string> onSuccess = null, Action<string> onFail = null)
     {
-        StartCoroutine(ActionPostStartSession(data, onSuccess, onFail));
+        if(Data_Manager.Instance.isValidAccount())
+            StartCoroutine(ActionPostStartSession(data, onSuccess, onFail));
     }
     private IEnumerator ActionPostStartSession(string data, Action<string> onSuccess = null, Action<string> onFail = null)
     {
@@ -129,7 +132,8 @@ public class API_CryptoFightClub : MonoBehaviour
     }
     public void PostEndSession(string data, Action<string> onSuccess = null, Action<string> onFail = null)
     {
-        StartCoroutine(ActionPostEndSession(data, onSuccess, onFail));
+        if (Data_Manager.Instance.isValidAccount())
+            StartCoroutine(ActionPostEndSession(data, onSuccess, onFail));
     }
     private IEnumerator ActionPostEndSession(string data, Action<string> onSuccess = null, Action<string> onFail = null)
     {
@@ -201,6 +205,27 @@ public class API_CryptoFightClub : MonoBehaviour
         if (www.isNetworkError || www.isHttpError)
         {
             onFail?.Invoke(www.error);
+        }
+        else
+        {
+            onSuccess?.Invoke(www.downloadHandler.text);
+        }
+    }
+
+    [Obsolete("Don't use anymore", true)]
+    public void GetSessions(int nftId, Action<string> onSuccess, Action<string> onFail)
+    {
+        StartCoroutine(ActionGetSessions(nftId, onSuccess, onFail));
+    }
+    private IEnumerator ActionGetSessions(int nftId, Action<string> onSuccess, Action<string> onFail)
+    {
+        string urlToCall = string.Format(baseURL + "game/sdk/status/sessions/{0}", nftId);
+        UnityWebRequest www = CreateRequestGET(urlToCall);
+        yield return www.SendWebRequest();
+
+        if (www.isNetworkError || www.isHttpError)
+        {
+            onFail?.Invoke(www.error);   
         }
         else
         {

@@ -7,8 +7,8 @@ using UnityEngine;
 public class PowerUp : ScriptableObject
 {
     public string Name;
-    public Color Color;
     public AttributePower Attribute;
+    public GameObject Effect_Prefab;
 }
 
 [Serializable]

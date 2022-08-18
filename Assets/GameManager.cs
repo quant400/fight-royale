@@ -12,17 +12,22 @@ public class GameManager : NetworkBehaviour
     [Header("Variables")]
     public int timeOutTime = 60;
     public int preGameTime = 5;
+    public int inGameTime = 600;
     public int postGameTime = 5;
     
     public int minPlayersToPlay = 2;
+    
+    public bool isEndingGameTime = false;
     
     [Header("Components")] 
     public MatchManager match;
     public TimerManager timer;
     public CloseAreaManager closeArea;
     public TimerBehavior timerBehavior;
+    public TimerBehavior gameTimeoutTimerBehavior;
     public AnalyticsManager analytics;
     public LevelManager level;
+    public PowerUpManager powerUp;
 
     [SyncVar] public int currentMatchState;
 
@@ -43,6 +48,8 @@ public class GameManager : NetworkBehaviour
         //PreGame
         match.onPreGameState.AddListener(PreGame);
         match.onPreGameState.AddListener(analytics.InitScore);
+        
+        match.onInGameState.AddListener(StartGameTimeout);
 
         //PostGame
         match.onPostGameState.AddListener(PostGame);
@@ -125,9 +132,51 @@ public class GameManager : NetworkBehaviour
     {
         //Resetar tudo
         match.ChangeState(MatchManager.MatchState.InGame);
-        timer.StartTime();
+        //timer.StartTime();
+    }
+
+    private void StartGameTimeout()
+    {
+        isEndingGameTime = false;
+        MrTime_Manager.Instance.SetTimer(inGameTime, UpdateGameTimeout, GameTimeout);
+    }
+
+    private void GameTimeout()
+    {
+        //todo: tela de empate
+        RpcDraw();
+        match.ChangeState(MatchManager.MatchState.PostGame);
+    }
+
+    [ClientRpc]
+    public void RpcDraw()
+    {
+        MenuManager.Instance.ShowKO();
+    }
+
+    private void UpdateGameTimeout(int time)
+    {
+        if (time < 60 && !isEndingGameTime)
+        {
+            RpcSetupGameTimeout(inGameTime);
+            isEndingGameTime = true;
+        }
+
+        RpcEndGameTimeout(time);
     }
     
+    [ClientRpc]
+    public void RpcSetupGameTimeout(int time)
+    {
+        gameTimeoutTimerBehavior.SetupTimer("Game ending in", time);
+    }
+
+    [ClientRpc]
+    public void RpcEndGameTimeout(int time)
+    {
+        gameTimeoutTimerBehavior.UpdateTimer(time);
+    }
+
     #endregion
     
     #region Ending
@@ -146,11 +195,18 @@ public class GameManager : NetworkBehaviour
     private void PostGame()
     {
         //STOP GAME
-        var winner = analytics.GetWinner();
-        winner.gameObject.GetComponent<PlayerBehaviour>().RpcWin();
-
-        RpcSetupEndingTimer(postGameTime);
-        MrTime_Manager.Instance.SetTimer(postGameTime, UpdatePostGameTimer, EndMatch);
+        try
+        {
+            var winner = analytics.GetWinner();
+            winner.gameObject.GetComponent<PlayerBehaviour>().RpcWin();
+            RpcSetupEndingTimer(postGameTime);
+            MrTime_Manager.Instance.SetTimer(postGameTime, UpdatePostGameTimer, EndMatch);
+        }
+        catch (System.Exception ex)
+        {
+            Debug.Log("Exception PostGame " + ex);
+        }
+       
     }
 
     private void EndMatch()

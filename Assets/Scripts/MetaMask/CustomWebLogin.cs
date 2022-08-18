@@ -11,6 +11,8 @@ public class CustomWebLogin : MonoBehaviour
     [SerializeField]
     private GameObject panelStart;
     [SerializeField]
+    private GameObject panelTryOut;
+    [SerializeField]
     private GameObject panelSelection;
     [Header("Connecting")]
     [SerializeField]
@@ -100,10 +102,7 @@ public class CustomWebLogin : MonoBehaviour
 
     public void OnGuest()
     {
-        //Versão com conta base
-        //_account = "account0x846b257a244141ecb5c65d7c8a122a72a5564c38";
-        //OnEnter("Guest");
-        //return;
+        panelTryOut.SetActive(true);
 
         //Versão com todos os personagens
         try
