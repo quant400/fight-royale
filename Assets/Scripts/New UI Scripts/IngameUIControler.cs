@@ -144,7 +144,7 @@ public class IngameUIControler : MonoBehaviour
         chatOpen = true;
         chatButtonImage.sprite = disableImage;
         chatButtonImage.transform.GetChild(0).GetComponent<Image>().color = new Color(0.9450981f, 0.1215686f, 0.172549f, 1f);
-        chatObject.transform.GetChild(0).gameObject.SetActive(true);
+        chatObject.transform.GetChild(0).gameObject.SetActive(false);
         chatObject.transform.GetChild(1).gameObject.SetActive(true);
         chatObject.transform.GetChild(2).gameObject.SetActive(false);
     }
@@ -156,6 +156,6 @@ public class IngameUIControler : MonoBehaviour
         chatButtonImage.transform.GetChild(0).GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f);
         chatObject.transform.GetChild(0).gameObject.SetActive(false);
         chatObject.transform.GetChild(1).gameObject.SetActive(false);
-        chatObject.transform.GetChild(2).gameObject.SetActive(true);
+        chatObject.transform.GetChild(2).gameObject.SetActive(false);
     }
 }

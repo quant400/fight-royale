@@ -64,7 +64,7 @@ public class StartMenu_Manager : MonoBehaviour
             Connection_Manager.Instance.SearchAvailableLobby(
                 () =>
                 {
-                    OnSetText("Looking for Room wait...");
+                    OnSetText("Looking for Room wait...".ToUpper());
                     OnLoading();
                 },
                 OnSuccess,
