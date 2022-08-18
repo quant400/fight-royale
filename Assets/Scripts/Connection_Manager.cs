@@ -67,7 +67,7 @@ public class Connection_Manager : MonoBehaviour
         
         }, OnFail);
     }
-    private IEnumerator ActionSearchAvailableLobby(Action actionOnStart, Action actionOnSuccess, Action actionOnFail)
+    private IEnumerator ActionSearchAvailableLobby(Action actionOnStart, Action actionOnSuccess, Action actionOnFullLobby= null,Action actionOnFail = null)
     {
         actionOnStart();
         yield return new WaitForSeconds(5.0f);
@@ -90,6 +90,7 @@ public class Connection_Manager : MonoBehaviour
                 else
                 {
                     Debug.Log("Not Found Lobby - Try Again");
+                    actionOnFullLobby?.Invoke();
                     SearchAvailableLobby(actionOnStart, actionOnSuccess, actionOnFail);
                 }
                     
@@ -98,13 +99,13 @@ public class Connection_Manager : MonoBehaviour
 
                 Debug.Log("SearchAvailableLobby OnFail");
                 OnFail(msg);
-                actionOnFail();
+                actionOnFail?.Invoke();
             });
         }
         catch (Exception e)
         {
             OnFail(e.Message);
-            actionOnFail();
+            actionOnFail?.Invoke();
         }
     }
     private void CreateListLobby()
@@ -160,9 +161,9 @@ public class Connection_Manager : MonoBehaviour
         , OnFail, postData);
 
     }
-    public void SearchAvailableLobby(Action actionOnStart, Action actionOnSuccess, Action actionOnFail)
+    public void SearchAvailableLobby(Action actionOnStart, Action actionOnSuccess, Action actionOnFullLobby = null, Action actionOnFail = null)
     {
-        StartCoroutine(ActionSearchAvailableLobby(actionOnStart, actionOnSuccess, actionOnFail));
+        StartCoroutine(ActionSearchAvailableLobby(actionOnStart, actionOnSuccess, actionOnFullLobby,actionOnFail));
     }
     public void SendCloseLobby(Action onFinish = null)
     {
@@ -263,6 +264,28 @@ public class Connection_Manager : MonoBehaviour
             }
 
         }, actionOnFail);
+
+    }
+    public void GetPlayerPvpScore(int nftId, Action<CFC.Serializable.PlayerPvpScore> actionOnSuccess,Action<string> actionOnFail)
+    {
+        CFC.Serializable.PlayerPvpScore playerPvpScore = null;
+
+        Api_CryptoFightClub.PostScore(nftId, (data) => 
+        {
+            try
+            {
+                Debug.Log(data);
+                var json = data;
+                playerPvpScore = JsonUtility.FromJson<CFC.Serializable.PlayerPvpScore>(json);
+                actionOnSuccess(playerPvpScore);
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e);
+                actionOnFail(e.Message);
+            }
+        }
+        , actionOnFail);
 
     }
 }

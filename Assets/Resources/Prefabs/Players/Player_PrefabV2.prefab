@@ -3441,7 +3441,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8100442382878791813}
   m_LocalRotation: {x: 0.009187515, y: -0.7156212, z: -0.69759, w: -0.034208216}
-  m_LocalPosition: {x: 0.68578285, y: -0.13897742, z: 0.3848188}
+  m_LocalPosition: {x: 0.63, y: -0.14, z: 0.38}
   m_LocalScale: {x: 3.3756957, y: 3.375695, z: 3.3756952}
   m_Children: []
   m_Father: {fileID: 1714174537776097861}
@@ -3753,7 +3753,7 @@ MonoBehaviour:
   FallTimeout: 0.15
   Grounded: 1
   GroundedOffset: -0.14
-  GroundedRadius: 0.28
+  GroundedRadius: 0.15
   GroundLayers:
     serializedVersion: 2
     m_Bits: 513
@@ -3797,10 +3797,10 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 2
   m_Height: 1.5
-  m_Radius: 0.28
+  m_Radius: 0.2
   m_SlopeLimit: 45
   m_StepOffset: 0.4
-  m_SkinWidth: 0.02
+  m_SkinWidth: 0.03
   m_MinMoveDistance: 0
   m_Center: {x: 0, y: 0.77, z: 0}
 --- !u!114 &1225964158235317973

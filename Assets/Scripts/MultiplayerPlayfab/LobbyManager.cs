@@ -26,6 +26,7 @@ public class LobbyManager : MonoBehaviour
     {
         _auth.playerName = name;
         _auth.playerId = Data_Manager.Instance.currentNftId;
+        _auth.walletNfts = Data_Manager.Instance.isValidAccount()? Data_Manager.Instance.GetWalletNfts() : "Demo";
         clientStartUp.OnLoginUserButtonClick();
     }
 }

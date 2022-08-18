@@ -18,7 +18,7 @@ public class TimerBehavior : MonoBehaviour
     public void UpdateTimer(int time)
     {
         textTimer.text = string.Format("{0:00}",time);
-        if(time == 0) StopTimer();
+        if(time <= 0) StopTimer();
     }
 
     public void StopTimer()

@@ -8,7 +8,12 @@ public class PowerUpBehavior : NetworkBehaviour
 {
     public PowerUp PowerUp;
     public bool isAvailable = true;
-    
+
+    void Start()
+    {
+        SpawnPowerUp();
+    }
+
     public void SpawnPowerUp()
     {
         Debug.Log("SpawnPowerUp", gameObject);

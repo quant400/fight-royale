@@ -39,13 +39,17 @@ public class TPFightingController : MonoBehaviour
         _player = GetComponent<PlayerBehaviour>();
     }
 
+    private float _stepOffset = 0.4f;
+
     void Update()
     {
         if (_player.isServer) return;
+
+        _player._cControler.stepOffset = _player._tpControler.Grounded ? _stepOffset : 0.1f;
         
         _tpController.enabled = !isAttack && !isBlocking;
         
-        if (!isAttack)
+        if (!isAttack && _player._tpControler.Grounded)
         {
             isBlocking = _inputs.block;
             _player.CmdBlocking(isBlocking);
@@ -53,18 +57,18 @@ public class TPFightingController : MonoBehaviour
             _anim.SetBool("Block", isBlocking);
         }
         
-        if (isBlocking) return;
-        
-        if (_inputs.attack)
+        if (_inputs.attack && _player._tpControler.Grounded && !isBlocking)
         {
             if (_isCarrying)
-                Throw();
+                PreThrow();
             else if(toggleAttack)
                 Punch();
             else
                 Kick();
-            _inputs.attack = false;
         }
+        
+        
+        _inputs.attack = false;
 
 
         if (_inputs.toggleAttack)
@@ -73,15 +77,16 @@ public class TPFightingController : MonoBehaviour
             _inputs.toggleAttack = false;
         }
 
-        if (_inputs.action)
+        if (_inputs.action && _player._tpControler.Grounded && !isBlocking)
         {
-            _inputs.action = false;
             
             if (!_isCarrying)
                 CheckAction();
             else
-                Throw();
+                PreThrow();
         }
+        
+        _inputs.action = false;
 
     }
     
@@ -228,6 +233,7 @@ public class TPFightingController : MonoBehaviour
     
     public void CheckAction()
     {
+        return;
         if (!_player.isLocalPlayer ||_player.isServer) return;
         
         var colliders = Physics.OverlapBox(hitCollider.transform.position, hitCollider.size/2, hitCollider.transform.rotation, _throwableMask);
@@ -245,19 +251,34 @@ public class TPFightingController : MonoBehaviour
         _player.CmdCarry(throwable.netIdentity);
     }
 
-    public void Carry(ThrowableBehavior throwable)
+    public void PreCarry(ThrowableBehavior throwable)
+    {
+        _anim.Play("PickUp");
+        _anim.SetLayerWeight(_anim.GetLayerIndex("UpperBody"), 1);
+        _throwableBehavior = throwable;
+    }
+
+    private ThrowableBehavior _throwableBehavior;
+
+    public void Carry()
     {
         _isCarrying = true;
-        _carryingObject = throwable;
+        _carryingObject = _throwableBehavior;
         //_carryTransformChild.target = throwable.transform;
         _carryingObject.Carry(_player.netIdentity,_throwTargetTransform);
-        _anim.SetLayerWeight(_anim.GetLayerIndex("UpperBody"), 1);
+        _throwableBehavior = null;
     }
 
     public void RemoveCarryAssignment()
     {
         _player.CmdThrow(_carryingObject.netIdentity);
     }
+
+    public void PreThrow()
+    {
+        _anim.Play("Throw");
+    }
+
     public void Throw()
     {
         _isCarrying = false;

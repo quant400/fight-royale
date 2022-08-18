@@ -97,7 +97,8 @@ public class PlayerAttributes : MonoBehaviour
 
     public float Block(float damage)
     {
-        var trueDamage = Mathf.Clamp(damage - _baseBlockDef, 1, 50);
+        float percenteDamage = 1.0f - (_baseBlockDef/ 100);
+        float trueDamage = damage * percenteDamage;
         return trueDamage;
     }
 
@@ -137,10 +138,13 @@ public class PlayerAttributes : MonoBehaviour
 
     private IEnumerator AddPower(PowerUp power, Action<bool> powerUpAction = null)
     {
+        var Effect = Instantiate(power.Effect_Prefab, this.transform);
         activePowerUps.Add(power);
         powerUpAction?.Invoke(true);
         yield return new WaitForSeconds(power.Attribute.Duration);
         powerUpAction?.Invoke(false);
+        yield return new WaitForSeconds(0.5f);
+        Destroy(Effect?.gameObject);
         activePowerUps.Remove(power);
 
     }

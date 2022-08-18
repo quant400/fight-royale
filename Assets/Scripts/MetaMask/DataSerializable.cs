@@ -40,8 +40,33 @@ namespace CFC.Serializable
     {
         public List<Account> accounts;
     }
-}
 
+
+    [Serializable]
+    public class NTFStatusSessions
+    {
+        public bool hasAnySessionOpened;
+        public bool hasChickenSessionOpened;
+        public bool hasBearSessionOpened;
+        public bool hasPVPSessionOpened;
+
+    }
+
+
+    [Serializable]
+    public class PlayerPvpScore
+    {
+        public string _id;
+        public int id;
+        public int dailyScore;
+        public int allTimeScore;
+        public int dailySessionPlayed;
+        public int totalSessionPlayed;
+        public int kills;
+        public DateTime updatedAt;
+        public int __v;
+    }
+}
 
 namespace CFC.Serializable.Leaderboard
 {

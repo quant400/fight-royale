@@ -31,7 +31,7 @@ public class TimerManager : NetworkBehaviour
 
     void Start()
     {
-        Menu.ShowTime(true);
+        //Menu.ShowTime(true);
         //if(isServer && false) StartTime();
     }
     

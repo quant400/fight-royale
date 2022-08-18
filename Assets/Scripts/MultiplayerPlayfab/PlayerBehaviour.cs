@@ -64,14 +64,6 @@ public class PlayerBehaviour : NetworkBehaviour
 
     }
 
-    void Update()
-    {
-        if (isLocalPlayer)
-        {
-        }
-    }
-
-
     void OnTriggerEnter(Collider other)
     {
         switch (other.gameObject.tag)
@@ -80,9 +72,27 @@ public class PlayerBehaviour : NetworkBehaviour
                 Death(null);
                 break;
             case "PowerUp":
+                /*if(hasAuthority && isClient)
+                    CmdPowerUp(other.GetComponent<NetworkIdentity>());
+                Debug.Log(other.GetComponent<NetworkIdentity>().netId);*/
+
                 _pAttributes.OnPowerUp(other.GetComponent<PowerUpBehavior>().GetPowerUp());
                 break;
         }
+    }
+
+    [Command]
+    private void CmdPowerUp(NetworkIdentity powerUp)
+    {
+        Debug.Log(powerUp.netId);
+            RpcPowerUp(powerUp);
+    }
+
+    [ClientRpc]
+    private void RpcPowerUp(NetworkIdentity powerUp)
+    {
+        Debug.Log(powerUp.netId);
+        powerUp.GetComponent<PowerUpBehavior>().GetPowerUp();
     }
 
     #endregion
@@ -382,7 +392,7 @@ public class PlayerBehaviour : NetworkBehaviour
     [ClientRpc]
     public void RpcCarry(NetworkIdentity item)
     {
-        _tpFightingControler.Carry(item.GetComponent<ThrowableBehavior>());
+        _tpFightingControler.PreCarry(item.GetComponent<ThrowableBehavior>());
     }
 
     #endregion

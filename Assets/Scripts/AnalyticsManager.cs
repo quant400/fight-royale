@@ -36,7 +36,13 @@ public class AnalyticsManager : MonoBehaviour
         var auxPlayer = GetPlayerByNetIdentity(netIdentity);
         auxPlayer.isConnected = false;
     }
-    
+
+    public bool CheckWallet(string nftIds)
+    {
+        var nftIdsList = nftIds.Split(';').ToList();
+        return !players.Any(auxPlayer => nftIdsList.Contains(auxPlayer.id.ToString()));
+    }
+
     #endregion
     
     #region Game Rules

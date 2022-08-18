@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: PowerUp [Atk]
   m_EditorClassIdentifier: 
   Name: power up attack
-  Color: {r: 0, g: 1, b: 0, a: 1}
   Attribute:
     Code: 1
     Description: Increases attack power
     Value: 0.2
     Duration: 60
+  Effect_Prefab: {fileID: 5690725435046760833, guid: e52a243b17e70bf43a92d7c7c39b22aa,
+    type: 3}

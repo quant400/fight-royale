@@ -15,7 +15,9 @@ MonoBehaviour:
   Name: power up heal
   Color: {r: 1, g: 0, b: 0, a: 1}
   Attribute:
-    Code: HEAL
+    Code: 0
     Description: restores character's life
     Value: 0.5
     Duration: 0
+  Effect_Prefab: {fileID: 5690725435046760833, guid: b85fe445b4b7c0e47853cc553a50ce65,
+    type: 3}

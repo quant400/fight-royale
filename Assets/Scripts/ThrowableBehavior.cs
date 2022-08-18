@@ -27,8 +27,8 @@ public class ThrowableBehavior : NetworkBehaviour
 
     public void AdjustPosition(Transform target)
     {
-        Vector3 pos = new Vector3(-0.13f, 0.42f, -0.04f);
-        Vector3 rot = new Vector3(37,110,37);
+        Vector3 pos = new Vector3(0.65f, -0.03f, -0.48f);
+        Vector3 rot = new Vector3(58f,144,-29);
 
         transform.localPosition = pos;
         transform.localRotation = Quaternion.Euler(rot);

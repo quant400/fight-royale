@@ -10,6 +10,7 @@ public class CFCAuth : NetworkAuthenticator
 
     [Header("Client Username")] public string playerName;
     public int playerId;
+    public string walletNfts;
     
     #region Messages
 
@@ -17,6 +18,7 @@ public class CFCAuth : NetworkAuthenticator
     {
         public string authUsername;
         public int nftId;
+        public string nftWallet;
     }
 
     public class AuthResponseMessage : MessageBase
@@ -42,11 +44,14 @@ public class CFCAuth : NetworkAuthenticator
     private void OnAuthRequestMessage(NetworkConnection conn, AuthRequestMessage msg)
     {
         Debug.Log($"Authentication Request: {msg.authUsername}");
+        Debug.Log($"Id: {msg.nftId}");
+        Debug.Log($"Wallet: {string.Join(", ",msg.nftWallet)}");
 
         if (connectionsPendingDisconnect.Contains(conn)) return;
 
         if ((!PlayerBehaviour.playerNames.Contains(msg.authUsername) || true) &&
-            GameManager.Instance.match.currentState == MatchManager.MatchState.Lobby)
+            GameManager.Instance.match.currentState == MatchManager.MatchState.Lobby &&
+            (msg.nftWallet.Equals("Demo") || GameManager.Instance.analytics.CheckWallet(msg.nftWallet)))
         {
             PlayerBehaviour.playerNames.Add(msg.authUsername);
             //GameManager.Instance.analytics.AddPlayer(msg.nftId,conn.identity);
@@ -106,7 +111,8 @@ public class CFCAuth : NetworkAuthenticator
         AuthRequestMessage authRequestMessage = new AuthRequestMessage
         {
             authUsername = playerName,
-            nftId = playerId
+            nftId = playerId,
+            nftWallet = walletNfts
         };
 
         conn.Send(authRequestMessage);

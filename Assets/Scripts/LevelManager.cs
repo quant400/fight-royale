@@ -1,20 +1,20 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Mirror;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class LevelManager : NetworkBehaviour
 {
     [SerializeField] private List<PropsBehavior> _props;
-    [SerializeField] private List<PowerUpBehavior> _powerUps;
 
     void Start()
     {
         if (!isServer) return;
         
         _props = FindObjectsOfType<PropsBehavior>().ToList();
-        _powerUps = FindObjectsOfType<PowerUpBehavior>().ToList();
         
         Subscribe();
     }
@@ -22,7 +22,8 @@ public class LevelManager : NetworkBehaviour
     void Subscribe()
     {
         GameManager.Instance.match.onLobbyState.AddListener(ResetProps);
-        //GameManager.Instance.match.onPreGameState.AddListener(ResetLevel);
+        //GameManager.Instance.match.onLobbyState.AddListener(ResetPowerUps);
+        //GameManager.Instance.match.onPreGameState.AddListener(ResetPowerUps);
         GameManager.Instance.match.onInGameState.AddListener(ResetLevel);
     }
 
@@ -48,12 +49,7 @@ public class LevelManager : NetworkBehaviour
     void ResetPowerUps()
     {
         Debug.Log("ResetPowerUps");
-
-        foreach (var powerUp in _powerUps)
-        {
-            powerUp.SpawnPowerUp(); //Altera no servidor
-            powerUp.RpcSpawnPowerUp();  //Altera no client
-        }
+        GameManager.Instance.powerUp.SpawnPowerUps();
     }
 
     void ResetPlayers()
