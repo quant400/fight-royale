@@ -34,7 +34,7 @@ public class IngameUIControler : MonoBehaviour
     Transform playerDisplayHolder;
     [SerializeField]
     GameObject playerDisplayObject;
-    Dictionary<NetworkIdentity,Image> playerMap;
+    Dictionary<NetworkIdentity,Image> playerMap = new Dictionary<NetworkIdentity, Image>();
 
     private void Awake()
     {
@@ -170,28 +170,23 @@ public class IngameUIControler : MonoBehaviour
 
     #region Player_Display
 
-    public void AddPlayer(NetworkIdentity p)
+    public void AddPlayer(NetworkIdentity p, GameObject chtr)
     {
-        Debug.Log("Called");
         var obj= Instantiate(playerDisplayObject, playerDisplayHolder);
         playerMap[p] = obj.transform.GetChild(2).GetChild(0).GetComponent<Image>();
-        obj.GetComponent<PlayerDisplayScript>().SetChar(p.name);
+        Debug.Log(p.gameObject.GetComponent<PlayerBehaviour>().pName);
+        obj.GetComponent<PlayerDisplayScript>().SetChar(p.gameObject.GetComponent<PlayerBehaviour>().pName.Replace(' ','-'), chtr);
     }
 
-    public void AddPlayers(NetworkIdentity[] p)
+    public void AddLocalPlayer(NetworkIdentity p)
     {
-        foreach(NetworkIdentity n in p)
-        {
-            if(!n.isLocalPlayer)
-            {
-                var obj = Instantiate(playerDisplayObject, playerDisplayHolder);
-                playerMap[n] = obj.transform.GetChild(2).GetChild(0).GetComponent<Image>();
-                obj.GetComponent<PlayerDisplayScript>().SetChar(n.name);
-            }
-        }
+        var obj = Instantiate(playerDisplayObject, playerDisplayHolder);
+        playerMap[p] = obj.transform.GetChild(2).GetChild(0).GetComponent<Image>();
+        Debug.Log(p.gameObject.GetComponent<PlayerBehaviour>().pName);
+        obj.GetComponent<PlayerDisplayScript>().SetLocalChar(p.gameObject.GetComponent<PlayerBehaviour>().pName.Replace(' ', '-'));
     }
 
-    public void UpdatePLayerHealth(NetworkIdentity p,float damage)
+    public void UpdatePlayerHealth(NetworkIdentity p,float damage)
     {
         playerMap[p].fillAmount -= damage / 100f;
     }

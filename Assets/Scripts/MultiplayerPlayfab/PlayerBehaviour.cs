@@ -107,6 +107,7 @@ public class PlayerBehaviour : NetworkBehaviour
             //_cControler.enabled = false;
             _tpControler.enabled = false;
             _tpFightingControler.enabled = false;
+            IngameUIControler.instance.AddPlayer(netIdentity, gameObject);
         }
         else
         {
@@ -114,7 +115,9 @@ public class PlayerBehaviour : NetworkBehaviour
             Camera_Manager.Instance.followCam.m_Follow = _camTarget;
             ChatGlobal_Manager.Instance.player = this;
             _pAttributes.gameObject.SetActive(true);
+            IngameUIControler.instance.AddLocalPlayer(netIdentity);
         }
+        
     }
 
     private void OnPlayerNameChanged(string _, string newName)

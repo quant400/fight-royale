@@ -433,10 +433,15 @@ MonoBehaviour:
   charName: {fileID: 1257243480436992331}
   backGroundImages:
   - {fileID: 21300000, guid: 58bab83e677ed4e439c0e8bb63e4fd53, type: 3}
+  - {fileID: 21300000, guid: e195f60b1f4a1864a846fc0124e4f634, type: 3}
   - {fileID: 21300000, guid: 030d235bfb6015644bb7b754d9b999d0, type: 3}
   - {fileID: 21300000, guid: 2cf32dc1a82597c4895d8f2d4a459389, type: 3}
-  - {fileID: 21300000, guid: 4631132bd64a1924cad605ebd768ae9a, type: 3}
   - {fileID: 21300000, guid: dee10f40f0fa53449a664eeec2da8c74, type: 3}
+  nameDisplayBackgrounds:
+  - {fileID: 21300000, guid: e17a3ffb69b6b744390b53a261d9ee94, type: 3}
+  - {fileID: 21300000, guid: 23389806e0345ad44ad615723e09f04f, type: 3}
+  - {fileID: 21300000, guid: 29e978fc78c83204baa1537ad72de9cb, type: 3}
+  - {fileID: 21300000, guid: 1ab4b350bf9d5d546bb8fce628e372a3, type: 3}
 --- !u!1 &1257243481197383489
 GameObject:
   m_ObjectHideFlags: 0

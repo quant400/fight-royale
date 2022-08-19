@@ -17,32 +17,43 @@ public class PlayerDisplayScript : MonoBehaviour
     TMP_Text charName;
     [SerializeField]
     Sprite[] backGroundImages;
+    [SerializeField]
+    Sprite[] nameDisplayBackgrounds;
 
     private void Start()
     {
-        SetChar(Character_Manager.Instance.GetCurrentCharacter.Name.Replace(' ','-'));
+        //SetChar(Character_Manager.Instance.GetCurrentCharacter.Name.Replace(' ','-'));
     }
-    public void SetChar(string cName)
+    public void SetChar(string cName ,GameObject chtr)
     {
         character.sprite = Resources.Load(Path.Combine("DisplaySprites/HeadShots", cName), typeof(Sprite)) as Sprite;
-        if (transform.GetSiblingIndex() == 0)
-            Background.sprite = backGroundImages[4];
-        else
-            Background.sprite = backGroundImages[transform.GetSiblingIndex()-1];
+        Debug.Log((transform.GetSiblingIndex(), backGroundImages[transform.GetSiblingIndex()].name));
+        Background.sprite = backGroundImages[transform.GetSiblingIndex()];
         charName.text = cName.ToUpper();
-        SetHealthColor();
+        SetHealthColor(transform.GetSiblingIndex());
+        SetNameDisplayColor(chtr);
     }
 
-    void SetHealthColor()
+    public void SetLocalChar(string cName)
     {
-        int ind = transform.GetSiblingIndex();
+        character.sprite = Resources.Load(Path.Combine("DisplaySprites/HeadShots", cName), typeof(Sprite)) as Sprite;
+        Background.sprite = backGroundImages[4];
+        charName.text = cName.ToUpper();
+        SetHealthColor(5);
+        Invoke("CheckIndex",1f);
+    }
+    void SetHealthColor(int ind)
+    {
         switch(ind)
         {
-            case 0:
+            case 5:
                 HealthBar.color = Color.red;
                 break;
-            case 1:
+            case 0:
                 HealthBar.color = new Color(0.5882353f, 0.1333333f, 0.9450981f, 1);
+                break;
+            case 1:
+                HealthBar.color = Color.green;
                 break;
             case 2:
                 HealthBar.color = Color.yellow;
@@ -53,5 +64,16 @@ public class PlayerDisplayScript : MonoBehaviour
 
         }
 
+    }
+    public void SetNameDisplayColor(GameObject character)
+    {
+        character.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = nameDisplayBackgrounds[transform.GetSiblingIndex()];
+    }
+    void CheckIndex()
+    {
+        if(transform.GetSiblingIndex()!=0)
+        {
+            transform.SetAsFirstSibling();
+        }
     }
 }
