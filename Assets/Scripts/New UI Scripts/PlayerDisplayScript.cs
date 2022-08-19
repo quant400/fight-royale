@@ -27,7 +27,6 @@ public class PlayerDisplayScript : MonoBehaviour
     public void SetChar(string cName ,GameObject chtr)
     {
         character.sprite = Resources.Load(Path.Combine("DisplaySprites/HeadShots", cName), typeof(Sprite)) as Sprite;
-        Debug.Log((transform.GetSiblingIndex(), backGroundImages[transform.GetSiblingIndex()].name));
         Background.sprite = backGroundImages[transform.GetSiblingIndex()];
         charName.text = cName.ToUpper();
         SetHealthColor(transform.GetSiblingIndex());

@@ -174,7 +174,6 @@ public class IngameUIControler : MonoBehaviour
     {
         var obj= Instantiate(playerDisplayObject, playerDisplayHolder);
         playerMap[p] = obj.transform.GetChild(2).GetChild(0).GetComponent<Image>();
-        Debug.Log(p.gameObject.GetComponent<PlayerBehaviour>().pName);
         obj.GetComponent<PlayerDisplayScript>().SetChar(p.gameObject.GetComponent<PlayerBehaviour>().pName.Replace(' ','-'), chtr);
     }
 

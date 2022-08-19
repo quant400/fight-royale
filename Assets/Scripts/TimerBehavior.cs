@@ -15,7 +15,8 @@ public class TimerBehavior : MonoBehaviour
         textTitle.text = title.ToUpper();
         textTimer.text = string.Format("{0:00}",time);
         textTimer.fontSize = textTitle.fontSize;
-        fillImage.fillAmount = 1f;
+        if(fillImage!=null)
+            fillImage.fillAmount = 1f;
         initialTime = time;
         gameObject.SetActive(true);
     }
@@ -25,7 +26,8 @@ public class TimerBehavior : MonoBehaviour
         if (textTimer.fontSize != textTitle.fontSize)
             textTimer.fontSize = textTitle.fontSize;
         textTimer.text = string.Format("{0:00}",time);
-        fillImage.fillAmount = (float)time / (float)initialTime;
+        if (fillImage != null)
+            fillImage.fillAmount = (float)time / (float)initialTime;
         if(time <= 0) StopTimer();
     }
 
