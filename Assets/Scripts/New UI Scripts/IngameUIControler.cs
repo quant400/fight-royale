@@ -36,6 +36,8 @@ public class IngameUIControler : MonoBehaviour
     GameObject playerDisplayObject;
     Dictionary<NetworkIdentity,Image> playerMap = new Dictionary<NetworkIdentity, Image>();
 
+    public bool localPlayerSpawned =false;
+    int playerNum  = 0;
     private void Awake()
     {
         if (instance == null)
@@ -175,14 +177,15 @@ public class IngameUIControler : MonoBehaviour
         var obj= Instantiate(playerDisplayObject, playerDisplayHolder);
         playerMap[p] = obj.transform.GetChild(2).GetChild(0).GetComponent<Image>();
         obj.GetComponent<PlayerDisplayScript>().SetChar(p.gameObject.GetComponent<PlayerBehaviour>().pName.Replace(' ','-'), chtr);
+        playerNum++;
     }
 
     public void AddLocalPlayer(NetworkIdentity p)
     {
         var obj = Instantiate(playerDisplayObject, playerDisplayHolder);
         playerMap[p] = obj.transform.GetChild(2).GetChild(0).GetComponent<Image>();
-        Debug.Log(p.gameObject.GetComponent<PlayerBehaviour>().pName);
         obj.GetComponent<PlayerDisplayScript>().SetLocalChar(p.gameObject.GetComponent<PlayerBehaviour>().pName.Replace(' ', '-'));
+        localPlayerSpawned = true;
     }
 
     public void UpdatePlayerHealth(NetworkIdentity p,float damage)
@@ -190,6 +193,9 @@ public class IngameUIControler : MonoBehaviour
         playerMap[p].fillAmount -= damage / 100f;
     }
 
-    
+    public int GetPlayerNumber()
+    {
+        return playerNum;
+    }
     #endregion Player_Display
 }

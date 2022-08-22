@@ -24,13 +24,15 @@ public class PlayerDisplayScript : MonoBehaviour
     {
         //SetChar(Character_Manager.Instance.GetCurrentCharacter.Name.Replace(' ','-'));
     }
-    public void SetChar(string cName ,GameObject chtr)
+    public void SetChar(string cName, GameObject chtr)
     {
         character.sprite = Resources.Load(Path.Combine("DisplaySprites/HeadShots", cName), typeof(Sprite)) as Sprite;
-        Background.sprite = backGroundImages[transform.GetSiblingIndex()];
+        int ind = IngameUIControler.instance.GetPlayerNumber();
+        Background.sprite = backGroundImages[ind];
+        SetHealthColor(ind);
         charName.text = cName.ToUpper();
-        SetHealthColor(transform.GetSiblingIndex());
-        SetNameDisplayColor(chtr);
+        SetHealthColor(ind);
+        SetNameDisplayColor(chtr,ind);
     }
 
     public void SetLocalChar(string cName)
@@ -52,21 +54,22 @@ public class PlayerDisplayScript : MonoBehaviour
                 HealthBar.color = new Color(0.5882353f, 0.1333333f, 0.9450981f, 1);
                 break;
             case 1:
-                HealthBar.color = Color.green;
+                HealthBar.color = new Color(0f, 0.5803922f, 0.3254902f, 1);
                 break;
             case 2:
-                HealthBar.color = Color.yellow;
+                HealthBar.color = new Color(0.8196079f, 0.8313726f, 0.1372549f, 1);
                 break;
             case 3:
-                HealthBar.color = Color.blue;
+                HealthBar.color = new Color(0.1098039f, 0.5254902f, 0.8235295f, 1);
                 break;
+            
 
         }
 
     }
-    public void SetNameDisplayColor(GameObject character)
+    public void SetNameDisplayColor(GameObject character,int ind)
     {
-        character.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = nameDisplayBackgrounds[transform.GetSiblingIndex()];
+        character.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = nameDisplayBackgrounds[ind];
     }
     void CheckIndex()
     {
