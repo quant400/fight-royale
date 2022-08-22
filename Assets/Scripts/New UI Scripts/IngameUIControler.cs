@@ -34,7 +34,7 @@ public class IngameUIControler : MonoBehaviour
     Transform playerDisplayHolder;
     [SerializeField]
     GameObject playerDisplayObject;
-    Dictionary<NetworkIdentity,Image> playerMap = new Dictionary<NetworkIdentity, Image>();
+    public Dictionary<NetworkIdentity,Image> playerMap = new Dictionary<NetworkIdentity, Image>();
 
     public bool localPlayerSpawned =false;
     int playerNum  = 0;
