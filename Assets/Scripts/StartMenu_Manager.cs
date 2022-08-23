@@ -64,13 +64,13 @@ public class StartMenu_Manager : MonoBehaviour
             Connection_Manager.Instance.SearchAvailableLobby(
                 () =>
                 {
-                    OnSetText("Looking for Room wait...".ToUpper());
+                    OnSetText("Loading... Please wait...".ToUpper());
                     OnLoading();
                 },
                 OnSuccess,
                 () =>
                 {
-                    OnSetText("All rooms are full you will be in a queue until some room is freed...");
+                    OnSetText("All rooms are full you will be in a queue until some room is freed...".ToUpper());
                 });
         else
             OnFail("Your NFT has no PVP Session available");
