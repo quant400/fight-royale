@@ -82,7 +82,7 @@ public class IngameUIControler : MonoBehaviour
         settings.onClick.AddListener(OpenSettings);
         closeSettings.onClick.AddListener(CloseSettings);
         chat.onClick.AddListener(ChatToggle);
-       
+        Invoke("ActivateTimer", 4f);
     }
 
 
@@ -198,4 +198,9 @@ public class IngameUIControler : MonoBehaviour
         return playerNum;
     }
     #endregion Player_Display
+
+    void ActivateTimer()
+    {
+        transform.GetChild(transform.childCount - 1).gameObject.SetActive(true);
+    }
 }
