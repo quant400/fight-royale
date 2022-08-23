@@ -107,7 +107,7 @@ public class GameManager : NetworkBehaviour
     [ClientRpc]
     public void RpcSetupTimeOutTimer(int time)
     {
-        timerBehavior.SetupTimer("Wait players to start game in", time);
+        timerBehavior.SetupTimer("Game will start in ", time);
     }
     
     [ClientRpc]
