@@ -12,7 +12,8 @@ public class TimerBehavior : MonoBehaviour
 
     public void SetupTimer(string title, int time)
     {
-        textTitle.text = title.ToUpper();
+        if(textTimer!=null)
+            textTitle.text = title.ToUpper();
         textTimer.text = string.Format("{0:00}",time);
         textTimer.fontSize = textTitle.fontSize;
         if (fillImage != null)

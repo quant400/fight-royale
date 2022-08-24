@@ -38,6 +38,10 @@ public class IngameUIControler : MonoBehaviour
 
     public bool localPlayerSpawned =false;
     int playerNum  = 0;
+
+    //for leaderboard 
+    [SerializeField]
+    GameObject leaderboard;
     private void Awake()
     {
         if (instance == null)
@@ -203,4 +207,14 @@ public class IngameUIControler : MonoBehaviour
     {
         transform.GetChild(transform.childCount - 1).gameObject.SetActive(true);
     }
+
+
+    #region Leaderboard
+
+   
+    
+
+
+    #endregion Leaderboard
+
 }
