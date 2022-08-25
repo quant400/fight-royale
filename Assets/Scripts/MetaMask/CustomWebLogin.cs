@@ -102,7 +102,7 @@ public class CustomWebLogin : MonoBehaviour
 
     public void OnGuest()
     {
-        panelTryOut.SetActive(true);
+        //panelTryOut.SetActive(true);
 
         //Versão com todos os personagens
         try
