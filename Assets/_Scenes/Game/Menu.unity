@@ -938,7 +938,7 @@ MonoBehaviour:
   baseURL: https://C5FA3.playfabapi.com/
   SecretKey: 3W4J5SK6W8GWHZKMH89GAP3FS1CN5YF83436XAFMXMKGCMJASW
   Region: EastUS
-  _BuildId: 8bdd901f-1aa1-485f-8861-4290c00473de
+  _BuildId: cc22dc96-5d0d-4e8b-af3c-f33aa1da6ab8
   EntityToken: 
   EntityTokenResponse:
     code: 0
@@ -1909,7 +1909,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 4.867354e-39, y: 4.775521e-39, z: 5.051028e-39, w: 5.234702e-39}
+  m_BoundingSphereOverride: {x: 4.5904e-41, y: 0, z: 0, w: 9.403955e-38}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -4941,6 +4941,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 399470000, guid: 6729c163af2ca3b4ca895947a301f316, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7174127212540956849, guid: 6729c163af2ca3b4ca895947a301f316,
         type: 3}
       propertyPath: m_text
