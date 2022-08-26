@@ -192,9 +192,12 @@ public class IngameUIControler : MonoBehaviour
         localPlayerSpawned = true;
     }
 
-    public void UpdatePlayerHealth(NetworkIdentity p,float damage)
+    public void UpdatePlayerHealth(NetworkIdentity p,float newHealth)
     {
-        playerMap[p].fillAmount -= damage / 100f;
+        if (playerMap.ContainsKey(p))
+        {
+            playerMap[p].fillAmount = newHealth;
+        }
     }
 
     public int GetPlayerNumber()

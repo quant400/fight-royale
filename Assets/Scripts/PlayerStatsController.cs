@@ -24,7 +24,7 @@ public class PlayerStatsController : MonoBehaviour
         _healthBar.fillAmount = health / 100;
 
         //for updating mini ui 
-        IngameUIControler.instance.playerMap[GetComponent<PlayerBehaviour>().netIdentity].fillAmount= health / 100;
+        IngameUIControler.instance.UpdatePlayerHealth(GetComponent<PlayerBehaviour>().netIdentity, health);
     }
 
     public void SetHealthBar(Image newBar)
