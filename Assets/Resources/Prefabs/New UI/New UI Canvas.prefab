@@ -1708,7 +1708,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: ENTERING LOBBY
+  m_text: WELCOME TO CRYPTO FIGHT CLUB
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a7ab4c1aab9d0d44aa6b854c34daf025, type: 2}
   m_sharedMaterial: {fileID: -6790455360330658979, guid: a7ab4c1aab9d0d44aa6b854c34daf025,
@@ -1736,8 +1736,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
-  m_fontSizeBase: 50
+  m_fontSize: 35
+  m_fontSizeBase: 35
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -5880,8 +5880,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
-  m_fontSizeBase: 50
+  m_fontSize: 35
+  m_fontSizeBase: 35
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
