@@ -7,6 +7,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1823845941203055068, guid: defb88a6d296bbe49b0512ac7ea45d04,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.17254902
+      objectReference: {fileID: 0}
+    - target: {fileID: 1823845941203055068, guid: defb88a6d296bbe49b0512ac7ea45d04,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.12156863
+      objectReference: {fileID: 0}
+    - target: {fileID: 1823845941203055068, guid: defb88a6d296bbe49b0512ac7ea45d04,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.94509804
+      objectReference: {fileID: 0}
+    - target: {fileID: 1823845941203055068, guid: defb88a6d296bbe49b0512ac7ea45d04,
+        type: 3}
+      propertyPath: m_Intensity
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 3184295034840982788, guid: defb88a6d296bbe49b0512ac7ea45d04,
         type: 3}
       propertyPath: m_Name
@@ -72,6 +92,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 71b351e0bddb1554f992abd00f4d577a, type: 2}
+    - target: {fileID: 5945654545131452283, guid: defb88a6d296bbe49b0512ac7ea45d04,
+        type: 3}
+      propertyPath: m_AssetId
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 7947855945362673116, guid: defb88a6d296bbe49b0512ac7ea45d04,
         type: 3}
       propertyPath: PowerUp

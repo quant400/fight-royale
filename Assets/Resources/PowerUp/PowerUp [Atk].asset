@@ -17,6 +17,6 @@ MonoBehaviour:
     Code: 1
     Description: Increases attack power
     Value: 0.2
-    Duration: 60
+    Duration: 20
   Effect_Prefab: {fileID: 5690725435046760833, guid: e52a243b17e70bf43a92d7c7c39b22aa,
     type: 3}

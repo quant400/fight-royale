@@ -19,12 +19,14 @@ public class TPFightingController : MonoBehaviour
     [SerializeField] private BoxCollider hitCollider;
 
     private bool isAttack;
+    private bool isRunningAttack = false;
     private bool isPunch;
     private bool isBlocking;
     private bool toggleAttack = true; //true = punch, false = kick
 
     [SerializeField]private bool m_comboPossible = false;
-    [SerializeField]private int m_comboStep = 0;
+    [SerializeField]private int m_PunchComboStep = 0;
+    [SerializeField]private int m_KickComboStep = 0;
     [SerializeField] private LayerMask playersMask;
     
     [Header("Actions")]
@@ -47,7 +49,7 @@ public class TPFightingController : MonoBehaviour
 
         _player._cControler.stepOffset = _player._tpControler.Grounded ? _stepOffset : 0.1f;
         
-        _tpController.enabled = !isAttack && !isBlocking;
+        _tpController.enabled = (!isAttack && !isBlocking) || isRunningAttack;
         
         if (!isAttack && _player._tpControler.Grounded)
         {
@@ -94,19 +96,61 @@ public class TPFightingController : MonoBehaviour
     {
         if (!_tpController.gameObject) return;
 			
-        if (m_comboStep == 0)
+        if (m_PunchComboStep == 0)
         {
-            isAttack = true;
-            isPunch = true;
-            PlayAttackAnimation("Punch 1");
-            m_comboStep = 1;
-            return;
+            if (_player._cfcInputs.move.magnitude != 0)
+            {
+                isAttack = true;
+                isPunch = true;
+                PlayAttackAnimation("Running Punch");
+                isRunningAttack = true;
+                return;
+            }
+            else
+            {
+                isAttack = true;
+                isPunch = true;
+                PlayAttackAnimation("Punch 1");
+                m_PunchComboStep = 1;
+                return;
+            }
         }
 			
         if (m_comboPossible)
         {
             m_comboPossible = false;
-            m_comboStep += 1;
+            m_PunchComboStep += 1;
+        }
+    }
+    
+    public void Kick()
+    {
+        if (!_tpController.gameObject) return;
+			
+        if (m_KickComboStep == 0)
+        {
+            if (_player._cfcInputs.move.magnitude != 0)
+            {
+                isAttack = true;
+                isPunch = false;
+                PlayAttackAnimation("Running Kick");
+                isRunningAttack = true;
+                return;
+            }
+            else
+            {
+                isAttack = true;
+                isPunch = false;
+                PlayAttackAnimation("Kick 1");
+                m_KickComboStep = 1;
+                return;
+            }
+        }
+			
+        if (m_comboPossible)
+        {
+            m_comboPossible = false;
+            m_KickComboStep += 1;
         }
     }
 
@@ -115,9 +159,9 @@ public class TPFightingController : MonoBehaviour
         _anim.Play(animName);
     }
 
-    public void Combo()
+    public void PunchCombo()
     {
-        switch (m_comboStep)
+        switch (m_PunchComboStep)
         {
             case 2:
                 PlayAttackAnimation("Punch 2");
@@ -127,13 +171,25 @@ public class TPFightingController : MonoBehaviour
                 break;
         }
     }
+    
+    public void KickCombo()
+    {
+        switch (m_KickComboStep)
+        {
+            case 2:
+                PlayAttackAnimation("Kick 2");
+                break;
+        }
+    }
 
     public void ComboReset()
     {
         isAttack = false;
+        isRunningAttack = false;
         isPunch = false;
         m_comboPossible = false;
-        m_comboStep = 0;
+        m_PunchComboStep = 0;
+        m_KickComboStep = 0;
         
         if(_player.isLocalPlayer)
             _tpController.enabled = true;
@@ -144,7 +200,7 @@ public class TPFightingController : MonoBehaviour
         m_comboPossible = true;
     }
     
-    public void Kick()
+    public void KickOld()
     {
         if (!_tpController.Grounded) return;
 
@@ -290,7 +346,8 @@ public class TPFightingController : MonoBehaviour
 
     public void PlayPunchAudio()
     {
-        SFX_Manager.Play($"Punch {m_comboStep}");
+        
+        SFX_Manager.Play($"Punch {(m_PunchComboStep==0?1:m_PunchComboStep)}");
     }
     
     public void PlayKickAudio()

@@ -3677,6 +3677,7 @@ MonoBehaviour:
   _skinController: {fileID: 7827165529778116518}
   _pAttributes: {fileID: 3797127690003850693}
   anim: {fileID: 2326369553867373797}
+  isDemo: 0
   pName: 
   pSkin: 
   pHealth: 100
@@ -3753,7 +3754,7 @@ MonoBehaviour:
   FallTimeout: 0.15
   Grounded: 1
   GroundedOffset: -0.14
-  GroundedRadius: 0.15
+  GroundedRadius: 0.24
   GroundLayers:
     serializedVersion: 2
     m_Bits: 513
@@ -3776,7 +3777,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitCollider: {fileID: 3111917122038982320}
   m_comboPossible: 0
-  m_comboStep: 0
+  m_PunchComboStep: 0
+  m_KickComboStep: 0
   playersMask:
     serializedVersion: 2
     m_Bits: 64

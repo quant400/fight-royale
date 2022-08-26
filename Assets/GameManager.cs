@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Mirror;
 using UnityEngine;
@@ -87,11 +88,22 @@ public class GameManager : NetworkBehaviour
     
     public void CloseLobby()
     {
+        KickDemoPlayers();
+        
         Connection_Manager.Instance.SendCloseLobby();
         RpcSetupStartGameTimer(preGameTime);
         MrTime_Manager.Instance.SetTimer(preGameTime, UpdatePreGameTimer, StartGame);
     }
-    
+
+    public void KickDemoPlayers()
+    {
+        var demoPlayers = FindObjectsOfType<PlayerBehaviour>();
+        foreach (var player in demoPlayers.Where(aux=> aux.isDemo))
+        {
+            player.RpcQuitMatch();
+        }
+    }
+
     private void UpdatePreGameTimer(int time)
     {
         RpcUpdateTimer(time);

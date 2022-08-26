@@ -53,7 +53,14 @@ public class CFCAuth : NetworkAuthenticator
             GameManager.Instance.match.currentState == MatchManager.MatchState.Lobby &&
             (msg.nftWallet.Equals("Demo") || GameManager.Instance.analytics.CheckWallet(msg.nftWallet)))
         {
-            PlayerBehaviour.playerNames.Add(msg.authUsername);
+            if (!msg.nftWallet.Equals("Demo"))
+            {
+                PlayerBehaviour.playerNames.Add(msg.authUsername);
+            }
+            else
+            {
+                //PlayerBehaviour.isdemo = true;
+            }
             //GameManager.Instance.analytics.AddPlayer(msg.nftId,conn.identity);
 
             conn.authenticationData = msg;
