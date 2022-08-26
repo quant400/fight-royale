@@ -17,6 +17,6 @@ MonoBehaviour:
     Code: 3
     Description: Increase character speed
     Value: 0.2
-    Duration: 60
+    Duration: 20
   Effect_Prefab: {fileID: 5690725435046760833, guid: b57f8b725ec7e8140b2fec791087f18b,
     type: 3}

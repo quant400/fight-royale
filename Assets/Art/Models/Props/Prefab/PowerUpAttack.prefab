@@ -7,6 +7,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1363676151901040315, guid: defb88a6d296bbe49b0512ac7ea45d04,
+        type: 3}
+      propertyPath: m_Name
+      value: point light
+      objectReference: {fileID: 0}
     - target: {fileID: 1585153097828748462, guid: defb88a6d296bbe49b0512ac7ea45d04,
         type: 3}
       propertyPath: m_Center.x
@@ -16,6 +21,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Center.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1823845941203055068, guid: defb88a6d296bbe49b0512ac7ea45d04,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.21568628
+      objectReference: {fileID: 0}
+    - target: {fileID: 1823845941203055068, guid: defb88a6d296bbe49b0512ac7ea45d04,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.68235296
+      objectReference: {fileID: 0}
+    - target: {fileID: 1823845941203055068, guid: defb88a6d296bbe49b0512ac7ea45d04,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.57254905
+      objectReference: {fileID: 0}
+    - target: {fileID: 1823845941203055068, guid: defb88a6d296bbe49b0512ac7ea45d04,
+        type: 3}
+      propertyPath: m_Intensity
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3184295034840982788, guid: defb88a6d296bbe49b0512ac7ea45d04,
         type: 3}

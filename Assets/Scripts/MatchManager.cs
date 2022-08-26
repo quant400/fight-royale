@@ -90,7 +90,7 @@ public class MatchManager : NetworkBehaviour
     {
         if (currentState != MatchState.Lobby && currentState != MatchState.PreGame) return;
         
-        if (CFCNetworkManager.Instance.connectedPlayersCount >= CFCNetworkManager.Instance.maxConnections) //Quantidade maxima atingida
+        if (CFCNetworkManager.Instance._gameManager.analytics.GetNumberOfPlayers >= CFCNetworkManager.Instance.maxConnections) //Quantidade maxima atingida
         {
             Debug.Log("Inicio por sala cheia");
 
@@ -100,7 +100,7 @@ public class MatchManager : NetworkBehaviour
 
             isEnoughPlayerTime = false;
         }
-        else if (CFCNetworkManager.Instance.connectedPlayersCount >= _gameManager.minPlayersToPlay && !isEnoughPlayerTime) //Quantidade minima atingida para começar a contar o tempo
+        else if (CFCNetworkManager.Instance._gameManager.analytics.GetNumberOfPlayers >= _gameManager.minPlayersToPlay && !isEnoughPlayerTime) //Quantidade minima atingida para começar a contar o tempo
         {
             Debug.Log("Inicio por tempo");
             
@@ -110,7 +110,7 @@ public class MatchManager : NetworkBehaviour
                 () => ChangeState(MatchState.PreGame));
             isEnoughPlayerTime = true;
         }
-        else if(CFCNetworkManager.Instance.connectedPlayersCount < _gameManager.minPlayersToPlay) //Quantidade insuficiente
+        else if(CFCNetworkManager.Instance._gameManager.analytics.GetNumberOfPlayers < _gameManager.minPlayersToPlay) //Quantidade insuficiente
         {
             Debug.Log("Sem jogadores suficientes");
 

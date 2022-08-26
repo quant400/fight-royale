@@ -7,6 +7,9 @@ public class CustomWebLogin : MonoBehaviour
 {
 
 
+    [Header("Local AccountId")]
+    [SerializeField] private string _account;
+
     [Header("Start")]
     [SerializeField]
     private GameObject panelStart;
@@ -23,12 +26,10 @@ public class CustomWebLogin : MonoBehaviour
     [SerializeField]
     private TMPro.TextMeshProUGUI textError;
 
-    private string _account;
-
     private API_CryptoFightClub Api_CryptoFightClub => Connection_Manager.Instance.Api_CryptoFightClub;
 
 
-#if UNITY_WEBGL
+
 
     #region DLL
     [DllImport("__Internal")]
@@ -44,6 +45,8 @@ public class CustomWebLogin : MonoBehaviour
 
     public void OnLogin()
     {
+
+#if UNITY_WEBGL && !UNITY_EDITOR
         try
         {
             panelConnecting.SetActive(true);
@@ -55,12 +58,21 @@ public class CustomWebLogin : MonoBehaviour
             OnFailToSignIn(e.Message);
             Debug.LogException(e, this);
         }
+#else
+
+        if(!string.IsNullOrEmpty(_account))
+            OnEnter(_account);
+
+#endif
 
     }
 
     async private void OnConnected()
     {
         Debug.Log("OnConnected");
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+
         await new WaitForSeconds(0.75f);
 
         try
@@ -82,9 +94,11 @@ public class CustomWebLogin : MonoBehaviour
             OnFailToSignIn(e.Message);
         }
 
+#endif
+
     }
 
-#endif
+
     private string ConvertIdMetaMask(string value)
     {
         //Ex value = account0x846b257a244141ecb5c65d7c8a122a72a5564c38
@@ -96,7 +110,6 @@ public class CustomWebLogin : MonoBehaviour
         else
         {
             return value;
-
         }
     }
 

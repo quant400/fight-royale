@@ -29,6 +29,8 @@ public class PlayerBehaviour : NetworkBehaviour
     public PlayerAttributes _pAttributes;
     public Animator anim;
 
+    public bool isDemo = false;
+
     public static readonly HashSet<string> playerNames = new HashSet<string>();
     [Header("Data")]
     [SyncVar(hook = nameof(OnPlayerNameChanged))] public string pName;
@@ -211,7 +213,15 @@ public class PlayerBehaviour : NetworkBehaviour
     public override void OnStartServer()
     {
         pName = ((CFCAuth.AuthRequestMessage)connectionToClient.authenticationData).authUsername;
-        GameManager.Instance.analytics.AddPlayer(((CFCAuth.AuthRequestMessage)connectionToClient.authenticationData).nftId,netIdentity);
+        if (!((CFCAuth.AuthRequestMessage) connectionToClient.authenticationData).nftWallet.Equals("Demo"))
+        {
+            GameManager.Instance.analytics.AddPlayer(((CFCAuth.AuthRequestMessage)connectionToClient.authenticationData).nftId,netIdentity);
+            isDemo = false;
+        }
+        else
+        {
+            isDemo = true;
+        }
     }
 
     #region Commands
@@ -287,7 +297,7 @@ public class PlayerBehaviour : NetworkBehaviour
     [Command]
     public void CmdAddHealth(float value)
     {
-        pHealth = Mathf.Clamp(pHealth+value, 0,100);
+        pHealth = Mathf.Clamp(pHealth+value, 0,120);
     }
 
     [Command]

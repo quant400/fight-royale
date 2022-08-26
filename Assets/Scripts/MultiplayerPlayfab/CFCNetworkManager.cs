@@ -42,10 +42,18 @@ public class CFCNetworkManager : NetworkManager
     {
         try
         {
+            
+            if (((CFCAuth.AuthRequestMessage) conn.authenticationData).nftWallet.Equals("Demo"))
+            {
+                Debug.Log("Disconnect as Demo");
+                base.OnServerDisconnect(conn);
+                return;
+            }
+
             PlayerBehaviour.playerNames.Remove(((CFCAuth.AuthRequestMessage)conn.authenticationData).authUsername);
             _gameManager.analytics.RemovePlayer(conn.identity);
             //_gameManager.CheckWinner();
-
+                
             base.OnServerDisconnect(conn);
 
             Debug.Log(_gameManager.match.currentState);
@@ -76,7 +84,10 @@ public class CFCNetworkManager : NetworkManager
     public override void OnServerAddPlayer(NetworkConnection conn)
     {
         base.OnServerAddPlayer(conn);
-        _gameManager.OnClientConnect(conn.identity);
+        if (!((CFCAuth.AuthRequestMessage) conn.authenticationData).nftWallet.Equals("Demo"))
+        {
+            _gameManager.OnClientConnect(conn.identity);
+        }
 
     }
     

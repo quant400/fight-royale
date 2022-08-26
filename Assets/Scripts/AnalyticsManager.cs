@@ -25,22 +25,22 @@ public class AnalyticsManager : MonoBehaviour
         //else
         //{
             players.Add(new Player(id, netIdentity));
-        //}
+            //}
 
-        //Debug.Log(string.Join(", ",players.Select(aux => $"{aux.id}, {aux.netIdentity.netId}")));
+            //Debug.Log(string.Join(", ",players.Select(aux => $"{aux.id}, {aux.netIdentity.netId}")));
 
     }
 
     public void  RemovePlayer(NetworkIdentity netIdentity)
     {
-        var auxPlayer = GetPlayerByNetIdentity(netIdentity);
+        var auxPlayer = GetPlayerById(((CFCAuth.AuthRequestMessage) netIdentity.connectionToClient.authenticationData).nftId);
         auxPlayer.isConnected = false;
     }
 
     public bool CheckWallet(string nftIds)
     {
         var nftIdsList = nftIds.Split(';').ToList();
-        return !players.Any(auxPlayer => nftIdsList.Contains(auxPlayer.id.ToString()));
+        return !players.Where(aux=> aux.isConnected).Any(auxPlayer => nftIdsList.Contains(auxPlayer.id.ToString()));
     }
 
     #endregion
@@ -62,11 +62,12 @@ public class AnalyticsManager : MonoBehaviour
     #region Gets
 
     public int GetNumberOfPlayersAlive() => players.Count(aux => aux.isConnected && !aux.isDead);
+    public int GetNumberOfPlayers => players.Count();
 
     public NetworkIdentity GetWinner()
     {
         NetworkIdentity playerIdentity = null;
-        if (players.Count(aux => !aux.isDead) == 1)
+        if (players.Count(aux => !aux.isDead && aux.isConnected) == 1)
         {
             var auxPlayer = players.First(aux => aux.isConnected && !aux.isDead);
             if (auxPlayer != null) playerIdentity =  auxPlayer.netIdentity;
