@@ -6,7 +6,8 @@ public class LeaderBoardScript : MonoBehaviour
 {
     [SerializeField]
     Button defaultButton;
-
+    [SerializeField]
+    GameObject background;
     [SerializeField]
     private Button[] buttons;
     internal void Activate()
@@ -14,11 +15,13 @@ public class LeaderBoardScript : MonoBehaviour
         SetAllButtonsInteractable();
         transform.localScale= Vector3.one;
         defaultButton.interactable=false;
+        background.SetActive(true);
     }
 
     internal void Deactivate()
     {
         transform.localScale=Vector3.zero;
+        background.SetActive(false);
 
     }
 
