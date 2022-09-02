@@ -37,6 +37,7 @@ public class PlayerBehaviour : NetworkBehaviour
     [SyncVar(hook = nameof(OnPlayerSkinChanged))] public string pSkin;
     [SyncVar(hook = nameof(OnHealthChanged))] public float pHealth = 100f;
     [SyncVar] public Color32 pColor;
+    [SyncVar] public int score;
 
     [SyncVar(hook = nameof(OnPlayerBlock))] public bool pIsBlocking;
 
@@ -251,6 +252,12 @@ public class PlayerBehaviour : NetworkBehaviour
 
     }
 
+    [TargetRpc]
+    public void TargetQuitMatch(NetworkConnection target)
+    {
+        QuitMatch();
+    }
+    
     [ClientRpc]
     public void RpcQuitMatch()
     {

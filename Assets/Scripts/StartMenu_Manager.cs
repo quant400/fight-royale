@@ -60,7 +60,7 @@ public class StartMenu_Manager : MonoBehaviour
 
         bool TryOutMode = !Data_Manager.Instance.isValidAccount();
 
-        if (TryOutMode || (playerPvpScore != null && playerPvpScore.dailySessionPlayed > 0))
+        if (TryOutMode || (playerPvpScore != null && playerPvpScore.dailySessionPlayed < 10))
             Connection_Manager.Instance.SearchAvailableLobby(
                 () =>
                 {
