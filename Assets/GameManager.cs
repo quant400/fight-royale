@@ -100,7 +100,7 @@ public class GameManager : NetworkBehaviour
         var demoPlayers = FindObjectsOfType<PlayerBehaviour>();
         foreach (var player in demoPlayers.Where(aux=> aux.isDemo))
         {
-            player.RpcQuitMatch();
+            player.TargetQuitMatch(player.connectionToClient);
         }
     }
 

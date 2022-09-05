@@ -127,6 +127,11 @@ public class AnalyticsManager : MonoBehaviour
     {
         var player = GetPlayerByNetIdentity(netId);
         player.score += score;
+
+        //UpdateScore
+        var playerBehaviour = netId.GetComponent<PlayerBehaviour>();
+        playerBehaviour.score = player.score;
+        
         _Debug($"AddScore: player={player.id}, score={score}");
     }
 

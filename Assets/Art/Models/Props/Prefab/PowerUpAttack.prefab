@@ -24,6 +24,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1823845941203055068, guid: defb88a6d296bbe49b0512ac7ea45d04,
         type: 3}
+      propertyPath: m_Range
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1823845941203055068, guid: defb88a6d296bbe49b0512ac7ea45d04,
+        type: 3}
       propertyPath: m_Color.b
       value: 0.21568628
       objectReference: {fileID: 0}
@@ -40,7 +45,12 @@ PrefabInstance:
     - target: {fileID: 1823845941203055068, guid: defb88a6d296bbe49b0512ac7ea45d04,
         type: 3}
       propertyPath: m_Intensity
-      value: 3
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1823845941203055068, guid: defb88a6d296bbe49b0512ac7ea45d04,
+        type: 3}
+      propertyPath: m_BounceIntensity
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3184295034840982788, guid: defb88a6d296bbe49b0512ac7ea45d04,
         type: 3}
