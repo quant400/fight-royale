@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Mirror;
-
+using TMPro;
 public class IngameUIControler : MonoBehaviour
 {
     public static IngameUIControler instance;
@@ -27,7 +27,7 @@ public class IngameUIControler : MonoBehaviour
     [SerializeField]
     GameObject chatObject;
     [SerializeField]
-    TMPro.TMP_InputField chatinput;
+    TMP_InputField chatinput;
     bool chatOpen=false;
 
     [SerializeField]
@@ -42,6 +42,9 @@ public class IngameUIControler : MonoBehaviour
     //for leaderboard 
     [SerializeField]
     GameObject leaderboard;
+
+    [SerializeField]
+    TMP_Text scr;
     private void Awake()
     {
         if (instance == null)
@@ -210,7 +213,11 @@ public class IngameUIControler : MonoBehaviour
     {
         transform.GetChild(transform.childCount - 1).gameObject.SetActive(true);
     }
-
+    
+    public void UpdateScore(int score)
+    {
+        scr.text = score.ToString();
+    }
 
     #region Leaderboard
 
