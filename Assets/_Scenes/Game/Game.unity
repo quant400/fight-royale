@@ -1227,7 +1227,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 1e-45, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: -44.277252}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -4091,17 +4091,17 @@ PrefabInstance:
     - target: {fileID: 8944336655422409503, guid: f6d148d888ffbf54b9afe9936dfaec1f,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.08536189
+      value: 0.08536188
       objectReference: {fileID: 0}
     - target: {fileID: 8944336655422409503, guid: f6d148d888ffbf54b9afe9936dfaec1f,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.86201465
+      value: 0.8620146
       objectReference: {fileID: 0}
     - target: {fileID: 8944336655422409503, guid: f6d148d888ffbf54b9afe9936dfaec1f,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.15490372
+      value: -0.15490374
       objectReference: {fileID: 0}
     - target: {fileID: 8944336655422409503, guid: f6d148d888ffbf54b9afe9936dfaec1f,
         type: 3}
@@ -4395,7 +4395,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 428650864}
-  m_LocalRotation: {x: 0.08536189, y: 0.86201465, z: -0.15490372, w: 0.47502527}
+  m_LocalRotation: {x: 0.08536188, y: 0.8620146, z: -0.15490374, w: 0.47502527}
   m_LocalPosition: {x: -6.5429397, y: 10.322994, z: 22.81615}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -10896,7 +10896,7 @@ PrefabInstance:
     - target: {fileID: 5479180407007317759, guid: dcade7979c3da534db27311c23ab15d5,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -363356.56
+      value: -388521.4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dcade7979c3da534db27311c23ab15d5, type: 3}
@@ -14428,11 +14428,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1954573911}
-    - target: {fileID: 2893826238833748634, guid: a56dd81cd0eff45408ae80891726dd06,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ToggleLeaderBoard
-      objectReference: {fileID: 0}
     - target: {fileID: 5427300856953091308, guid: a56dd81cd0eff45408ae80891726dd06,
         type: 3}
       propertyPath: m_Name
