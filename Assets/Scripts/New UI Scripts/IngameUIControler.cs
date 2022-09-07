@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using Mirror;
 using TMPro;
+using System.IO;
+
 public class IngameUIControler : MonoBehaviour
 {
     public static IngameUIControler instance;
@@ -25,10 +27,13 @@ public class IngameUIControler : MonoBehaviour
     GameObject SettingsPanel;
     // for chat 
     [SerializeField]
-    GameObject chatObject;
+    GameObject chatObject,chatMessage;
+    public Transform chatContainer;
     [SerializeField]
     TMP_InputField chatinput;
     bool chatOpen=false;
+    public Dictionary<NetworkIdentity,Sprite> chatPics = new Dictionary<NetworkIdentity, Sprite>();
+    public Dictionary<string,NetworkIdentity> NameMap = new Dictionary<string, NetworkIdentity>();
 
     [SerializeField]
     Transform playerDisplayHolder;
@@ -185,14 +190,25 @@ public class IngameUIControler : MonoBehaviour
         playerMap[p] = obj.transform.GetChild(2).GetChild(0).GetComponent<Image>();
         obj.GetComponent<PlayerDisplayScript>().SetChar(p.gameObject.GetComponent<PlayerBehaviour>().pName.Replace(' ','-'), chtr);
         playerNum++;
+        NameMap.Add(p.gameObject.GetComponent<PlayerBehaviour>().pName, p);
+        SetChatDict(p);
     }
 
     public void AddLocalPlayer(NetworkIdentity p)
     {
-        var obj = Instantiate(playerDisplayObject, playerDisplayHolder);
+        /*var obj = Instantiate(playerDisplayObject, playerDisplayHolder);
         playerMap[p] = obj.transform.GetChild(2).GetChild(0).GetComponent<Image>();
         obj.GetComponent<PlayerDisplayScript>().SetLocalChar(p.gameObject.GetComponent<PlayerBehaviour>().pName.Replace(' ', '-'));
-        localPlayerSpawned = true;
+        localPlayerSpawned = true;*/
+        NameMap.Add(p.gameObject.GetComponent<PlayerBehaviour>().pName, p);
+        SetChatDict(p);
+    }
+
+    void SetChatDict(NetworkIdentity p)
+    {
+        string cName = p.gameObject.GetComponent<PlayerBehaviour>().pName.Replace(' ', '-');
+        Sprite pic = Resources.Load(Path.Combine("DisplaySprites/HeadShots", cName), typeof(Sprite)) as Sprite;
+        chatPics.Add(p, pic);
     }
 
     public void UpdatePlayerHealth(NetworkIdentity p,float newHealth)
@@ -219,12 +235,11 @@ public class IngameUIControler : MonoBehaviour
         scr.text = score.ToString();
     }
 
-    #region Leaderboard
+    public void AddChat(string n, string Chat)
+    {
+        var ch=Instantiate(chatMessage,chatContainer);
+        ch.GetComponent<ChatMessage>().SetMessage(NameMap[n], Chat);
 
-   
-    
-
-
-    #endregion Leaderboard
+    }
 
 }

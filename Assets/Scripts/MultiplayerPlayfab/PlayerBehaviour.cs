@@ -122,7 +122,7 @@ public class PlayerBehaviour : NetworkBehaviour
             Camera_Manager.Instance.followCam.m_Follow = _camTarget;
             ChatGlobal_Manager.Instance.player = this;
             _pAttributes.gameObject.SetActive(true);
-            //IngameUIControler.instance.AddLocalPlayer(netIdentity);
+            IngameUIControler.instance.AddLocalPlayer(netIdentity);
         }
         
     }
