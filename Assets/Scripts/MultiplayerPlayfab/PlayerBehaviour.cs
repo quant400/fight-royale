@@ -14,6 +14,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+
 public class PlayerBehaviour : NetworkBehaviour
 {
     [Header("Components")]
@@ -203,9 +204,9 @@ public class PlayerBehaviour : NetworkBehaviour
         //CFCNetworkManager.Instance.agora?.onJoin(false, callId);
     }
 
-    public void SendMessage(string playerName, Color32 color, string message)
+    public void SendMessage(NetworkIdentity playerIdentity, Color32 color, string message)
     {
-        CmdOnSendGlobalMessage(playerName, color, message);
+        CmdOnSendGlobalMessage(playerIdentity, color, message);
     }
 
     public override void OnStartServer()
@@ -345,15 +346,15 @@ public class PlayerBehaviour : NetworkBehaviour
     }
 
     [Command]
-    void CmdOnSendGlobalMessage(string playerName, Color32 color, string message)
+    void CmdOnSendGlobalMessage(NetworkIdentity playerIdentity, Color32 color, string message)
     {
-        RpcMessageCreated(playerName, color, message);
+        RpcMessageCreated(playerIdentity, color, message);
     }
 
     [ClientRpc]
-    void RpcMessageCreated(string playerName, Color32 color, string message)
+    void RpcMessageCreated(NetworkIdentity playerIdentity, Color32 color, string message)
     {
-        ChatGlobal_Manager.Instance.CreateMessage(playerName, color, message);
+        ChatGlobal_Manager.Instance.CreateMessage(playerIdentity, color, message);
     }
     
     public void ResetServer()
@@ -371,7 +372,6 @@ public class PlayerBehaviour : NetworkBehaviour
     {
         CFCNetworkManager.singleton.ServerChangeScene(SceneManager.GetActiveScene().name);
         CFCNetworkManager.singleton.StopServer();
-        //NetworkServer.Reset();
     }
 
     [Command]
@@ -384,7 +384,6 @@ public class PlayerBehaviour : NetworkBehaviour
     [TargetRpc]
     public void TargetChangePlayerPosition(Vector3 pos)
     {
-        Debug.Log($"Move to {pos}");
         anim.enabled = false;
         transform.position = pos;
         anim.enabled = true;
@@ -397,19 +396,48 @@ public class PlayerBehaviour : NetworkBehaviour
     public void CmdCarry(NetworkIdentity item)
     {
         item.AssignClientAuthority(connectionToClient);
+
+        var chair = item.GetComponent<Throwable_BehaviorV2>();
+        CarryChair(chair);
+
         RpcCarry(item);
     }
     
+    [ClientRpc]
+    public void RpcCarry(NetworkIdentity item)
+    {
+        var chair = item.GetComponent<Throwable_BehaviorV2>();
+        CarryChair(chair);
+
+        _tpFightingControler.PreCarry(chair);
+    }
+    public void CarryChair(Throwable_BehaviorV2 chair) 
+    {
+        chair.SetNoPhysics(true);
+    }
+
     [Command]
     public void CmdThrow(NetworkIdentity item)
     {
         item.RemoveClientAuthority(connectionToClient);
+
+        //var chair = item.GetComponent<Throwable_BehaviorV2>();
+        //ThrowChair(chair);
+
+        //RpcThrow(item);
     }
 
+
     [ClientRpc]
-    public void RpcCarry(NetworkIdentity item)
+    public void RpcThrow(NetworkIdentity item)
     {
-        _tpFightingControler.PreCarry(item.GetComponent<ThrowableBehavior>());
+        var chair = item.GetComponent<Throwable_BehaviorV2>();
+        //ThrowChair(chair);
+    }
+    public void ThrowChair(Throwable_BehaviorV2 chair) 
+    {
+        
+        chair.SetNoPhysics(false);
     }
 
     #endregion

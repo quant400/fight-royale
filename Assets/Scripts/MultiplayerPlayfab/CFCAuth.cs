@@ -33,7 +33,7 @@ public class CFCAuth : NetworkAuthenticator
 
     public override void OnServerAuthenticate(NetworkConnection conn)
     {
-        //...
+        
     }
 
     public override void OnStartServer()
