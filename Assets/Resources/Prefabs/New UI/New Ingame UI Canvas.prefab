@@ -3111,7 +3111,8 @@ MonoBehaviour:
   chat: {fileID: 5427300856542130807}
   disableImage: {fileID: 21300000, guid: 4986cc753243bd1458e1b9996a94da08, type: 3}
   SettingsPanel: {fileID: 5427300856920010491}
-  chatObject: {fileID: 0}
+  chatObject: {fileID: 6081596635747798417, guid: 7219ef77b2e3dbd49ab65a87aaeeed4f,
+    type: 3}
   chatMessage: {fileID: 6081596635747798417, guid: 7219ef77b2e3dbd49ab65a87aaeeed4f,
     type: 3}
   chatContainer: {fileID: 0}

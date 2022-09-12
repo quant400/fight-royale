@@ -49,8 +49,9 @@ public class ChatGlobal_Manager : MonoBehaviour
     
     public void CreateMessage(NetworkIdentity playerIdentity, Color32 color, string message)
     {
-        Message_Component messageComponent = Instantiate(_prefabGlobalMessage, _contentGlobalChat);
-        _messages.Add(messageComponent);
-        messageComponent.SetUp(playerIdentity, message, color);
+        /* Message_Component messageComponent = Instantiate(_prefabGlobalMessage, _contentGlobalChat);
+         _messages.Add(messageComponent);
+         messageComponent.SetUp(playerIdentity, message, color);*/
+        IngameUIControler.instance.AddChat(playerIdentity, message);
     }
 }

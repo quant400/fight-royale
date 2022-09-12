@@ -33,7 +33,7 @@ public class IngameUIControler : MonoBehaviour
     TMP_InputField chatinput;
     bool chatOpen=false;
     public Dictionary<NetworkIdentity,Sprite> chatPics = new Dictionary<NetworkIdentity, Sprite>();
-    public Dictionary<string,NetworkIdentity> NameMap = new Dictionary<string, NetworkIdentity>();
+    //public Dictionary<NetworkIdentity,string> NameMap = new Dictionary<NetworkIdentity, string>();
 
     [SerializeField]
     Transform playerDisplayHolder;
@@ -190,7 +190,7 @@ public class IngameUIControler : MonoBehaviour
         playerMap[p] = obj.transform.GetChild(2).GetChild(0).GetComponent<Image>();
         obj.GetComponent<PlayerDisplayScript>().SetChar(p.gameObject.GetComponent<PlayerBehaviour>().pName.Replace(' ','-'), chtr);
         playerNum++;
-        NameMap.Add(p.gameObject.GetComponent<PlayerBehaviour>().pName, p);
+        //NameMap.Add(p, p.gameObject.GetComponent<PlayerBehaviour>().pName);
         SetChatDict(p);
     }
 
@@ -200,7 +200,7 @@ public class IngameUIControler : MonoBehaviour
         playerMap[p] = obj.transform.GetChild(2).GetChild(0).GetComponent<Image>();
         obj.GetComponent<PlayerDisplayScript>().SetLocalChar(p.gameObject.GetComponent<PlayerBehaviour>().pName.Replace(' ', '-'));
         localPlayerSpawned = true;*/
-        NameMap.Add(p.gameObject.GetComponent<PlayerBehaviour>().pName, p);
+        //NameMap.Add(p, p.gameObject.GetComponent<PlayerBehaviour>().pName);
         SetChatDict(p);
     }
 
@@ -232,13 +232,13 @@ public class IngameUIControler : MonoBehaviour
     
     public void UpdateScore(int score)
     {
-        scr.text = score.ToString();
+        scr.text = "SCORE: "+score.ToString();
     }
 
-    public void AddChat(string n, string Chat)
+    public void AddChat(NetworkIdentity n, string Chat)
     {
         var ch=Instantiate(chatMessage,chatContainer);
-        ch.GetComponent<ChatMessage>().SetMessage(NameMap[n], Chat);
+        ch.GetComponent<ChatMessage>().SetMessage(n, Chat);
 
     }
 
