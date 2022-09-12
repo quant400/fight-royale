@@ -1245,7 +1245,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 4.5904e-41, y: 0, z: 0, w: 3.59e-43}
+  m_BoundingSphereOverride: {x: NaN, y: 8, z: NaN, w: 0}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -4126,7 +4126,7 @@ PrefabInstance:
     - target: {fileID: 8944336655422409503, guid: f6d148d888ffbf54b9afe9936dfaec1f,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.08536189
+      value: 0.085361876
       objectReference: {fileID: 0}
     - target: {fileID: 8944336655422409503, guid: f6d148d888ffbf54b9afe9936dfaec1f,
         type: 3}
@@ -4430,7 +4430,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 428650864}
-  m_LocalRotation: {x: 0.08536189, y: 0.86201465, z: -0.15490372, w: 0.47502527}
+  m_LocalRotation: {x: 0.085361876, y: 0.86201465, z: -0.15490372, w: 0.47502527}
   m_LocalPosition: {x: -6.5429397, y: 10.322994, z: 22.81615}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -13337,11 +13337,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5479180405665985383, guid: dcade7979c3da534db27311c23ab15d5,
-        type: 3}
-      propertyPath: leaderboardControllerRestApi
-      value: 
-      objectReference: {fileID: 911644392}
     - target: {fileID: 5479180406122774453, guid: dcade7979c3da534db27311c23ab15d5,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -13535,7 +13530,7 @@ PrefabInstance:
     - target: {fileID: 5479180407007317759, guid: dcade7979c3da534db27311c23ab15d5,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -991005.06
+      value: -993129.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dcade7979c3da534db27311c23ab15d5, type: 3}
@@ -15202,21 +15197,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 911644392}
-    - target: {fileID: 2893826238833748634, guid: a56dd81cd0eff45408ae80891726dd06,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ToggleLeaderBoard
-      objectReference: {fileID: 0}
     - target: {fileID: 5427300856953091308, guid: a56dd81cd0eff45408ae80891726dd06,
         type: 3}
       propertyPath: m_Name
       value: New Ingame UI Canvas
       objectReference: {fileID: 0}
-    - target: {fileID: 5427300856953091315, guid: a56dd81cd0eff45408ae80891726dd06,
-        type: 3}
-      propertyPath: scr
-      value: 
-      objectReference: {fileID: 1677963170}
     - target: {fileID: 5427300856953091315, guid: a56dd81cd0eff45408ae80891726dd06,
         type: 3}
       propertyPath: chatinput
@@ -15227,12 +15212,6 @@ PrefabInstance:
       propertyPath: chatObject
       value: 
       objectReference: {fileID: 1783186389}
-    - target: {fileID: 5427300856953091315, guid: a56dd81cd0eff45408ae80891726dd06,
-        type: 3}
-      propertyPath: chatMessage
-      value: 
-      objectReference: {fileID: 6081596635747798417, guid: 7219ef77b2e3dbd49ab65a87aaeeed4f,
-        type: 3}
     - target: {fileID: 5427300856953091315, guid: a56dd81cd0eff45408ae80891726dd06,
         type: 3}
       propertyPath: leaderboard
@@ -15350,18 +15329,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a56dd81cd0eff45408ae80891726dd06, type: 3}
---- !u!114 &1677963170 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8528354047920610058, guid: a56dd81cd0eff45408ae80891726dd06,
-    type: 3}
-  m_PrefabInstance: {fileID: 1677963169}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1694469047
 GameObject:
   m_ObjectHideFlags: 0
