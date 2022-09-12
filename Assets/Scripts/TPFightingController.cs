@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +34,7 @@ public class TPFightingController : MonoBehaviour
     private bool _isCarrying = false;
     [SerializeField] private LayerMask _throwableMask;
     [SerializeField] private Transform _throwTargetTransform;
-    private ThrowableBehavior _carryingObject;
+    private Throwable_BehaviorV2 _carryingObject;
     [SerializeField] private NetworkTransformChild _carryTransformChild;
     
     void Awake()
@@ -82,7 +83,7 @@ public class TPFightingController : MonoBehaviour
         if (_inputs.action && _player._tpControler.Grounded && !isBlocking)
         {
             
-            if (!_isCarrying)
+            if (!_isCarrying && false)
                 CheckAction();
             else
                 PreThrow();
@@ -283,18 +284,19 @@ public class TPFightingController : MonoBehaviour
             
             //CFCNetworkManager.Instance.agora?.onJoin(false, callId);
             //collider.DoCall(callId);
+
             break;
         }
     }
     
     public void CheckAction()
     {
-        return;
+        //return;
         if (!_player.isLocalPlayer ||_player.isServer) return;
         
         var colliders = Physics.OverlapBox(hitCollider.transform.position, hitCollider.size/2, hitCollider.transform.rotation, _throwableMask);
 
-        var throwable = colliders.Select(aux => aux.GetComponent<ThrowableBehavior>()).FirstOrDefault();
+        var throwable = colliders.Select(aux => aux.GetComponent<Throwable_BehaviorV2>()).FirstOrDefault();
 
         if (throwable != null)
         {
@@ -302,19 +304,19 @@ public class TPFightingController : MonoBehaviour
         }
     }
 
-    public void AssignToCarry(ThrowableBehavior throwable)
+    public void AssignToCarry(Throwable_BehaviorV2 throwable)
     {
         _player.CmdCarry(throwable.netIdentity);
     }
 
-    public void PreCarry(ThrowableBehavior throwable)
+    public void PreCarry(Throwable_BehaviorV2 throwable)
     {
         _anim.Play("PickUp");
         _anim.SetLayerWeight(_anim.GetLayerIndex("UpperBody"), 1);
         _throwableBehavior = throwable;
     }
 
-    private ThrowableBehavior _throwableBehavior;
+    private Throwable_BehaviorV2 _throwableBehavior;
 
     public void Carry()
     {
@@ -337,11 +339,19 @@ public class TPFightingController : MonoBehaviour
 
     public void Throw()
     {
-        _isCarrying = false;
-        //_carryTransformChild.target = null;
-        _carryingObject.Throw(_player.transform);
-        _anim.SetLayerWeight(_anim.GetLayerIndex("UpperBody"), 0);
-        _carryingObject = null;
+        try {
+            _isCarrying = false;
+            //_carryTransformChild.target = null;
+            //_carryingObject.Throw(_player.transform);
+            _carryingObject.Throw();
+            _anim.SetLayerWeight(_anim.GetLayerIndex("UpperBody"), 0);
+            _carryingObject = null;
+        }
+        catch (Exception e)
+        { 
+            Debug.Log(e);
+        }
+        
     }
 
     public void PlayPunchAudio()

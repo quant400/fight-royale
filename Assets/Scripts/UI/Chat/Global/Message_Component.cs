@@ -1,3 +1,4 @@
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -9,9 +10,9 @@ namespace CFC.Chatt.Global
     {
         [SerializeField] private TMP_Text _textMessage;
 
-        public void SetUp(string name, string message, Color color)
+        public void SetUp(NetworkIdentity netIdentity, string message, Color color)
         {
-            _textMessage.text = $"{name}: {message}";
+            _textMessage.text = $"{netIdentity.GetComponent<PlayerBehaviour>().pName}: {message}";
             _textMessage.color = color;
         }
     }
