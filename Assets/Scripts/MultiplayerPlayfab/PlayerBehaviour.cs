@@ -52,6 +52,11 @@ public class PlayerBehaviour : NetworkBehaviour
         //_tpControler.enabled = !value;
 
     }
+    private void OnDestroy()
+    {
+        if(!netIdentity.isLocalPlayer)
+            IngameUIControler.instance.RemovePlayer(netIdentity);
+    }
 
     #region Unity Callbacks
 

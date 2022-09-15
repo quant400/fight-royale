@@ -242,4 +242,11 @@ public class IngameUIControler : MonoBehaviour
 
     }
 
+    public void RemovePlayer(NetworkIdentity p)
+    {
+        Destroy(playerMap[p].transform.parent.parent.gameObject);
+        playerMap.Remove(p);
+        chatPics.Remove(p);
+    }
+
 }
