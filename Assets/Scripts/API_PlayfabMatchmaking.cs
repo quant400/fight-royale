@@ -18,6 +18,7 @@ public class API_PlayfabMatchmaking : MonoBehaviour
     [SerializeField] private string Region = "EastUS";
 
     [SerializeField] private string _BuildId = null;
+
     public string BuildId => GetBuildId();
 
     [Header("EntityToken")]
@@ -148,6 +149,8 @@ public class API_PlayfabMatchmaking : MonoBehaviour
             onSuccess?.Invoke();
         }
     }
+
+    #region TitleData
     public void GetTitleData(Action onSuccess, Action<string> onFail)
     {
         StartCoroutine(ActionGetTitleData(onSuccess, onFail));
@@ -206,6 +209,83 @@ public class API_PlayfabMatchmaking : MonoBehaviour
             onSuccess?.Invoke();
         }
     }
+    #endregion
+
+    #region InternalTitleData
+    private void SetTitleInternalData(Action onSuccess, Action<string> onFail, CFC.Serializable.Admin.TitleData.Data postData)
+    {
+        StartCoroutine(ActionSetTitleInternalData(onSuccess, onFail, postData));
+    }
+    private IEnumerator ActionSetTitleInternalData(Action onSuccess, Action<string> onFail, CFC.Serializable.Admin.TitleData.Data postData)
+    {
+        string urlToCall = string.Format(baseURL + "Server/SetTitleInternalData");
+        var data = JsonUtility.ToJson(postData);
+
+        yield return new WaitForSeconds(1.0f);
+
+        // Debug.Log(data);
+
+        UnityWebRequest www = CreateRequestPOST(urlToCall, data);
+        www.SetRequestHeader("X-SecretKey", SecretKey);
+        yield return www.SendWebRequest();
+
+        if (www.isNetworkError || www.isHttpError)
+        {
+            onFail?.Invoke(www.error.ToString());
+        }
+        else
+        {
+            yield return new WaitForSeconds(0.20f);
+            onSuccess?.Invoke();
+        }
+    }
+    private void GetTitleInternalData(Action<List<CFC.Serializable.Admin.TitleData.Data>> onSuccess, Action<string> onFail)
+    {
+        StartCoroutine(ActionGetTitleInternalData(onSuccess, onFail));
+    }
+    private IEnumerator ActionGetTitleInternalData(Action<List<CFC.Serializable.Admin.TitleData.Data>> onSuccess, Action<string> onFail)
+    {
+        string urlToCall = string.Format(baseURL + "Server/GetTitleInternalData");
+
+        var data = JsonUtility.ToJson(
+         Connection_Manager.Instance.Api_PlayfabMatchmaking._multiplayerServersResponse.data.MultiplayerServerSummaries
+             .Select(aux => aux.ServerId));
+
+
+        UnityWebRequest www = CreateRequestPOST(urlToCall, data);
+        www.SetRequestHeader("X-SecretKey", SecretKey);
+        yield return www.SendWebRequest();
+
+        if (www.isNetworkError || www.isHttpError)
+        {
+            onFail?.Invoke(www.error.ToString());
+        }
+        else
+        {
+            JObject json = JObject.Parse(www.downloadHandler.text);
+            Dictionary<string, string> dic = json["data"]["Data"].ToObject<Dictionary<string, string>>();
+
+            var dicData = new CFC.Serializable.Admin.TitleData.DataKey()
+            {
+                dic = dic
+            };
+
+            var internalDataServer = new List<CFC.Serializable.Admin.TitleData.Data>();
+
+            foreach (var d in dicData.dic)
+            {
+                internalDataServer.Add(new CFC.Serializable.Admin.TitleData.Data()
+                {
+                    Key = d.Key,
+                    Value = d.Value
+                });
+            }
+
+            onSuccess?.Invoke(internalDataServer);
+        }
+    }
+    #endregion
+
     private string GetBuildId()
     {
         if (string.IsNullOrEmpty(_BuildId))
@@ -235,6 +315,35 @@ public class API_PlayfabMatchmaking : MonoBehaviour
                         });
         }
     }
+    public void SetPlayersOnServer(string serverId,int countPlayer)
+    {
+        var data = new CFC.Serializable.Admin.TitleData.Data
+        {
+            Key = serverId,
+            Value = (countPlayer).ToString()
+        };
 
+        SetTitleInternalData(
+            ()=> { Debug.Log("SetPlayersOnServer [Key : " + data.Key + " ] - " + "[ Value : " + data.Value + " ]"); },
+            (error) => { Debug.Log("SetPlayersOnServerError" + error); },
+            data
+            );
+    }
+    public List<CFC.Serializable.Admin.TitleData.Data> GetBestServerId()
+    {
+        List<CFC.Serializable.Admin.TitleData.Data> serverByPlayer = null;
+        GetTitleInternalData(
+            (data) =>
+            {
+                serverByPlayer = data.OrderByDescending(aux => aux.Value).ToList();
+            }, 
+            (error) =>
+            {
+                Debug.Log(error);
+            }
+            );
+
+        return serverByPlayer;
+    }
 
 }

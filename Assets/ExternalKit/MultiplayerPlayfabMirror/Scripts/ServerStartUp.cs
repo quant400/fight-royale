@@ -72,7 +72,9 @@ public class ServerStartUp : MonoBehaviour
 		ConnectedPlayer player = _connectedPlayers.Find(x => x.PlayerId.Equals(playfabId, StringComparison.OrdinalIgnoreCase));
 		_connectedPlayers.Remove(player);
 		PlayFabMultiplayerAgentAPI.UpdateConnectedPlayers(_connectedPlayers);
+		GameManager.Instance.UpdateLobbyPlayer(PlayFabMultiplayerAgentAPI.ServerIdKey, _connectedPlayers.Count, configuration.buildType);
 		CheckPlayerCountToShutdown();
+
 	}
 
 	private void CheckPlayerCountToShutdown()
@@ -87,6 +89,7 @@ public class ServerStartUp : MonoBehaviour
 	{
 		_connectedPlayers.Add(new ConnectedPlayer(playfabId));
 		PlayFabMultiplayerAgentAPI.UpdateConnectedPlayers(_connectedPlayers);
+		GameManager.Instance.UpdateLobbyPlayer(PlayFabMultiplayerAgentAPI.ServerIdKey, _connectedPlayers.Count, configuration.buildType);
 	}
 
 	private void OnAgentError(string error)

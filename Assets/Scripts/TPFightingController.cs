@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using CFC;
 using Mirror;
@@ -20,6 +21,7 @@ public class TPFightingController : MonoBehaviour
     [SerializeField] private BoxCollider hitCollider;
 
     private bool isAttack;
+    private bool isHitted;
     private bool isRunningAttack = false;
     private bool isPunch;
     private bool isBlocking;
@@ -30,12 +32,14 @@ public class TPFightingController : MonoBehaviour
     [SerializeField]private int m_KickComboStep = 0;
     [SerializeField] private LayerMask playersMask;
     
+    private bool _isCarrying => _carryingObject != null;
     [Header("Actions")]
-    private bool _isCarrying = false;
     [SerializeField] private LayerMask _throwableMask;
-    [SerializeField] private Transform _throwTargetTransform;
-    private Throwable_BehaviorV2 _carryingObject;
+    [SerializeField] public Transform _throwTargetTransform;
+    public Throwable_BehaviorV2 _carryingObject;
     [SerializeField] private NetworkTransformChild _carryTransformChild;
+
+    public bool isAction = false;
     
     void Awake()
     {
@@ -60,7 +64,7 @@ public class TPFightingController : MonoBehaviour
             _anim.SetBool("Block", isBlocking);
         }
         
-        if (_inputs.attack && _player._tpControler.Grounded && !isBlocking)
+        if (_inputs.attack && _player._tpControler.Grounded && !isBlocking && !isHitted)
         {
             if (_isCarrying)
                 PreThrow();
@@ -80,10 +84,11 @@ public class TPFightingController : MonoBehaviour
             _inputs.toggleAttack = false;
         }
 
-        if (_inputs.action && _player._tpControler.Grounded && !isBlocking)
+        if (_inputs.action && _player._tpControler.Grounded && !isBlocking && !isHitted && _anim.GetLayerWeight(_anim.GetLayerIndex("UpperBody"))==0)
         {
-            
-            if (!_isCarrying && false)
+            isAction = true;
+
+            if (!_isCarrying)
                 CheckAction();
             else
                 PreThrow();
@@ -216,10 +221,22 @@ public class TPFightingController : MonoBehaviour
     public void TakeDamage()
     {
         Debug.Log("TakeDamage");
+
+        if (_player.isLocalPlayer)
+            _player.CmdAnimationPickUp(true);
+
         _anim.Play("Hit");
-        isAttack = true;
+        isHitted = true;
     }
-    
+
+    public void ReturnFromHit() 
+    {
+        if(_player.isLocalPlayer)
+            _player.CmdAnimationPickUp(false);
+
+        isHitted = false;
+    }
+
     public void BlockDamage()
     {
         _anim.Play("Block Hit");
@@ -291,67 +308,70 @@ public class TPFightingController : MonoBehaviour
     
     public void CheckAction()
     {
-        //return;
         if (!_player.isLocalPlayer ||_player.isServer) return;
         
         var colliders = Physics.OverlapBox(hitCollider.transform.position, hitCollider.size/2, hitCollider.transform.rotation, _throwableMask);
 
-        var throwable = colliders.Select(aux => aux.GetComponent<Throwable_BehaviorV2>()).FirstOrDefault();
+        var item = colliders.Select(aux => aux.GetComponent<Throwable_BehaviorV2>()).FirstOrDefault();
 
-        if (throwable != null)
+        if (item != null)
         {
-            AssignToCarry(throwable);
+            if (item.HasCarrier)
+            {
+                _player.CmdStealObject(item.carrierNetIdentity);
+                //item.carrierNetIdentity.GetComponent<PlayerBehaviour>()._tpFightingControler.StolenObject();
+            }
+            PrePickUp(item);
         }
     }
 
-    public void AssignToCarry(Throwable_BehaviorV2 throwable)
-    {
-        _player.CmdCarry(throwable.netIdentity);
-    }
-
-    public void PreCarry(Throwable_BehaviorV2 throwable)
+    public void PrePickUp(Throwable_BehaviorV2 item)
     {
         _anim.Play("PickUp");
-        _anim.SetLayerWeight(_anim.GetLayerIndex("UpperBody"), 1);
-        _throwableBehavior = throwable;
+        //_anim.SetLayerWeight(_anim.GetLayerIndex("UpperBody"), 1);
+
+        _player.CmdAnimationPickUp(true);
+        _carryingObject = item;
     }
 
-    private Throwable_BehaviorV2 _throwableBehavior;
-
-    public void Carry()
+    public void PickUp() 
     {
-        _isCarrying = true;
-        _carryingObject = _throwableBehavior;
-        //_carryTransformChild.target = throwable.transform;
-        _carryingObject.Carry(_player.netIdentity,_throwTargetTransform);
-        _throwableBehavior = null;
-    }
+        if (!_player.isLocalPlayer || _player.isServer) return;
 
-    public void RemoveCarryAssignment()
-    {
-        _player.CmdThrow(_carryingObject.netIdentity);
-    }
+        _player.CmdPickUp(_carryingObject.netIdentity);
+        _carryingObject.PickUp(_player.netIdentity, _throwTargetTransform);
+
+        isAction = false;
+    }   
 
     public void PreThrow()
     {
         _anim.Play("Throw");
     }
 
-    public void Throw()
+    private void Throw()
     {
-        try {
-            _isCarrying = false;
-            //_carryTransformChild.target = null;
-            //_carryingObject.Throw(_player.transform);
-            _carryingObject.Throw();
-            _anim.SetLayerWeight(_anim.GetLayerIndex("UpperBody"), 0);
-            _carryingObject = null;
-        }
-        catch (Exception e)
-        { 
-            Debug.Log(e);
-        }
-        
+        if (!_player.isLocalPlayer || _player.isServer) return;
+
+        _carryingObject.Throw();
+        _player.CmdThrow(_carryingObject.netIdentity);
+        //_anim.SetLayerWeight(_anim.GetLayerIndex("UpperBody"), 0);
+        _player.CmdAnimationPickUp(false);
+
+        _carryingObject = null;
+
+        isAction = false;
+    }
+
+    public void StolenObject() 
+    {
+        if (_carryingObject == null) return;
+
+        if(!_player.isServer) _player.CmdAnimationPickUp(false);
+        _carryingObject.ResetChair();
+        _carryingObject.ResetCollision(_player);
+
+        _carryingObject = null;
     }
 
     public void PlayPunchAudio()

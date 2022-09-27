@@ -9,13 +9,16 @@ using Random = UnityEngine.Random;
 public class LevelManager : NetworkBehaviour
 {
     [SerializeField] private List<PropsBehavior> _props;
+    [SerializeField] private List<Throwable_BehaviorV2> _throwables;
 
     void Start()
     {
         if (!isServer) return;
         
         _props = FindObjectsOfType<PropsBehavior>().ToList();
-        
+        _throwables = FindObjectsOfType<Throwable_BehaviorV2>().ToList();
+
+
         Subscribe();
     }
 
@@ -23,14 +26,12 @@ public class LevelManager : NetworkBehaviour
     {
         GameManager.Instance.match.onLobbyState.AddListener(ResetProps);
         //GameManager.Instance.match.onLobbyState.AddListener(ResetPowerUps);
-        //GameManager.Instance.match.onPreGameState.AddListener(ResetPowerUps);
+        //GameManager.Instance.match.onPreGameState.AddListener(ResetPlayers);
         GameManager.Instance.match.onInGameState.AddListener(ResetLevel);
     }
 
     void ResetLevel()
-    {
-        Debug.Log("ResetLevel");
-        
+    {        
         ResetProps();
         ResetPowerUps();
         ResetPlayers();
@@ -38,11 +39,18 @@ public class LevelManager : NetworkBehaviour
 
     void ResetProps()
     {
-        Debug.Log("ResetProps");
-        
-        foreach (var prop in _props)
+        foreach (var item in _throwables.Where(x=> x.HasCarrier))
         {
-            prop.ResetPosition();
+            Debug.Log(item.netId);
+            var target = item.carrierNetIdentity.GetComponent<PlayerBehaviour>();
+            target._tpFightingControler.StolenObject();
+            target.RpcStealObject(target.netIdentity);
+        }
+
+        foreach (var item in _throwables)
+        {
+            item.ResetPosition();
+            item.RpcResetPosition();
         }
     }
 
@@ -52,15 +60,19 @@ public class LevelManager : NetworkBehaviour
         GameManager.Instance.powerUp.SpawnPowerUps();
     }
 
-    void ResetPlayers()
+
+
+    public void ResetPlayers()
     {
         var spawnPoints = FindObjectsOfType<NetworkStartPosition>().ToList();
-        foreach (var conn in NetworkServer.connections)
+        int cont = 0;
+        foreach (var player in GameManager.Instance.analytics.players.Where(aux=> aux.isConnected))
         {
-            Debug.Log(conn.Value.identity.gameObject.GetComponent<PlayerBehaviour>().pName);
-            int randomIndex = Random.Range(0, spawnPoints.Count-1);
-            conn.Value.identity.gameObject.GetComponent<PlayerBehaviour>().TargetChangePlayerPosition(spawnPoints[randomIndex].transform.position);
-            spawnPoints.RemoveAt(randomIndex);
+            player.netIdentity.transform.position = spawnPoints[cont].transform.position;
+            player.netIdentity.gameObject.GetComponent<PlayerBehaviour>().RpcChangePlayerPosition(spawnPoints[cont].transform.position);
+
+            cont++;
+
         }
     }
 }

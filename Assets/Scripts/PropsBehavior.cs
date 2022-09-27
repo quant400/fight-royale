@@ -9,6 +9,7 @@ public class PropsBehavior : MonoBehaviour
 
     void Awake()
     {
+        this.gameObject.SetActive(true);
         Setup();
     }
 

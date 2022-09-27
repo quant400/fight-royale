@@ -2,12 +2,13 @@ using Mirror;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class Throwable_BehaviorV2 : NetworkBehaviour
 {
-
-    [SerializeField] private Transform defaultParent;
+    private Vector3 _defaultPos;
+    private Quaternion _defaultRot;
     [SerializeField] private float throwForce;
 
     private Rigidbody rb;
@@ -16,18 +17,20 @@ public class Throwable_BehaviorV2 : NetworkBehaviour
 
     //Carry variables
     private Transform carrierTarget;
-    private NetworkIdentity carrierNetId;
-    public bool hasCarrier = false;
+    public NetworkIdentity carrierNetIdentity;
+
+    public bool HasCarrier => carrierTarget != null;
 
     public void Awake()
     {
+        _defaultPos = transform.position;
         rb = GetComponent<Rigidbody>();
         collider = GetComponent<MeshCollider>();
     }
 
     public void Update()
     {
-        if (carrierTarget!=null) 
+        if (carrierTarget != null && !isServer)// && carrierNetIdentity.isLocalPlayer) 
         {
             MoveToTarget();
         }
@@ -39,80 +42,96 @@ public class Throwable_BehaviorV2 : NetworkBehaviour
         transform.rotation = carrierTarget.rotation;
     }
 
-    public void Carry(NetworkIdentity carrier, Transform carryTarget) 
+    [ClientRpc]
+    public void RpcResetPosition() 
+    {
+        ResetPosition();
+    }
+
+    public void ResetPosition() 
+    {
+        transform.position = _defaultPos;
+        transform.rotation = _defaultRot;
+    }
+
+    public void PickUp(NetworkIdentity carrier, Transform carryTarget) 
+    {
+        SetNoPhysics(true);
+
+        Physics.IgnoreCollision(collider, carrier.GetComponent<CharacterController>(), true);
+
+        SetVariable(carrier, carryTarget);
+    }
+
+    public void SetVariable(NetworkIdentity carrier, Transform carryTarget) 
     {
         carrierTarget = carryTarget;
-        carrierNetId = carrier;
-        hasCarrier = true;
-
-        Physics.IgnoreCollision(collider, carrierNetId.GetComponent<CharacterController>(), true);
-        //Debug.Log("Reset: " + Physics.GetIgnoreCollision(collider, carrierNetId.GetComponent<CharacterController>()));
-
-
-        SetNoPhysics(true);
+        carrierNetIdentity = carrier;
     }
 
-    public void Throw() 
-    {
-        carrierTarget = null;
-
-        SetNoPhysics(false);
-
-        var force = (carrierNetId.transform.forward + (Vector3.up / 10)) * throwForce;
-        rb.AddForce(force);
-
-        carrierNetId.GetComponent<PlayerBehaviour>().CmdThrow(netIdentity);
-
-        //collider.isTrigger = false;
-    }
-
-    public void SetNoPhysics(bool isTrigger) 
+    public void SetNoPhysics(bool isTrigger)
     {
         collider.isTrigger = isTrigger;
         rb.isKinematic = isTrigger;
     }
 
+    public void ResetChair() 
+    {
+        SetVariable(carrierNetIdentity, null);
+        SetNoPhysics(false);
+    }
+
+    public void Throw() 
+    {
+        SetNoPhysics(false);
+
+        if (carrierNetIdentity != null) 
+        {
+            var force = (carrierNetIdentity.transform.forward + (Vector3.up / 10)) * throwForce;
+            rb.AddForce(force, ForceMode.Force);
+        }       
+
+        carrierTarget = null;
+    }
+
+
+
     void OnCollisionEnter(Collision other)
     {
-
-        //Debug.Log("OnCollisionEnter: " + other.gameObject.name);
-
-        if (!hasCarrier) return;
-
-        //if (isServer || !isLocalPlayer) return;
+        if (carrierNetIdentity == null || !isServer) return;
 
         var player = other.gameObject.GetComponent<PlayerBehaviour>();
+        var carrier = carrierNetIdentity.GetComponent<PlayerBehaviour>();
 
         if (player != null) 
         {
-            if (player.netId == carrierNetId.netId)
+            if (player.netId == carrierNetIdentity.netId)
             {
                 return;
             }
             else 
             {
-                var carrier = carrierNetId.GetComponent<PlayerBehaviour>();
                 carrier.OnDamage(carrier.netIdentity, player.netIdentity, 15);
+
             }
         }
 
-        ResetChair();
-        carrierNetId = null;
-        hasCarrier = false;
+        Physics.IgnoreCollision(collider, carrier.GetComponent<CharacterController>(), false);
+        RpcResetCollision(carrierNetIdentity);
+
+        carrierNetIdentity = null;
     }
 
-    public void ResetChair() 
+    [ClientRpc]
+    public void RpcResetCollision(NetworkIdentity carrier) 
     {
-        try
-        {
-            //if (isLocalPlayer)
-            Physics.IgnoreCollision(collider, carrierNetId.GetComponent<CharacterController>(), false);
-            Debug.Log("Reset: " + Physics.GetIgnoreCollision(collider, carrierNetId.GetComponent<CharacterController>()));
-        }
-        catch (Exception e) 
-        {
-            Debug.Log("Try: "+e);
-        }
-        
+        var lastCarrier = carrier.GetComponent<PlayerBehaviour>();
+        ResetCollision(lastCarrier);
+    }
+
+    public void ResetCollision(PlayerBehaviour lastCarrier) 
+    {
+        Physics.IgnoreCollision(collider, lastCarrier._cControler, false);
+        carrierNetIdentity = null;
     }
 }

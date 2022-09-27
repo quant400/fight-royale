@@ -88,6 +88,15 @@ public class MatchManager : NetworkBehaviour
     
     public void OnPlayersChanges()
     {
+
+
+        //Debug.Log("OnPlayersChanges: "+ currentState);
+        //Debug.Log("Players: "+ _gameManager.analytics.players);
+        //Debug.Log("Number of players: "+ CFCNetworkManager.Instance._gameManager.analytics.GetNumberOfPlayers);
+        //Debug.Log("Max connections: "+ CFCNetworkManager.Instance.maxConnections);
+        //Debug.Log("Min connections: "+ _gameManager.minPlayersToPlay);
+        //Debug.Log("Enough player time: "+ isEnoughPlayerTime);
+
         if (currentState != MatchState.Lobby && currentState != MatchState.PreGame) return;
         
         if (CFCNetworkManager.Instance._gameManager.analytics.GetNumberOfPlayers >= CFCNetworkManager.Instance.maxConnections) //Quantidade maxima atingida

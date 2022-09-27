@@ -3783,12 +3783,13 @@ MonoBehaviour:
   playersMask:
     serializedVersion: 2
     m_Bits: 64
-  throwForce: 4000
   _throwableMask:
     serializedVersion: 2
     m_Bits: 128
   _throwTargetTransform: {fileID: 8119087901085521918}
+  _carryingObject: {fileID: 0}
   _carryTransformChild: {fileID: 8017567617649068653}
+  isAction: 0
 --- !u!143 &9071112424790293551
 CharacterController:
   m_ObjectHideFlags: 0

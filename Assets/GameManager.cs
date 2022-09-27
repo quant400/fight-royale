@@ -74,8 +74,15 @@ public class GameManager : NetworkBehaviour
     {
         if (isServer)
         {
-            match.OnPlayersChanges();
-            CheckWinner();
+            if (match.currentState == MatchManager.MatchState.InGame)
+            {
+                CheckWinner();
+            }
+            else 
+            {
+                match.OnPlayersChanges();
+            }
+
         }
     }
     
@@ -86,10 +93,29 @@ public class GameManager : NetworkBehaviour
         CloseLobby();
     }
     
+
+    public void UpdateLobbyPlayer(string serverId,int countPlayer, BuildType buildType)
+    {
+        if (buildType == BuildType.LOCAL_SERVER) return;
+
+        try
+        {
+            if (!string.IsNullOrEmpty(serverId))
+            {
+                Connection_Manager.Instance.Api_PlayfabMatchmaking.SetPlayersOnServer(serverId, countPlayer);
+            }
+            
+        }
+        catch (System.Exception e)
+        {
+            Debug.Log("UpdateLobbyPlayer Error - " + e.Message);
+        }
+       
+    }
+
     public void CloseLobby()
     {
         KickDemoPlayers();
-        
         Connection_Manager.Instance.SendCloseLobby();
         RpcSetupStartGameTimer(preGameTime);
         MrTime_Manager.Instance.SetTimer(preGameTime, UpdatePreGameTimer, StartGame);
@@ -106,6 +132,7 @@ public class GameManager : NetworkBehaviour
 
     private void UpdatePreGameTimer(int time)
     {
+        level.ResetPlayers();
         RpcUpdateTimer(time);
         Debug.Log("Começando em: "+time);
     }

@@ -39292,7 +39292,7 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 1.4
-    functionName: ComboReset
+    functionName: ReturnFromHit
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

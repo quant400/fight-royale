@@ -129,19 +129,26 @@ public class Connection_Manager : MonoBehaviour
     {
         var id = (int)LobbyState.Open;
 
-        foreach (var dic in Api_PlayfabMatchmaking.Lobby)
+        var lobbyPrioritized = Api_PlayfabMatchmaking.GetBestServerId();
+        if (lobbyPrioritized != null && lobbyPrioritized.Count > 0)
         {
-            if (dic.Value.Equals(id.ToString()))
-            {
-                Api_PlayfabMatchmaking.CurrentMultiplayerServerSummary = Api_PlayfabMatchmaking.GetMultiplayerServerSummary(dic.Key);
-                
-                if (Api_PlayfabMatchmaking.CurrentMultiplayerServerSummary != null)
-                {
-                    return true;
-                }
-               
-            }
+            Api_PlayfabMatchmaking.Lobby = new List<CFC.Serializable.Admin.TitleData.Data>();
+            Api_PlayfabMatchmaking.Lobby = lobbyPrioritized;
         }
+
+            foreach (var dic in Api_PlayfabMatchmaking.Lobby)
+            {
+                if (dic.Value.Equals(id.ToString()))
+                {
+                    Api_PlayfabMatchmaking.CurrentMultiplayerServerSummary = Api_PlayfabMatchmaking.GetMultiplayerServerSummary(dic.Key);
+
+                    if (Api_PlayfabMatchmaking.CurrentMultiplayerServerSummary != null)
+                    {
+                        return true;
+                    }
+                }
+            }
+        
 
         return false;
     }
@@ -192,7 +199,7 @@ public class Connection_Manager : MonoBehaviour
         catch (Exception e)
         {
             Debug.Log(e);
-            UpdateAvailableLobby("0000000000000000000000000000000000000000000000000000000000000001", e.Message , onFinish);
+            UpdateAvailableLobby("0x00000000000000000000000000000000000000000000000000000000000001", e.Message , onFinish);
         }
         
     }
