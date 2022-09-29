@@ -1224,7 +1224,7 @@ namespace Mirror
 
         void OnClientDisconnectInternal(NetworkConnection conn, DisconnectMessage msg)
         {
-            Debug.Log("NetworkManager.OnClientDisconnectInternal");
+            Debug.Log("NetworkManager.OnClientDisconnectInternal" + msg);
             OnClientDisconnect(conn);
         }
 

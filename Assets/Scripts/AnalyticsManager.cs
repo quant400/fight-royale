@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class AnalyticsManager : MonoBehaviour
 {
-    [Header("Data")] [SerializeField] private List<Player> players = new List<Player>();
+    [Header("Data")] [SerializeField] public List<Player> players = new List<Player>();
 
     [SerializeField] private int _pointsPerKill = 10;
     
@@ -39,6 +39,7 @@ public class AnalyticsManager : MonoBehaviour
 
     public bool CheckWallet(string nftIds)
     {
+        return true;
         var nftIdsList = nftIds.Split(';').ToList();
         return !players.Where(aux=> aux.isConnected).Any(auxPlayer => nftIdsList.Contains(auxPlayer.id.ToString()));
     }
@@ -62,7 +63,7 @@ public class AnalyticsManager : MonoBehaviour
     #region Gets
 
     public int GetNumberOfPlayersAlive() => players.Count(aux => aux.isConnected && !aux.isDead);
-    public int GetNumberOfPlayers => players.Count();
+    public int GetNumberOfPlayers => players.Count(aux => aux.isConnected);
 
     public NetworkIdentity GetWinner()
     {
@@ -113,6 +114,7 @@ public class AnalyticsManager : MonoBehaviour
         var killer = GetPlayerByNetIdentity(killerIdentity);
         killer.kills++;
         AddScore(killer.netIdentity, _pointsPerKill);
+
         
         //Dead
         var dead = GetPlayerByNetIdentity(deadIdentity);
@@ -120,7 +122,16 @@ public class AnalyticsManager : MonoBehaviour
         SetPlayerDead(deadIdentity);
         
         _Debug($"AddKill: killer={killer.id}, dead={dead.id}");
-        
+
+        UpdateSpectatorCamera(dead.netIdentity, killer.netIdentity);
+    }
+
+    public void UpdateSpectatorCamera(NetworkIdentity dead, NetworkIdentity killer) 
+    {
+        foreach (var player in players.Where(aux=> aux.isConnected && aux.isDead).Select(aux=>aux.netIdentity.GetComponent<PlayerBehaviour>()))
+        {
+            player.TargetChangeSpectatorCamera(dead, killer);
+        }
     }
 
     private void AddScore(NetworkIdentity netId, int score)
@@ -199,12 +210,12 @@ public class AnalyticsManager : MonoBehaviour
     
     private Player GetPlayerById(int id)
     {
-        return players.FirstOrDefault(aux => aux.id == id);
+        return players.LastOrDefault(aux => aux.id == id);
     }
 
     private Player GetPlayerByNetIdentity(NetworkIdentity netIdentity)
     {
-        return players.FirstOrDefault(aux => aux.netIdentity.netId == netIdentity.netId);
+        return players.LastOrDefault(aux => aux.netIdentity.netId == netIdentity.netId);
     }
 
     private void _Debug(string desc)

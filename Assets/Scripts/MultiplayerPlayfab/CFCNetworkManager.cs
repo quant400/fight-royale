@@ -57,7 +57,9 @@ public class CFCNetworkManager : NetworkManager
             base.OnServerDisconnect(conn);
 
             Debug.Log(_gameManager.match.currentState);
-            if (_gameManager.match.currentState == MatchManager.MatchState.InGame)
+            if (_gameManager.match.currentState == MatchManager.MatchState.InGame || 
+                _gameManager.match.currentState == MatchManager.MatchState.PreGame ||
+                _gameManager.match.currentState == MatchManager.MatchState.Lobby)
             {
                 _gameManager.OnClientDisconnect();
             }
@@ -84,6 +86,9 @@ public class CFCNetworkManager : NetworkManager
     public override void OnServerAddPlayer(NetworkConnection conn)
     {
         base.OnServerAddPlayer(conn);
+
+        Debug.Log("OnServerAddPlayer");
+
         if (!((CFCAuth.AuthRequestMessage) conn.authenticationData).nftWallet.Equals("Demo"))
         {
             _gameManager.OnClientConnect(conn.identity);

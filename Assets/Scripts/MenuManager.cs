@@ -125,6 +125,7 @@ public class MenuManager : MonoBehaviour
     }
     public void ShowKO(bool show = true)
     {
+        
         currentCam = 0;
         GO_KO.SetActive(show);
     }

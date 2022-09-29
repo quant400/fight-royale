@@ -30,6 +30,8 @@ public class PlayerBehaviour : NetworkBehaviour
     public PlayerAttributes _pAttributes;
     public Animator anim;
 
+    public NetworkIdentity spectating;
+
     public bool isDemo = false;
 
     public static readonly HashSet<string> playerNames = new HashSet<string>();
@@ -50,7 +52,6 @@ public class PlayerBehaviour : NetworkBehaviour
     {
         Debug.Log(value);
         //_tpControler.enabled = !value;
-
     }
     private void OnDestroy()
     {
@@ -393,63 +394,92 @@ public class PlayerBehaviour : NetworkBehaviour
         GameManager.Instance.CheckWinner();
     }
     
-    [TargetRpc]
-    public void TargetChangePlayerPosition(Vector3 pos)
-    {
-        anim.enabled = false;
-        transform.position = pos;
-        anim.enabled = true;
-
-    }
-
-    #region Throwable
-    
-    [Command]
-    public void CmdCarry(NetworkIdentity item)
-    {
-        item.AssignClientAuthority(connectionToClient);
-
-        var chair = item.GetComponent<Throwable_BehaviorV2>();
-        CarryChair(chair);
-
-        RpcCarry(item);
-    }
-    
     [ClientRpc]
-    public void RpcCarry(NetworkIdentity item)
+    public void RpcChangePlayerPosition(Vector3 pos)
     {
-        var chair = item.GetComponent<Throwable_BehaviorV2>();
-        CarryChair(chair);
-
-        _tpFightingControler.PreCarry(chair);
+        if(Vector3.Distance(transform.position, pos) > 0.2f)
+            transform.position = pos;
     }
-    public void CarryChair(Throwable_BehaviorV2 chair) 
+
+    [TargetRpc]
+    public void TargetChangeSpectatorCamera(NetworkIdentity dead, NetworkIdentity killer) 
     {
-        chair.SetNoPhysics(true);
+        if (spectating == null || spectating == dead)
+        {
+            spectating = killer;
+            Camera_Manager.Instance.followCam.m_Follow = spectating.GetComponent<PlayerBehaviour>()._camTarget;
+        }
+    }
+
+    #region Pick and Throw
+
+    [Command]
+    public void CmdStealObject(NetworkIdentity carrier)
+    {
+        var auxCarrier = carrier.GetComponent<PlayerBehaviour>();
+        auxCarrier._tpFightingControler.StolenObject();
+
+        RpcStealObject(carrier);
+    }
+
+    [ClientRpc]
+    public void RpcStealObject(NetworkIdentity carrier)
+    {
+        var auxCarrier = carrier.GetComponent<PlayerBehaviour>();
+        auxCarrier._tpFightingControler.StolenObject();
+    }
+
+    [Command]
+    public void CmdAnimationPickUp(bool isPickUp) 
+    {
+        //anim.SetLayerWeight(anim.GetLayerIndex("UpperBody"), isPickUp?1:0);
+        RpcAnimationPickUp(isPickUp);
+    }
+
+    [ClientRpc]
+    public void RpcAnimationPickUp(bool isPickUp)
+    {
+        anim.SetLayerWeight(anim.GetLayerIndex("UpperBody"), isPickUp ? 1 : 0);
+    }
+
+    [Command]
+    public void CmdPickUp(NetworkIdentity item)
+    {
+        item.RemoveClientAuthority();
+        item.AssignClientAuthority(netIdentity.connectionToClient);
+
+        var pickUpObject = item.GetComponent<Throwable_BehaviorV2>();
+        pickUpObject.PickUp(netIdentity, _tpFightingControler._throwTargetTransform);
+        _tpFightingControler._carryingObject = pickUpObject;
+
+        RpcPickUp(item);
+    }
+
+    [ClientRpc]
+    public void RpcPickUp(NetworkIdentity item) 
+    {
+        var pickUpObject = item.GetComponent<Throwable_BehaviorV2>();
+        pickUpObject.PickUp(netIdentity, _tpFightingControler._throwTargetTransform);
+        _tpFightingControler._carryingObject = pickUpObject;
+        //pickUpObject.SetNoPhysics(true);
     }
 
     [Command]
     public void CmdThrow(NetworkIdentity item)
     {
-        item.RemoveClientAuthority(connectionToClient);
+        var pickUpObject = item.GetComponent<Throwable_BehaviorV2>();
+        pickUpObject.ResetChair();
+        _tpFightingControler._carryingObject = null;
 
-        //var chair = item.GetComponent<Throwable_BehaviorV2>();
-        //ThrowChair(chair);
-
-        //RpcThrow(item);
+        RpcThrow(item);
     }
-
 
     [ClientRpc]
     public void RpcThrow(NetworkIdentity item)
     {
-        var chair = item.GetComponent<Throwable_BehaviorV2>();
-        //ThrowChair(chair);
-    }
-    public void ThrowChair(Throwable_BehaviorV2 chair) 
-    {
-        
-        chair.SetNoPhysics(false);
+        var pickUpObject = item.GetComponent<Throwable_BehaviorV2>();
+        pickUpObject.ResetChair();
+        _tpFightingControler._carryingObject = null;
     }
 
     #endregion

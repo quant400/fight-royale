@@ -49,7 +49,7 @@ public class CFCAuth : NetworkAuthenticator
 
         if (connectionsPendingDisconnect.Contains(conn)) return;
 
-        if ((!PlayerBehaviour.playerNames.Contains(msg.authUsername) || true) &&
+        if (//(!PlayerBehaviour.playerNames.Contains(msg.authUsername) || true) &&
             GameManager.Instance.match.currentState == MatchManager.MatchState.Lobby &&
             (msg.nftWallet.Equals("Demo") || GameManager.Instance.analytics.CheckWallet(msg.nftWallet)))
         {
@@ -57,11 +57,6 @@ public class CFCAuth : NetworkAuthenticator
             {
                 PlayerBehaviour.playerNames.Add(msg.authUsername);
             }
-            else
-            {
-                //PlayerBehaviour.isdemo = true;
-            }
-            //GameManager.Instance.analytics.AddPlayer(msg.nftId,conn.identity);
 
             conn.authenticationData = msg;
 
