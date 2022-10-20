@@ -55,6 +55,7 @@ public class GameManager : NetworkBehaviour
         //PostGame
         match.onPostGameState.AddListener(PostGame);
         match.onPostGameState.AddListener(()=>Invoke("SendScore", 2f));
+
     }
 
     public void SendScore()
@@ -94,12 +95,11 @@ public class GameManager : NetworkBehaviour
     }
     
 
-    public void UpdateLobbyPlayer(string serverId,int countPlayer, BuildType buildType)
+    public void UpdateLobbyPlayer(string serverId,int countPlayer)
     {
-        if (buildType == BuildType.LOCAL_SERVER) return;
-
         try
         {
+            Debug.Log(" Try Update Lobby Player");
             if (!string.IsNullOrEmpty(serverId))
             {
                 Connection_Manager.Instance.Api_PlayfabMatchmaking.SetPlayersOnServer(serverId, countPlayer);

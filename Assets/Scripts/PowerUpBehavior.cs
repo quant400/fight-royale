@@ -7,6 +7,7 @@ using UnityEngine;
 public class PowerUpBehavior : NetworkBehaviour
 {
     public PowerUp PowerUp;
+    public int id;
     public bool isAvailable = true;
 
     void Start()
@@ -35,7 +36,7 @@ public class PowerUpBehavior : NetworkBehaviour
 
     public PowerUp GetPowerUp()
     {
-        if (!isAvailable) return null;
+        //if (!isAvailable) return null;
         DestroyYourSelf();
         return PowerUp;
     }

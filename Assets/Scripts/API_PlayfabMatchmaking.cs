@@ -251,6 +251,7 @@ public class API_PlayfabMatchmaking : MonoBehaviour
          Connection_Manager.Instance.Api_PlayfabMatchmaking._multiplayerServersResponse.data.MultiplayerServerSummaries
              .Select(aux => aux.ServerId));
 
+       
 
         UnityWebRequest www = CreateRequestPOST(urlToCall, data);
         www.SetRequestHeader("X-SecretKey", SecretKey);
@@ -329,21 +330,19 @@ public class API_PlayfabMatchmaking : MonoBehaviour
             data
             );
     }
-    public List<CFC.Serializable.Admin.TitleData.Data> GetBestServerId()
+    public void GetBestServerId(Action<List<CFC.Serializable.Admin.TitleData.Data>> onfinish)
     {
-        List<CFC.Serializable.Admin.TitleData.Data> serverByPlayer = null;
         GetTitleInternalData(
             (data) =>
-            {
-                serverByPlayer = data.OrderByDescending(aux => aux.Value).ToList();
-            }, 
+                {
+                onfinish(data.OrderByDescending(aux => aux.Value).ToList());
+                }, 
             (error) =>
-            {
+                {
+                onfinish(null);
                 Debug.Log(error);
-            }
+               }
             );
-
-        return serverByPlayer;
     }
 
 }

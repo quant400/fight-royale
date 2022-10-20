@@ -11,7 +11,8 @@ public class Connection_Manager : MonoBehaviour
     public static Connection_Manager Instance;
     public API_CryptoFightClub Api_CryptoFightClub;
     public API_PlayfabMatchmaking Api_PlayfabMatchmaking;
-    
+    private List<CFC.Serializable.Admin.TitleData.Data> lobbyPrioritized = null;
+
     public enum LobbyState
     {
         Open = 0,
@@ -69,13 +70,15 @@ public class Connection_Manager : MonoBehaviour
     }
     private IEnumerator ActionSearchAvailableLobby(Action actionOnStart, Action actionOnSuccess, Action actionOnFullLobby= null,Action actionOnFail = null)
     {
+
         actionOnStart();
-        yield return new WaitForSeconds(5.0f);
+        Api_PlayfabMatchmaking.GetBestServerId((lb) => { lobbyPrioritized = lb; });
+        yield return new WaitForSeconds(5.25f);
+        
         try
         {
             var found = false;
             
-
             Api_PlayfabMatchmaking.GetTitleData(() => {
 
                 Debug.Log("GetTitleData OnSuccess");
@@ -128,15 +131,21 @@ public class Connection_Manager : MonoBehaviour
     private bool VerifyAvailableLobby()
     {
         var id = (int)LobbyState.Open;
+        var listLobby = Api_PlayfabMatchmaking.Lobby;
 
-        var lobbyPrioritized = Api_PlayfabMatchmaking.GetBestServerId();
-        if (lobbyPrioritized != null && lobbyPrioritized.Count > 0)
+        if (lobbyPrioritized != null && lobbyPrioritized.Count > 0 && lobbyPrioritized.Count == listLobby.Count)
         {
-            Api_PlayfabMatchmaking.Lobby = new List<CFC.Serializable.Admin.TitleData.Data>();
-            Api_PlayfabMatchmaking.Lobby = lobbyPrioritized;
+            Debug.Log("LobbyPrioritized by player");
+            foreach (var dic in lobbyPrioritized)
+            {
+                dic.Value = listLobby.First(aux => aux.Key == dic.Key).Value;
+            }
+
+            listLobby = lobbyPrioritized;
+
         }
 
-            foreach (var dic in Api_PlayfabMatchmaking.Lobby)
+            foreach (var dic in listLobby)
             {
                 if (dic.Value.Equals(id.ToString()))
                 {

@@ -25,7 +25,9 @@ public class LevelManager : NetworkBehaviour
     void Subscribe()
     {
         GameManager.Instance.match.onLobbyState.AddListener(ResetProps);
+
         //GameManager.Instance.match.onLobbyState.AddListener(ResetPowerUps);
+
         //GameManager.Instance.match.onPreGameState.AddListener(ResetPlayers);
         GameManager.Instance.match.onInGameState.AddListener(ResetLevel);
     }
