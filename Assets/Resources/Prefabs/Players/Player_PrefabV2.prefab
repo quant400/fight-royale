@@ -3679,6 +3679,7 @@ MonoBehaviour:
   _skinController: {fileID: 7827165529778116518}
   _pAttributes: {fileID: 3797127690003850693}
   anim: {fileID: 2326369553867373797}
+  spectating: {fileID: 0}
   isDemo: 0
   pName: 
   pSkin: 
@@ -3760,7 +3761,7 @@ MonoBehaviour:
   GroundedRadius: 0.24
   GroundLayers:
     serializedVersion: 2
-    m_Bits: 513
+    m_Bits: 129
   CinemachineCameraTarget: {fileID: 3680860937754248574}
   TopClamp: 70
   BottomClamp: -30

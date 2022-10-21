@@ -54,13 +54,17 @@ public class Throwable_BehaviorV2 : NetworkBehaviour
         transform.rotation = _defaultRot;
     }
 
-    public void PickUp(NetworkIdentity carrier, Transform carryTarget) 
+    public bool PickUp(NetworkIdentity carrier, Transform carryTarget) 
     {
         SetNoPhysics(true);
 
         Physics.IgnoreCollision(collider, carrier.GetComponent<CharacterController>(), true);
 
+        if (carrierNetIdentity != null) return false;
+
         SetVariable(carrier, carryTarget);
+
+        return true;
     }
 
     public void SetVariable(NetworkIdentity carrier, Transform carryTarget) 

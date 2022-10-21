@@ -54,7 +54,7 @@ public class TPFightingController : MonoBehaviour
 
         _player._cControler.stepOffset = _player._tpControler.Grounded ? _stepOffset : 0.1f;
         
-        _tpController.enabled = (!isAttack && !isBlocking) || isRunningAttack;
+        _tpController.canMove = (!isAttack && !isBlocking) || isRunningAttack;
         
         if (!isAttack && _player._tpControler.Grounded)
         {
@@ -198,7 +198,7 @@ public class TPFightingController : MonoBehaviour
         m_KickComboStep = 0;
         
         if(_player.isLocalPlayer)
-            _tpController.enabled = true;
+            _tpController.canMove = true;
     }
     
     public void ComboPossible()
@@ -225,8 +225,12 @@ public class TPFightingController : MonoBehaviour
         if (_player.isLocalPlayer)
             _player.CmdAnimationPickUp(true);
 
-        _anim.Play("Hit");
-        isHitted = true;
+        if (!_isCarrying) 
+        {
+            _anim.Play("Hit");
+            isHitted = true;
+        }
+        
     }
 
     public void ReturnFromHit() 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Cinemachine;
 using Mirror;
 using Mirror.Websocket;
+using PlayFab;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -38,11 +39,36 @@ public class CFCNetworkManager : NetworkManager
         Connection_Manager.Instance.Api_PlayfabMatchmaking.CreateDataTitle();
     }
 
-    public override void OnServerDisconnect(NetworkConnection conn)
+
+    private void TryUpdateLobbyPlayer(int ConnectedPlayersCount)
     {
         try
         {
-            
+            var dic = PlayFabMultiplayerAgentAPI.GetConfigSettings();
+            if (dic != null)
+            {
+                
+                string _serverId = dic[PlayFabMultiplayerAgentAPI.ServerIdKey];
+                GameManager.Instance.UpdateLobbyPlayer(_serverId, ConnectedPlayersCount);
+            }
+        }
+        catch (Exception)
+        {
+            Debug.Log("Try GetConfigSettings");
+        }
+
+    }
+
+    public override void OnServerDisconnect(NetworkConnection conn)
+    {
+        var diffConnectedPlayersCount = connectedPlayersCount - 1;
+        if (diffConnectedPlayersCount < 0) { diffConnectedPlayersCount = 0; }
+        TryUpdateLobbyPlayer(diffConnectedPlayersCount);
+
+        try
+        {
+           
+              
             if (((CFCAuth.AuthRequestMessage) conn.authenticationData).nftWallet.Equals("Demo"))
             {
                 Debug.Log("Disconnect as Demo");
@@ -75,6 +101,8 @@ public class CFCNetworkManager : NetworkManager
                 singleton.ServerChangeScene(SceneManager.GetActiveScene().name);
                 singleton.StopServer();
             }
+
+           
         }
         catch (Exception e)
         {
@@ -86,7 +114,6 @@ public class CFCNetworkManager : NetworkManager
     public override void OnServerAddPlayer(NetworkConnection conn)
     {
         base.OnServerAddPlayer(conn);
-
         Debug.Log("OnServerAddPlayer");
 
         if (!((CFCAuth.AuthRequestMessage) conn.authenticationData).nftWallet.Equals("Demo"))
@@ -94,8 +121,9 @@ public class CFCNetworkManager : NetworkManager
             _gameManager.OnClientConnect(conn.identity);
         }
 
+           TryUpdateLobbyPlayer(connectedPlayersCount);
     }
-    
+
     #endregion
 
     #region Client

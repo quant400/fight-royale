@@ -6,6 +6,7 @@ using System.Linq;
 using CFC;
 using Cinemachine;
 using Mirror;
+using Newtonsoft.Json;
 using PlayFab;
 using StarterAssets;
 using TMPro;
@@ -90,23 +91,41 @@ public class PlayerBehaviour : NetworkBehaviour
                     CmdPowerUp(other.GetComponent<NetworkIdentity>());
                 Debug.Log(other.GetComponent<NetworkIdentity>().netId);*/
 
-                _pAttributes.OnPowerUp(other.GetComponent<PowerUpBehavior>().GetPowerUp());
+                if (hasAuthority && isClient)
+                    CmdPowerUp(other.GetComponent<PowerUpBehavior>().id);
+
+                //_pAttributes.OnPowerUp(other.GetComponent<PowerUpBehavior>().GetPowerUp());
                 break;
         }
     }
 
     [Command]
-    private void CmdPowerUp(NetworkIdentity powerUp)
+    private void CmdPowerUp(int powerUpId)
     {
-        Debug.Log(powerUp.netId);
-            RpcPowerUp(powerUp);
+        Debug.Log("CmdPowerUp: "+powerUpId);
+
+        var powerUp = PowerUpManager.Instance.GetPowerUpById(powerUpId);
+
+        if (powerUp != null && powerUp.isAvailable) 
+        {
+            powerUp.isAvailable = false;
+            RpcPowerUp(powerUpId);
+        }
     }
 
     [ClientRpc]
-    private void RpcPowerUp(NetworkIdentity powerUp)
+    private void RpcPowerUp(int powerUpId)
     {
-        Debug.Log(powerUp.netId);
-        powerUp.GetComponent<PowerUpBehavior>().GetPowerUp();
+
+        Debug.Log("RpcPowerUp: " + powerUpId);
+
+        var powerUp = PowerUpManager.Instance.GetPowerUpById(powerUpId);
+
+        if (powerUp != null) 
+        {
+            powerUp.isAvailable = false;
+            _pAttributes.OnPowerUp(powerUp.GetPowerUp());
+        }
     }
 
     #endregion
@@ -449,10 +468,17 @@ public class PlayerBehaviour : NetworkBehaviour
         item.AssignClientAuthority(netIdentity.connectionToClient);
 
         var pickUpObject = item.GetComponent<Throwable_BehaviorV2>();
-        pickUpObject.PickUp(netIdentity, _tpFightingControler._throwTargetTransform);
-        _tpFightingControler._carryingObject = pickUpObject;
+        if (pickUpObject.PickUp(netIdentity, _tpFightingControler._throwTargetTransform))
+        {
+            _tpFightingControler._carryingObject = pickUpObject;
 
-        RpcPickUp(item);
+            RpcPickUp(item);
+        }
+        else 
+        {
+            RpcStealObject(netIdentity);
+        }
+        
     }
 
     [ClientRpc]
