@@ -65,8 +65,11 @@ public class IngameUIControler : MonoBehaviour
     }
     private void Start()
     {
-        musicAudioSource = BGM_Manager.Instance.GetComponent<AudioSource>();
-        defaultMusicVol = musicAudioSource.volume;
+        if (BGM_Manager.Instance != null)
+        {
+            musicAudioSource = BGM_Manager.Instance.GetComponent<AudioSource>();
+            defaultMusicVol = musicAudioSource.volume;
+        }
         sfxButtonImage = muteSfx.GetComponent<Image>();
         musicButtonImage = muteMusic.GetComponent<Image>();
         chatButtonImage = chat.GetComponent<Image>();
@@ -124,21 +127,24 @@ public class IngameUIControler : MonoBehaviour
 
     public void MuteMusic()
     {
-        if (musicAudioSource.volume == 0)
+        if (musicAudioSource != null)
         {
-            musicButtonImage.sprite = regularImage; //musicButtonImage.color = new Color(1f, 1f, 1f, 1f);
-            musicButtonImage.transform.GetChild(0).GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f);
-            musicAudioSource.volume = defaultMusicVol;
-            PlayerPrefs.SetString("Music", "on");
-            if (!musicAudioSource.isPlaying)
-                musicAudioSource.Play();
-        }
-        else
-        {
-            musicButtonImage.sprite = disableImage;//musicButtonImage.color = new Color(1, 1, 1, 0.5f);
-            musicButtonImage.transform.GetChild(0).GetComponent<Image>().color = new Color(0.9450981f, 0.1215686f, 0.172549f, 1f);
-            musicAudioSource.volume = 0;
-            PlayerPrefs.SetString("Music", "off");
+            if (musicAudioSource.volume == 0)
+            {
+                musicButtonImage.sprite = regularImage; //musicButtonImage.color = new Color(1f, 1f, 1f, 1f);
+                musicButtonImage.transform.GetChild(0).GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f);
+                musicAudioSource.volume = defaultMusicVol;
+                PlayerPrefs.SetString("Music", "on");
+                if (!musicAudioSource.isPlaying)
+                    musicAudioSource.Play();
+            }
+            else
+            {
+                musicButtonImage.sprite = disableImage;//musicButtonImage.color = new Color(1, 1, 1, 0.5f);
+                musicButtonImage.transform.GetChild(0).GetComponent<Image>().color = new Color(0.9450981f, 0.1215686f, 0.172549f, 1f);
+                musicAudioSource.volume = 0;
+                PlayerPrefs.SetString("Music", "off");
+            }
         }
     }
 
