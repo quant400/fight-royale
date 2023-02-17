@@ -12,7 +12,7 @@ public class Data_Manager : MonoBehaviour
     public string accountId;
     public string contractId;
 
-    public int currentNftId;
+    public string currentNftId;
 
     public Account selectedAccount => GetSelectedAccount();
     private Account _selectedAccount;
@@ -75,7 +75,7 @@ public class Data_Manager : MonoBehaviour
         Debug.Log("Starting the account");
         try
         {
-            //Debug.Log(json);
+            Debug.Log(json);
 
             var tempAccounts = JsonUtility.FromJson<RootAccount>(json);
 
@@ -103,6 +103,7 @@ public class Data_Manager : MonoBehaviour
             }
             else
             {
+                gameplayView.instance.csv.noNFTCanvas.SetActive(true);
                 error("You don't own any characters visit \n  (https://app.cryptofightclub.io/mint) \n to acquire");
 
             }

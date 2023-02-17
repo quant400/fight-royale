@@ -87,7 +87,7 @@ public class API_CryptoFightClub : MonoBehaviour
             onSuccess?.Invoke(json);
         }
     }
-    public void PostScore(int id,Action<string> onSuccess, Action<string> onFail)
+    public void PostScore(string id,Action<string> onSuccess, Action<string> onFail)
     {
         string data = "{\"id\":" + id +"}";
         StartCoroutine(ActionPostScore(onSuccess, onFail, data));

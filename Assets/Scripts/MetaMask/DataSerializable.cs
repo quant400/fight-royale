@@ -24,7 +24,7 @@ namespace CFC.Serializable
     public class Account
     {
         public string name;
-        public int id;
+        public string id;
         public string description;
         public string image;
         public string external_url;
@@ -57,7 +57,7 @@ namespace CFC.Serializable
     public class PlayerPvpScore
     {
         public string _id;
-        public int id;
+        public string id;
         public int dailyScore;
         public int allTimeScore;
         public int dailySessionPlayed;
@@ -277,7 +277,7 @@ namespace CFC.Serializable.Admin.TitleData
     [Serializable]
     public class RequestEndSession
     {
-        public int id;
+        public string id;
         public int score;
         public int kills;
     }
@@ -285,7 +285,7 @@ namespace CFC.Serializable.Admin.TitleData
     [Serializable]
     public class RequestStartSession
     {
-        public int id;
+        public string id;
     }
   
 }

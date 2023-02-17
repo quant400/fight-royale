@@ -15,7 +15,7 @@ public class AnalyticsManager : MonoBehaviour
 
     #region Connection
 
-    public void AddPlayer(int id, NetworkIdentity netIdentity)
+    public void AddPlayer(string id, NetworkIdentity netIdentity)
     {
         //var oldPlayer = players.FirstOrDefault(aux => aux.id == id);
         //if (oldPlayer != null)
@@ -167,13 +167,13 @@ public class AnalyticsManager : MonoBehaviour
         Connection_Manager.Instance.Api_CryptoFightClub.PostStartSession(JsonUtility.ToJson(request),(aux)=>SuccessRequestStartSession(request.id, aux), (aux)=>FailRequestStartSession(request.id, aux));
     }
     
-    private void SuccessRequestStartSession(int id, string result)
+    private void SuccessRequestStartSession(string id, string result)
     {
         Debug.Log("Sucasss: start session: "+result);
         //RequestEndSession(GetPlayerByNetId(id));
     }
 
-    private void FailRequestStartSession(int id, string erro)
+    private void FailRequestStartSession(string id, string erro)
     {
         Debug.Log("Error: Fail to start session");
         //RequestEndSession(GetPlayerByNetId(id));
@@ -193,12 +193,12 @@ public class AnalyticsManager : MonoBehaviour
         Connection_Manager.Instance.Api_CryptoFightClub.PostEndSession(JsonUtility.ToJson(request),(aux)=>SuccessEndSendRequest(request.id, aux), (aux)=>FailEndSendRequest(request.id, aux));
     }
 
-    private void SuccessEndSendRequest(int id, string result)
+    private void SuccessEndSendRequest(string id, string result)
     {
         Debug.Log("Success: end session: "+result);
     }
 
-    private void FailEndSendRequest(int id, string erro)
+    private void FailEndSendRequest(string id, string erro)
     {
         Debug.Log("Error: Fail to end session");
         //RequestEndSession(GetPlayerByNetId(id));
@@ -208,7 +208,7 @@ public class AnalyticsManager : MonoBehaviour
 
     #region Utils
     
-    private Player GetPlayerById(int id)
+    private Player GetPlayerById(string id)
     {
         return players.LastOrDefault(aux => aux.id == id);
     }
@@ -230,17 +230,17 @@ public class AnalyticsManager : MonoBehaviour
 [System.Serializable]
 public class Player
 {
-    public int id;
+    public string id;
     public NetworkIdentity netIdentity;
     public bool isConnected = true;
     public bool isDead = false;
     public float damageDealt = 0;
     public float damageReceived = 0;
-    public int killerId;
+    public string killerId;
     public int kills = 0;
     public int score = 0;
 
-    public Player(int id, NetworkIdentity netIdentity)
+    public Player(string id, NetworkIdentity netIdentity)
     {
         this.id = id;
         this.netIdentity = netIdentity;

@@ -282,7 +282,7 @@ public class Connection_Manager : MonoBehaviour
         }, actionOnFail);
 
     }
-    public void GetPlayerPvpScore(int nftId, Action<CFC.Serializable.PlayerPvpScore> actionOnSuccess,Action<string> actionOnFail)
+    public void GetPlayerPvpScore(string nftId, Action<CFC.Serializable.PlayerPvpScore> actionOnSuccess,Action<string> actionOnFail)
     {
         CFC.Serializable.PlayerPvpScore playerPvpScore = null;
 

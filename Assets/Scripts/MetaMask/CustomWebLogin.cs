@@ -142,6 +142,7 @@ public class CustomWebLogin : MonoBehaviour
             Data_Manager.Instance.contractId = contract;
             Debug.Log("contract -> " + contract);
             Data_Manager.Instance.accountId = ConvertIdMetaMask(_account);
+            PlayerPrefs.SetString("Account", Data_Manager.Instance.accountId);
             Debug.Log("account -> " + _account);
 
             //Tratar o ID do metaMask
@@ -158,7 +159,7 @@ public class CustomWebLogin : MonoBehaviour
         }
     }
 
-    private void OnSuccessToSingIn()
+    public void OnSuccessToSingIn()
     {
         panelConnecting.SetActive(false);
         panelStart.SetActive(false);
@@ -168,7 +169,7 @@ public class CustomWebLogin : MonoBehaviour
 
     }
 
-    private void OnFailToSignIn(string error)
+    public void OnFailToSignIn(string error)
     {
         Debug.Log(error);
         textError.text = error;

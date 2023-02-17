@@ -9,7 +9,7 @@ public class CFCAuth : NetworkAuthenticator
     private readonly HashSet<NetworkConnection> connectionsPendingDisconnect = new HashSet<NetworkConnection>();
 
     [Header("Client Username")] public string playerName;
-    public int playerId;
+    public string playerId;
     public string walletNfts;
     
     #region Messages
@@ -17,7 +17,7 @@ public class CFCAuth : NetworkAuthenticator
     public class AuthRequestMessage : MessageBase
     {
         public string authUsername;
-        public int nftId;
+        public string nftId;
         public string nftWallet;
     }
 

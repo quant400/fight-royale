@@ -24,6 +24,9 @@ public class characterSelectionView : MonoBehaviour
 
     public static UnityWebRequest temp;
 
+    public GameObject noNFTCanvas;
+    
+
     [SerializeField]
     GameObject backButtonDestScreen;
     public void Start()
@@ -41,13 +44,33 @@ public class characterSelectionView : MonoBehaviour
         skipping = false;
         if (acc != "")
         {
-            StartCoroutine(GetRequest("https://api.cryptofightclub.io/game/sdk/" + acc));
+            StartCoroutine(KeyMaker.instance.GetRequest());
 
         }
         else
             Invoke("SetUpCharactersLogin", 1f);
     }
 
+    public void Display(Account[] NFTData)
+    {
+        Debug.Log(4);
+        Account[] used=NFTData;
+        if (used.Length == 0 && !gameplayView.instance.usingMeta)
+        {
+            gameplayView.instance.usingFreemint = true;
+            FreeMint();
+        }
+        else if (used.Length == 0 && gameplayView.instance.usingMeta)
+        {
+            Debug.Log("NoNft");
+        }
+        else
+        {
+            noNFTCanvas.SetActive(false);
+            SetData(used);
+        }
+
+    }
     void DisplayChar(int startingindex)
     {
         for (int i = 0; i < 4; i++)
@@ -87,7 +110,7 @@ public class characterSelectionView : MonoBehaviour
             {
                 string name = info[i + startingindex].name;
                 charButtons[i].GetComponent<ButtonInfoHolder>().SetChar(name);
-                characterNFTMap[i + startingindex] = new Account { id = 175, name = name };
+                characterNFTMap[i + startingindex] = new Account { id = "175", name = name };
             }
         }
         ResetAvalaibleColors();
@@ -148,36 +171,31 @@ public class characterSelectionView : MonoBehaviour
         }
     }
 
-    IEnumerator GetRequest(string uri)
+    public void FreeMint()
     {
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
-        {
-            // Request and wait for the desired page.
-            yield return webRequest.SendWebRequest();
-
-            string[] pages = uri.Split('/');
-            int page = pages.Length - 1;
-
-            switch (webRequest.result)
-            {
-                case UnityWebRequest.Result.ConnectionError:
-                case UnityWebRequest.Result.DataProcessingError:
-                    Debug.LogError(pages[page] + ": Error: " + webRequest.error);
-                    break;
-                case UnityWebRequest.Result.ProtocolError:
-                    Debug.LogError(pages[page] + ": HTTP Error: " + webRequest.error);
-                    break;
-                case UnityWebRequest.Result.Success:
-                    //Debug.Log(pages[page] + ":\nReceived: " + webRequest.downloadHandler.text);
-                    temp = webRequest;
-                    GetCharacters();
-                    break;
-            }
-        }
+        info = Resources.LoadAll("DisplaySprites/FreeMint/HeadShots", typeof(Sprite));
+        characterNFTMap = new Account[info.Length];
+        FreeMintDisplayChars(0);
+       
     }
 
-    
-   
+    void FreeMintDisplayChars(int startingindex)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+
+            if (i + startingindex >= info.Length)
+                charButtons[i].GetComponent<ButtonInfoHolder>().SetChar("null");
+            else
+            {
+                string name = info[i + startingindex].name;
+                charButtons[i].GetComponent<ButtonInfoHolder>().SetChar(name);
+                characterNFTMap[i + startingindex] = new Account { id = "00000", name = name };
+            }
+        }
+        ResetAvalaibleColors();
+    }
+
     void GetCharacters()
     {
         string data = "{\"Items\":" + temp.downloadHandler.text + "}";
