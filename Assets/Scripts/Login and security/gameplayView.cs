@@ -14,7 +14,7 @@ public class gameplayView : MonoBehaviour
 
     public characterSelectionView csv;
     public CustomWebLogin cWL;
-    
+    public FireBaseWebGLAuth webGLAuth;
     public GameObject buttonsToEnableAftrLogin, buttonsToDisableAftrLogin;
     private void Awake()
     {
@@ -32,7 +32,7 @@ public class gameplayView : MonoBehaviour
     public string GetLoggedPlayerString()
     {
         if (usingMeta)
-            return PlayerPrefs.GetString("Account");
+            return Data_Manager.Instance.accountId; //PlayerPrefs.GetString("Account");
         else
             return logedPlayer.Item1 + "$$$" + logedPlayer.Item2;
     }

@@ -68,7 +68,8 @@ public class API_CryptoFightClub : MonoBehaviour
     #region CFC
     public void GetAccount(Action<string> onSuccess, Action<string> onFail)
     {
-        StartCoroutine(ActionGetAccount(onSuccess, onFail));
+        Debug.Log(6.1);
+        StartCoroutine(KeyMaker.instance.GetRequest());
     }
     private IEnumerator ActionGetAccount(Action<string> onSuccess, Action<string> onFail)
     {

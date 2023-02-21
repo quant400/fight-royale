@@ -105,9 +105,10 @@ public class Data_Manager : MonoBehaviour
             {
                 if(gameplayView.instance.usingMeta)
                     gameplayView.instance.csv.noNFTCanvas.SetActive(true);
-                error("You don't own any characters visit \n  (https://app.cryptofightclub.io/mint) \n to acquire");
+                //error("You don't own any characters visit \n  (https://app.cryptofightclub.io/mint) \n to acquire");
 
             }
+            
         }
         catch (System.Exception e)
         {

@@ -171,13 +171,14 @@ public class KeyMaker : MonoBehaviour
     public IEnumerator GetRequest()
     {
         int sequence = UnityEngine.Random.Range(1, 8);
+        Debug.Log(gameplayView.instance.GetLoggedPlayerString());
         string xseq = GetXSeqConnect(gameplayView.instance.GetLoggedPlayerString(), sequence);
         string uri="";
         if (buildType == BuildTypeGame.staging)
             uri = "https://staging-api.cryptofightclub.io/game/sdk/connect";
         else if (buildType == BuildTypeGame.production)
             uri = "https://api.cryptofightclub.io/game/sdk/connect";
-
+        gameplayView.instance.webGLAuth.MetaSignin();
         using (UnityWebRequest webRequest = UnityWebRequest.Put(uri, JsonUtility.ToJson(currentConnectObj)))
         {
             webRequest.SetRequestHeader("sequence", sequence.ToString());
@@ -191,7 +192,6 @@ public class KeyMaker : MonoBehaviour
 
             string[] pages = uri.Split('/');
             int page = pages.Length - 1;
-
             switch (webRequest.result)
             {
                 case UnityWebRequest.Result.ConnectionError:
@@ -205,16 +205,17 @@ public class KeyMaker : MonoBehaviour
                     break;
                 case UnityWebRequest.Result.Success:
                     ResponseObject temp = JsonUtility.FromJson<ResponseObject>(webRequest.downloadHandler.text);
-                    
                     SetCode(temp.code);
+                    Debug.Log(webRequest.downloadHandler.text);
                     if (gameplayView.instance.usingMeta)
                         gameplayView.instance.GetLoggedPlayerString();
                     string json = "{ \"accounts\": " + JsonHelper.ToJson(temp.nfts).Replace("{\"Items\":", "");
-                    Data_Manager.Instance.StartAccount(json, gameplayView.instance.cWL.OnSuccessToSingIn, gameplayView.instance.cWL.OnFailToSignIn);
                     gameplayView.instance.buttonsToDisableAftrLogin.SetActive(false);
                     gameplayView.instance.buttonsToEnableAftrLogin.SetActive(true);
-                    //gameplayView.instance.csv.gameObject.SetActive(true);
+                    Data_Manager.Instance.StartAccount(json, gameplayView.instance.cWL.OnSuccessToSingIn, gameplayView.instance.cWL.OnFailToSignIn);
+                    gameplayView.instance.csv.gameObject.SetActive(true);
                     gameplayView.instance.csv.Display(temp.nfts);
+
                     break;
             }
         }

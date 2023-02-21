@@ -155,6 +155,14 @@ public class FireBaseWebGLAuth : MonoBehaviour
 
     }
 
+    public void MetaSignin()
+    {
+        Close();
+        loginButton.GetComponent<UnityEngine.UI.Button>().interactable = false;
+        currentOpenWindiow.SetActive(false);
+        currentOpenWindiow = methodSelect;
+    }
+
     public void LogOut()
     {
         FirebaseAuth.SignOut();
@@ -295,8 +303,10 @@ public class FireBaseWebGLAuth : MonoBehaviour
         gameplayView.instance.usingMeta = true;
         PlayerPrefs.SetString("Account", "0xD408B954A1Ec6c53BE4E181368F1A54ca434d2f3");
 
-
+        Data_Manager.Instance.accountId= "0xD408B954A1Ec6c53BE4E181368F1A54ca434d2f3";
+        Data_Manager.Instance.contractId= "0xD408B954A1Ec6c53BE4E181368F1A54ca434d2f3";
         StartCoroutine(KeyMaker.instance.GetRequest());
+        //Connection_Manager.Instance.Api_CryptoFightClub.OnSignIn(gameplayView.instance.cWL.OnEnter, gameplayView.instance.cWL.OnFailToSignIn);
     }
     #endregion utility
 

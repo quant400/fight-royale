@@ -71,7 +71,7 @@ public class CustomWebLogin : MonoBehaviour
     {
         Debug.Log("OnConnected");
 
-#if UNITY_WEBGL && !UNITY_EDITOR
+#if UNITY_WEBGL
 
         await new WaitForSeconds(0.75f);
 
@@ -135,22 +135,18 @@ public class CustomWebLogin : MonoBehaviour
         }
     }
 
-    private void OnEnter(string contract)
+    public void OnEnter(string contract)
     {
         try
         {
+            gameplayView.instance.usingMeta = true;
             Data_Manager.Instance.contractId = contract;
             Debug.Log("contract -> " + contract);
             Data_Manager.Instance.accountId = ConvertIdMetaMask(_account);
-            PlayerPrefs.SetString("Account", Data_Manager.Instance.accountId);
+            PlayerPrefs.SetString("account", Data_Manager.Instance.accountId);
             Debug.Log("account -> " + _account);
-
             //Tratar o ID do metaMask
-            Api_CryptoFightClub.GetAccount((json) =>
-            {
-                Data_Manager.Instance.StartAccount(json, OnSuccessToSingIn, OnFailToSignIn);
-            }
-                , OnFailToSignIn);
+            Api_CryptoFightClub.GetAccount(null, OnFailToSignIn);
 
         }
         catch (Exception e)
@@ -166,6 +162,7 @@ public class CustomWebLogin : MonoBehaviour
         panelError.SetActive(false);
         panelSelection.SetActive(true);
         BGM_Manager.Instance.PlaySong();
+       
 
     }
 
