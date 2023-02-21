@@ -63,8 +63,20 @@ public class Skin_Controller : MonoBehaviour
     public void UpdateMeshRenderer (SkinnedMeshRenderer newMeshRenderer)
     {
         // update mesh
-        _meshRenderer.sharedMesh = newMeshRenderer.sharedMesh;
-        
+        //_meshRenderer.sharedMesh = newMeshRenderer.sharedMesh;
+        if (newMeshRenderer.sharedMaterials.Length > 1)
+        {
+            _meshRenderer.sharedMaterials = newMeshRenderer.sharedMaterials;
+           
+        }
+        else
+        {
+            _meshRenderer.material.mainTexture = newMeshRenderer.sharedMaterial.mainTexture;
+        }
+            
+
+        GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = newMeshRenderer.sharedMesh;
+
         Transform[] childrens = transform.GetComponentsInChildren<Transform> (true);
         
         // sort bones.

@@ -297,6 +297,7 @@ public class Connection_Manager : MonoBehaviour
             }
             catch (Exception e)
             {
+                Debug.Log(3);
                 Debug.Log(e);
                 actionOnFail(e.Message);
             }

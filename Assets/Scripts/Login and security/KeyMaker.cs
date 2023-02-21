@@ -28,6 +28,7 @@ struct GameEndObj
     public string id;
     public string address;
     public string score;
+    public string kills;
     public string r;
     public string g;
     public string b;
