@@ -112,7 +112,10 @@ public class API_CryptoFightClub : MonoBehaviour
     public void PostStartSession(string data, Action<string> onSuccess = null, Action<string> onFail = null)
     {
         if(Data_Manager.Instance.isValidAccount())
-            StartCoroutine(ActionPostStartSession(data, onSuccess, onFail));
+        {
+            StartCoroutine(KeyMaker.instance.startSessionApi(data));
+        }
+            
     }
     private IEnumerator ActionPostStartSession(string data, Action<string> onSuccess = null, Action<string> onFail = null)
     {

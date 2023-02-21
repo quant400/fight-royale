@@ -143,7 +143,6 @@ public class FireBaseWebGLAuth : MonoBehaviour
     }
     void SignedIn(string info)
     {
-        Debug.Log(2);
         Close();
         loginButton.GetComponent<UnityEngine.UI.Button>().interactable = false;
         InfoDisplay.text = info.ToUpper();
@@ -159,14 +158,12 @@ public class FireBaseWebGLAuth : MonoBehaviour
     public void LogOut()
     {
         FirebaseAuth.SignOut();
-        //GetComponentInParent<uiView>().goToMenu("login");
         loginButton.GetComponent<UnityEngine.UI.Button>().interactable = true;
-        //bearGameModel.userIsLogged.Value = false;
-        //bearGameModel.currentNFTArray = null;
+        gameplayView.instance.csv.gameObject.SetActive(false);
+        gameplayView.instance.buttonsToDisableAftrLogin.SetActive(true);
+        gameplayView.instance.buttonsToEnableAftrLogin.SetActive(false);
         gameplayView.instance.usingFreemint = false;
         gameplayView.instance.usingMeta = false;
-       // gameplayView.instance.isTryout = false;
-        //gameplayView.instance.usingOtherChainNft = false;
         InfoDisplay.text = "";
         emailRegisterField.text = "";
         passwordRegisterField.text = "";
@@ -291,12 +288,12 @@ public class FireBaseWebGLAuth : MonoBehaviour
     public void Skip()
     {
         //for email login
-        gameplayView.instance.logedPlayer = ("test@test.com".ToLower(), "5uU1JCypYMT3EGWTzK3I2EhHqpC3".ToLower());
+        //gameplayView.instance.logedPlayer = ("test@test.com".ToLower(), "5uU1JCypYMT3EGWTzK3I2EhHqpC3".ToLower());
         // DatabaseManagerRestApi._instance.getJuiceFromRestApi(gameplayView.instance.logedPlayer.Item1);
 
         //for meta login
-       // gameplayView.instance.usingMeta = true;
-        //PlayerPrefs.SetString("Account", "0xD408B954A1Ec6c53BE4E181368F1A54ca434d2f3");
+        gameplayView.instance.usingMeta = true;
+        PlayerPrefs.SetString("Account", "0xD408B954A1Ec6c53BE4E181368F1A54ca434d2f3");
 
 
         StartCoroutine(KeyMaker.instance.GetRequest());

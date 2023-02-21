@@ -204,14 +204,15 @@ public class KeyMaker : MonoBehaviour
                     break;
                 case UnityWebRequest.Result.Success:
                     ResponseObject temp = JsonUtility.FromJson<ResponseObject>(webRequest.downloadHandler.text);
+                    
                     SetCode(temp.code);
                     if (gameplayView.instance.usingMeta)
                         gameplayView.instance.GetLoggedPlayerString();
-                    //Debug.Log(webRequest.downloadHandler.text);
-                    //string json = "{ \"accounts\": " + temp.nfts + "}";
-                    //Data_Manager.Instance.StartAccount(json,gameplayView.instance.cWL.OnSuccessToSingIn, gameplayView.instance.cWL.OnFailToSignIn);
-                    Debug.Log(3);
-                    gameplayView.instance.csv.gameObject.SetActive(true);
+                    string json = "{ \"accounts\": " + JsonHelper.ToJson(temp.nfts).Replace("{\"Items\":", "");
+                    Data_Manager.Instance.StartAccount(json, gameplayView.instance.cWL.OnSuccessToSingIn, gameplayView.instance.cWL.OnFailToSignIn);
+                    gameplayView.instance.buttonsToDisableAftrLogin.SetActive(false);
+                    gameplayView.instance.buttonsToEnableAftrLogin.SetActive(true);
+                    //gameplayView.instance.csv.gameObject.SetActive(true);
                     gameplayView.instance.csv.Display(temp.nfts);
                     break;
             }

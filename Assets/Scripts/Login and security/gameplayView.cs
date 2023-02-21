@@ -14,6 +14,8 @@ public class gameplayView : MonoBehaviour
 
     public characterSelectionView csv;
     public CustomWebLogin cWL;
+    
+    public GameObject buttonsToEnableAftrLogin, buttonsToDisableAftrLogin;
     private void Awake()
     {
         if (instance == null)

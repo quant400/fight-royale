@@ -163,8 +163,9 @@ public class AnalyticsManager : MonoBehaviour
         };
         
         _Debug($"RequestStartSession: id={request.id}");
-        
-        Connection_Manager.Instance.Api_CryptoFightClub.PostStartSession(JsonUtility.ToJson(request),(aux)=>SuccessRequestStartSession(request.id, aux), (aux)=>FailRequestStartSession(request.id, aux));
+        // changed for new api        
+        //Connection_Manager.Instance.Api_CryptoFightClub.PostStartSession(JsonUtility.ToJson(request),(aux)=>SuccessRequestStartSession(request.id, aux), (aux)=>FailRequestStartSession(request.id, aux));
+        Connection_Manager.Instance.Api_CryptoFightClub.PostStartSession(request.id, (aux) => SuccessRequestStartSession(request.id, aux), (aux) => FailRequestStartSession(request.id, aux));
     }
     
     private void SuccessRequestStartSession(string id, string result)

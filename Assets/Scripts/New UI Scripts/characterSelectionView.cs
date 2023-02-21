@@ -53,7 +53,6 @@ public class characterSelectionView : MonoBehaviour
 
     public void Display(Account[] NFTData)
     {
-        Debug.Log(4);
         Account[] used=NFTData;
         if (used.Length == 0 && !gameplayView.instance.usingMeta)
         {
