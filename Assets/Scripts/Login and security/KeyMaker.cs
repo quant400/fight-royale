@@ -120,7 +120,7 @@ public class KeyMaker : MonoBehaviour
         return xSeq;
     }
 
-    public string GetGameEndKey(int score, string nftID, int seq)
+    public string GetGameEndKey(int score, string nftID, int seq, int kills)
     {
         string tmst = DateTimeOffset.Now.ToUnixTimeSeconds().ToString();
         currentGameEndSequence = seq;
@@ -137,6 +137,7 @@ public class KeyMaker : MonoBehaviour
         currentEndObj.id = nftID;
         currentEndObj.address = currentAddress;
         currentEndObj.score = score.ToString();
+        currentEndObj.kills = kills.ToString();
         currentEndObj.r = endR;
         currentEndObj.g = endG;
         currentEndObj.b = endB;
@@ -207,14 +208,20 @@ public class KeyMaker : MonoBehaviour
                     ResponseObject temp = JsonUtility.FromJson<ResponseObject>(webRequest.downloadHandler.text);
                     SetCode(temp.code);
                     Debug.Log(webRequest.downloadHandler.text);
-                    if (gameplayView.instance.usingMeta)
-                        gameplayView.instance.GetLoggedPlayerString();
                     string json = "{ \"accounts\": " + JsonHelper.ToJson(temp.nfts).Replace("{\"Items\":", "");
+                    if (!gameplayView.instance.usingMeta && temp.nfts.Length == 0)
+                    {
+                        json = gameplayView.instance.csv.GetFreeMintList();
+                        json = "{ \"accounts\": " + json.Replace("{\"Items\":", "");
+                    }
                     gameplayView.instance.buttonsToDisableAftrLogin.SetActive(false);
                     gameplayView.instance.buttonsToEnableAftrLogin.SetActive(true);
                     Data_Manager.Instance.StartAccount(json, gameplayView.instance.cWL.OnSuccessToSingIn, gameplayView.instance.cWL.OnFailToSignIn);
                     gameplayView.instance.csv.gameObject.SetActive(true);
-                    gameplayView.instance.csv.Display(temp.nfts);
+                    if(!gameplayView.instance.usingMeta && temp.nfts.Length == 0)
+                        gameplayView.instance.csv.Display(JsonHelper.FromJson<Account>(gameplayView.instance.csv.GetFreeMintList()));
+                    else
+                            gameplayView.instance.csv.Display(temp.nfts);
 
                     break;
             }
@@ -293,11 +300,11 @@ public class KeyMaker : MonoBehaviour
 
     }
 
-    public IEnumerator endSessionApi(string id, int scoreAdded)
+    public IEnumerator endSessionApi(string id, int scoreAdded,int kills)
     {
         leaderboardModel.userPostedData postedData = new leaderboardModel.userPostedData();
         int sequence = UnityEngine.Random.Range(1, 8);
-        string xseq = GetGameEndKey(scoreAdded, id, sequence);
+        string xseq = GetGameEndKey(scoreAdded, id, sequence, kills);
         string uri = "";
         if (buildType == BuildTypeGame.staging)
             uri = "https://staging-api.cryptofightclub.io/game/sdk/" + game + "/end-session";

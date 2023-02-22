@@ -135,6 +135,7 @@ public class FireBaseWebGLAuth : MonoBehaviour
             Debug.Log(1);
             FirebaseUser pl = JsonUtility.FromJson<FirebaseUser>(info);
             gameplayView.instance.logedPlayer = (pl.email.ToLower(), pl.uid.ToLower());
+            Data_Manager.Instance.accountId = gameplayView.instance.GetLoggedPlayerString();
             gameplayView.instance.usingMeta = false;
             //DatabaseManagerRestApi._instance.getJuiceFromRestApi(pl.email);
             SignedIn("Signed in as ".ToUpper() + pl.email.ToUpper() + "\n\n" + pl.providerData);
@@ -148,9 +149,6 @@ public class FireBaseWebGLAuth : MonoBehaviour
         InfoDisplay.text = info.ToUpper();
         currentOpenWindiow.SetActive(false);
         currentOpenWindiow = methodSelect;
-        //PlayerPrefs.SetString("Account", "0xD408B954A1Ec6c53BE4E181368F1A54ca434d2f3");
-       // gameplayView.instance.isTryout = false;
-        //change what loads when mint nft added and stuff linked
         StartCoroutine(KeyMaker.instance.GetRequest());
 
     }
@@ -296,15 +294,17 @@ public class FireBaseWebGLAuth : MonoBehaviour
     public void Skip()
     {
         //for email login
-        //gameplayView.instance.logedPlayer = ("test@test.com".ToLower(), "5uU1JCypYMT3EGWTzK3I2EhHqpC3".ToLower());
+        gameplayView.instance.logedPlayer = ("test@test.com".ToLower(), "5uU1JCypYMT3EGWTzK3I2EhHqpC3".ToLower());
+        Data_Manager.Instance.accountId = gameplayView.instance.GetLoggedPlayerString();
+        Data_Manager.Instance.contractId = gameplayView.instance.GetLoggedPlayerString();
         // DatabaseManagerRestApi._instance.getJuiceFromRestApi(gameplayView.instance.logedPlayer.Item1);
 
         //for meta login
-        gameplayView.instance.usingMeta = true;
-        PlayerPrefs.SetString("Account", "0xD408B954A1Ec6c53BE4E181368F1A54ca434d2f3");
+        //gameplayView.instance.usingMeta = true;
+        //PlayerPrefs.SetString("Account", "0xD408B954A1Ec6c53BE4E181368F1A54ca434d2f3");
 
-        Data_Manager.Instance.accountId= "0xD408B954A1Ec6c53BE4E181368F1A54ca434d2f3";
-        Data_Manager.Instance.contractId= "0xD408B954A1Ec6c53BE4E181368F1A54ca434d2f3";
+        //Data_Manager.Instance.accountId= "0xD408B954A1Ec6c53BE4E181368F1A54ca434d2f3";
+        //Data_Manager.Instance.contractId= "0xD408B954A1Ec6c53BE4E181368F1A54ca434d2f3";
         StartCoroutine(KeyMaker.instance.GetRequest());
         //Connection_Manager.Instance.Api_CryptoFightClub.OnSignIn(gameplayView.instance.cWL.OnEnter, gameplayView.instance.cWL.OnFailToSignIn);
     }

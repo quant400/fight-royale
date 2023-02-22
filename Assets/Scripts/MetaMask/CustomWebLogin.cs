@@ -49,7 +49,7 @@ public class CustomWebLogin : MonoBehaviour
 #if UNITY_WEBGL && !UNITY_EDITOR
         try
         {
-            panelConnecting.SetActive(true);
+            //panelConnecting.SetActive(true);
             Web3Connect();
             OnConnected();
         }

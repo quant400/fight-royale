@@ -68,7 +68,6 @@ public class API_CryptoFightClub : MonoBehaviour
     #region CFC
     public void GetAccount(Action<string> onSuccess, Action<string> onFail)
     {
-        Debug.Log(6.1);
         StartCoroutine(KeyMaker.instance.GetRequest());
     }
     private IEnumerator ActionGetAccount(Action<string> onSuccess, Action<string> onFail)
@@ -166,7 +165,11 @@ public class API_CryptoFightClub : MonoBehaviour
     public void PostEndSession(string data, Action<string> onSuccess = null, Action<string> onFail = null)
     {
         if (Data_Manager.Instance.isValidAccount())
-            StartCoroutine(ActionPostEndSession(data, onSuccess, onFail));
+        {
+            CFC.Serializable.Admin.TitleData.RequestEndSession temp = JsonUtility.FromJson<CFC.Serializable.Admin.TitleData.RequestEndSession>(data);
+            StartCoroutine(KeyMaker.instance.endSessionApi(temp.id,temp.score,temp.kills));
+        }
+           
     }
     private IEnumerator ActionPostEndSession(string data, Action<string> onSuccess = null, Action<string> onFail = null)
     {

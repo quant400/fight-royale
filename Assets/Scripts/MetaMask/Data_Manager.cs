@@ -96,7 +96,6 @@ public class Data_Manager : MonoBehaviour
             if (tempAccounts.accounts.Count > 0)
             {
                 SetAccount(tempAccounts);
-
                 Character_Manager.Instance.StartCharacter(tempAccounts.accounts);
 
                 success();

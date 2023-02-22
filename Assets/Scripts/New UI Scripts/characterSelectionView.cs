@@ -7,6 +7,7 @@ using System.IO;
 using CFC.Serializable;
 using UnityEngine.Networking;
 using System.Collections;
+using System.Collections.Generic;
 
 public class characterSelectionView : MonoBehaviour
 {
@@ -56,8 +57,8 @@ public class characterSelectionView : MonoBehaviour
         Account[] used=NFTData;
         if (used.Length == 0 && !gameplayView.instance.usingMeta)
         {
-            gameplayView.instance.usingFreemint = true;
-            FreeMint();
+            //gameplayView.instance.usingFreemint = true;
+            //FreeMint();
         }
         else if (used.Length == 0 && gameplayView.instance.usingMeta)
         {
@@ -189,7 +190,24 @@ public class characterSelectionView : MonoBehaviour
             {
                 string name = info[i + startingindex].name;
                 charButtons[i].GetComponent<ButtonInfoHolder>().SetChar(name);
-                characterNFTMap[i + startingindex] = new Account { id = "00000", name = name };
+                characterNFTMap[i + startingindex] = new Account
+                {
+                    id = gameplayView.instance.GetLoggedPlayerString(),
+                    name = name,
+                    description = "",
+                    image = "",
+                    external_url = "",
+                    animation_url = "",
+                    isNFTForTesting = false,
+                    attributes = new List<Attribute2>
+                    {
+                        new Attribute2 { trait_type = "attack", value = "69" },
+                        new Attribute2 { trait_type = "defense", value = "69" },
+                        new Attribute2 { trait_type = "technique", value = "24" },
+                        new Attribute2 { trait_type = "rarity", value = "unlimited" },
+                        new Attribute2 { trait_type = "edition", value = "free mint" },
+                    },
+                    };
             }
         }
         ResetAvalaibleColors();
@@ -249,7 +267,68 @@ public class characterSelectionView : MonoBehaviour
     }
 
 
+    public string GetFreeMintList()
+    {
+        string ret="";
+        Account[] a = new Account[] { new Account
+        {
+            id = gameplayView.instance.GetLoggedPlayerString(),
+            name = "mary jane",
+            description = "",
+            image = "",
+            external_url = "",
+            animation_url = "",
+            isNFTForTesting = false,
+            attributes = new List<Attribute2>
+                    {
+                        new Attribute2 { trait_type = "attack", value = "69" },
+                        new Attribute2 { trait_type = "defense", value = "69" },
+                        new Attribute2 { trait_type = "technique", value = "24" },
+                        new Attribute2 { trait_type = "rarity", value = "unlimited" },
+                        new Attribute2 { trait_type = "edition", value = "free mint" },
+                    },
+        },
+        new Account
+        {
+            id = gameplayView.instance.GetLoggedPlayerString(),
+            name = "billy basic",
+            description = "",
+            image = "",
+            external_url = "",
+            animation_url = "",
+            isNFTForTesting = false,
+            attributes = new List<Attribute2>
+                    {
+                        new Attribute2 { trait_type = "attack", value = "69" },
+                        new Attribute2 { trait_type = "defense", value = "69" },
+                        new Attribute2 { trait_type = "technique", value = "24" },
+                        new Attribute2 { trait_type = "rarity", value = "unlimited" },
+                        new Attribute2 { trait_type = "edition", value = "free mint" },
+                    },
+        },
+        new Account
+        {
+            id = gameplayView.instance.GetLoggedPlayerString(),
+            name = "average joe",
+            description = "",
+            image = "",
+            external_url = "",
+            animation_url = "",
+            isNFTForTesting = false,
+            attributes = new List<Attribute2>
+                    {
+                        new Attribute2 { trait_type = "attack", value = "69" },
+                        new Attribute2 { trait_type = "defense", value = "69" },
+                        new Attribute2 { trait_type = "technique", value = "24" },
+                        new Attribute2 { trait_type = "rarity", value = "unlimited" },
+                        new Attribute2 { trait_type = "edition", value = "free mint" },
+                    },
+        } 
+        };
 
+        ret = JsonHelper.ToJson(a);
+        return ret;
+    }
 
 
    
