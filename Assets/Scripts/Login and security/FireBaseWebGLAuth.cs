@@ -297,7 +297,7 @@ public class FireBaseWebGLAuth : MonoBehaviour
         gameplayView.instance.logedPlayer = ("test@test.com".ToLower(), "5uU1JCypYMT3EGWTzK3I2EhHqpC3".ToLower());
         Data_Manager.Instance.accountId = gameplayView.instance.GetLoggedPlayerString();
         Data_Manager.Instance.contractId = gameplayView.instance.GetLoggedPlayerString();
-        // DatabaseManagerRestApi._instance.getJuiceFromRestApi(gameplayView.instance.logedPlayer.Item1);
+        //DatabaseManagerRestApi._instance.getJuiceFromRestApi(gameplayView.instance.logedPlayer.Item1);
 
         //for meta login
         //gameplayView.instance.usingMeta = true;

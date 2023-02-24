@@ -51,16 +51,21 @@ public class CustomWebLogin : MonoBehaviour
         {
             //panelConnecting.SetActive(true);
             Web3Connect();
+            Debug.Log(1);
             OnConnected();
+             Debug.Log(2);
         }
         catch (Exception e)
         {
+         Debug.Log(3);
             OnFailToSignIn(e.Message);
+             Debug.Log(4);
             Debug.LogException(e, this);
+             Debug.Log(5);
         }
 #else
 
-        if(!string.IsNullOrEmpty(_account))
+        if (!string.IsNullOrEmpty(_account))
             OnEnter(_account);
 
 #endif
@@ -82,12 +87,14 @@ public class CustomWebLogin : MonoBehaviour
             {
                 await new WaitForSeconds(1.00f);
                 _account = ConnectAccount();
+                Debug.Log(_account);
             };
 
             // reset login message
             SetConnectAccount("");
             // load next scene
-            Api_CryptoFightClub.OnSignIn(OnEnter, OnFailToSignIn);
+            //Api_CryptoFightClub.OnSignIn(OnEnter, OnFailToSignIn);
+            OnEnter("test");
         }
         catch (Exception e)
         {
