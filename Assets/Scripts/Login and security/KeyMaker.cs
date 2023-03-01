@@ -285,12 +285,14 @@ public class KeyMaker : MonoBehaviour
                 // getDataFromRestApi(assetId);
                 scoreUpdateTried = 0;
                 Debug.Log("all is good in server" + Encoding.UTF8.GetString(request.downloadHandler.data));
+               
 
             }
             else
             {
                 Debug.Log(request.error);
                 Debug.Log("error in server");
+                
             }
 
 

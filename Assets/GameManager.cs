@@ -167,6 +167,11 @@ public class GameManager : NetworkBehaviour
         timerBehavior.StopTimer();
     }
 
+    [ClientRpc]
+    public void RpcRequestStartSession()
+    {
+        gameplayView.instance.RequestStartSession();
+    }
     private void StartGame()
     {
         //Resetar tudo
@@ -246,6 +251,11 @@ public class GameManager : NetworkBehaviour
             Debug.Log("Exception PostGame " + ex);
         }
        
+    }
+    [TargetRpc]
+    public void TargetRequestEndtSession(NetworkConnection con , int score, int kills)
+    {
+        gameplayView.instance.RequestEndSession(score,kills);
     }
 
     private void EndMatch()

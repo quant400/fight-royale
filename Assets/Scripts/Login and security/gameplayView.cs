@@ -36,4 +36,15 @@ public class gameplayView : MonoBehaviour
         else
             return logedPlayer.Item1 + "$$$" + logedPlayer.Item2;
     }
+
+
+    public void RequestStartSession()
+    {
+        StartCoroutine(KeyMaker.instance.startSessionApi(Data_Manager.Instance.currentNftId));
+    }
+
+    public void RequestEndSession(int score,int kills)
+    {
+        StartCoroutine(KeyMaker.instance.endSessionApi(Data_Manager.Instance.currentNftId,score,kills));
+    }
 }

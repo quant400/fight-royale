@@ -71,7 +71,12 @@ public class AnalyticsManager : MonoBehaviour
         if (players.Count(aux => !aux.isDead && aux.isConnected) == 1)
         {
             var auxPlayer = players.First(aux => aux.isConnected && !aux.isDead);
-            if (auxPlayer != null) playerIdentity =  auxPlayer.netIdentity;
+            if (auxPlayer != null)
+            {
+                playerIdentity = auxPlayer.netIdentity;
+                GameManager.Instance.TargetRequestEndtSession(playerIdentity.connectionToClient, auxPlayer.score, auxPlayer.kills);
+            }
+
         }
 
         return playerIdentity;
@@ -85,10 +90,11 @@ public class AnalyticsManager : MonoBehaviour
 
     public void InitScore()
     {
-        foreach (var player in players)
-        {
-            RequestStartSession(player);
-        }
+        /* foreach (var player in players)
+         {
+             RequestStartSession(player);
+         }*/
+        GameManager.Instance.RpcRequestStartSession();
     }
 
     public void AddDamageDealt(NetworkIdentity netIdentity, float damage)
@@ -120,7 +126,7 @@ public class AnalyticsManager : MonoBehaviour
         var dead = GetPlayerByNetIdentity(deadIdentity);
         dead.killerId = killer.id;
         SetPlayerDead(deadIdentity);
-        
+        GameManager.Instance.TargetRequestEndtSession(deadIdentity.connectionToClient,dead.score,dead.kills);
         _Debug($"AddKill: killer={killer.id}, dead={dead.id}");
 
         UpdateSpectatorCamera(dead.netIdentity, killer.netIdentity);
@@ -165,7 +171,7 @@ public class AnalyticsManager : MonoBehaviour
         _Debug($"RequestStartSession: id={request.id}");
         // changed for new api        
         //Connection_Manager.Instance.Api_CryptoFightClub.PostStartSession(JsonUtility.ToJson(request),(aux)=>SuccessRequestStartSession(request.id, aux), (aux)=>FailRequestStartSession(request.id, aux));
-        Connection_Manager.Instance.Api_CryptoFightClub.PostStartSession(request.id, (aux) => SuccessRequestStartSession(request.id, aux), (aux) => FailRequestStartSession(request.id, aux));
+        Connection_Manager.Instance.Api_CryptoFightClub.PostStartSession(request.id);
     }
     
     private void SuccessRequestStartSession(string id, string result)

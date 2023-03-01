@@ -33,7 +33,7 @@ public class PlayerAttributes : MonoBehaviour
             var allFighterCategory = Resources.LoadAll("FighterCategory", typeof(FighterCategory)).Cast<FighterCategory>().ToList();
             _category = allFighterCategory.FirstOrDefault(f => f.name.ToLower().Equals(att.value.ToLower()));
             if (_category == null)
-                _category = allFighterCategory[0];
+                _category = allFighterCategory.FirstOrDefault(f => f.name.ToLower().Equals("boxing")); ;
             Debug.Log(_category);
             SetAtkSpeed(_category.Speed/100 + 1);
             return _category;

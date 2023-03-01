@@ -17,12 +17,10 @@ public class WinPanelImageSetter : MonoBehaviour
 
     private void OnEnable()
     {
-        Debug.Log(2);
         SetSprite();
     }
     void SetSprite()
     {
-        Debug.Log(3);
         string charName = Character_Manager.Instance.GetCurrentCharacter.Name;
         Debug.Log(charName.Replace(' ', '-'));
         img.sprite = Resources.Load(Path.Combine("DisplaySprites/Display", charName.Replace(' ','-')), typeof(Sprite)) as Sprite;
