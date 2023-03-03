@@ -147,17 +147,17 @@ public class AnalyticsManager : MonoBehaviour
 
         //UpdateScore
         var playerBehaviour = netId.GetComponent<PlayerBehaviour>();
-        playerBehaviour.score = player.score;
+        GameManager.Instance.TargetSendUpdatedScore(netId.connectionToClient, player.score);
         
         _Debug($"AddScore: player={player.id}, score={score}");
     }
 
     public void SendScore()
     {
-        foreach (var player in players)
+        /*foreach (var player in players)
         {
             RequestEndSession(player);
-        }
+        }*/
         //EndSession
     }
 

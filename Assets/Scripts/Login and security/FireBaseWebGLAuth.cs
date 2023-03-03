@@ -132,7 +132,6 @@ public class FireBaseWebGLAuth : MonoBehaviour
     {
         if (info != "")
         {
-            Debug.Log(1);
             FirebaseUser pl = JsonUtility.FromJson<FirebaseUser>(info);
             gameplayView.instance.logedPlayer = (pl.email.ToLower(), pl.uid.ToLower());
             Data_Manager.Instance.accountId = gameplayView.instance.GetLoggedPlayerString();
@@ -146,6 +145,7 @@ public class FireBaseWebGLAuth : MonoBehaviour
     void SignedIn(string info)
     {
         Close();
+        gameplayView.instance.logedin = true;
         loginButton.GetComponent<UnityEngine.UI.Button>().interactable = false;
         InfoDisplay.text = info.ToUpper();
         currentOpenWindiow.SetActive(false);
@@ -157,6 +157,7 @@ public class FireBaseWebGLAuth : MonoBehaviour
     public void MetaSignin()
     {
         Close();
+        gameplayView.instance.logedin = true;
         loginButton.GetComponent<UnityEngine.UI.Button>().interactable = false;
         currentOpenWindiow.SetActive(false);
         currentOpenWindiow = methodSelect;
@@ -165,6 +166,7 @@ public class FireBaseWebGLAuth : MonoBehaviour
     public void LogOut()
     {
         FirebaseAuth.SignOut();
+        gameplayView.instance.logedin = false;
         loginButton.GetComponent<UnityEngine.UI.Button>().interactable = true;
         gameplayView.instance.csv.gameObject.SetActive(false);
         gameplayView.instance.buttonsToDisableAftrLogin.SetActive(true);

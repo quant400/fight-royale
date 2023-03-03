@@ -221,6 +221,11 @@ public class GameManager : NetworkBehaviour
         gameTimeoutTimerBehavior.UpdateTimer(time);
     }
 
+    [TargetRpc]
+    public void TargetSendUpdatedScore(NetworkConnection con,int score)
+    {
+        IngameUIControler.instance.UpdateScore(score);
+    }
     #endregion
     
     #region Ending

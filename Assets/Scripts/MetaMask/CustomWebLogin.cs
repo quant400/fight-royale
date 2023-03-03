@@ -146,6 +146,7 @@ public class CustomWebLogin : MonoBehaviour
     {
         try
         {
+            gameplayView.instance.logedin = true;
             gameplayView.instance.usingMeta = true;
             Data_Manager.Instance.contractId = contract;
             Debug.Log("contract -> " + contract);

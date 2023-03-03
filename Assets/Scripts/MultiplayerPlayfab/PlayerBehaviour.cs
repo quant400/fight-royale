@@ -41,14 +41,14 @@ public class PlayerBehaviour : NetworkBehaviour
     [SyncVar(hook = nameof(OnPlayerSkinChanged))] public string pSkin;
     [SyncVar(hook = nameof(OnHealthChanged))] public float pHealth = 100f;
     [SyncVar] public Color32 pColor;
-    [SyncVar(hook = nameof(OnScoreChanged))] public int score;
+    //[SyncVar(hook = nameof(OnScoreChanged))] public int score;
 
     [SyncVar(hook = nameof(OnPlayerBlock))] public bool pIsBlocking;
 
-    private void OnScoreChanged(int oidScore, int newScore)
+   /* private void OnScoreChanged(int oidScore, int newScore)
     {
         IngameUIControler.instance.UpdateScore(newScore);
-    }
+    }*/
     private void OnPlayerBlock(bool old, bool value)
     {
         Debug.Log(value);

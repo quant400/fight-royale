@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class gameplayView : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class gameplayView : MonoBehaviour
     public CustomWebLogin cWL;
     public FireBaseWebGLAuth webGLAuth;
     public GameObject buttonsToEnableAftrLogin, buttonsToDisableAftrLogin;
+
+    public bool logedin=false;
     private void Awake()
     {
         if (instance == null)
@@ -27,6 +30,14 @@ public class gameplayView : MonoBehaviour
         }
         
         DontDestroyOnLoad(this);
+    }
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += GetRefrences;
+    }
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= GetRefrences;
     }
 
     public string GetLoggedPlayerString()
@@ -46,5 +57,30 @@ public class gameplayView : MonoBehaviour
     public void RequestEndSession(int score,int kills)
     {
         StartCoroutine(KeyMaker.instance.endSessionApi(Data_Manager.Instance.currentNftId,score,kills));
+    }
+
+
+    void GetRefrences(Scene scene, LoadSceneMode mode)
+    {
+        if(scene.name=="Menu")
+        {
+            RefrenceHolder r= GameObject.FindGameObjectWithTag("RefHolder").GetComponent<RefrenceHolder>();
+            if (csv == null)
+                csv = r.CVS;
+            if (cWL == null)
+                cWL = r.CWL;
+            if (webGLAuth == null)
+                webGLAuth = r.Webgl;
+            if (buttonsToDisableAftrLogin == null)
+                buttonsToDisableAftrLogin = r.DAL; 
+            if (buttonsToEnableAftrLogin == null)
+                buttonsToEnableAftrLogin = r.EAL;
+        }
+
+        if (logedin)
+        {
+            buttonsToDisableAftrLogin.SetActive(false);
+            buttonsToEnableAftrLogin.SetActive(true);
+        }
     }
 }

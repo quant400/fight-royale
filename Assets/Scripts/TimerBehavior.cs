@@ -12,9 +12,10 @@ public class TimerBehavior : MonoBehaviour
 
     public void SetupTimer(string title, int time)
     {
+        Debug.Log(title);
         if(textTimer!=null)
             textTitle.text = title.ToUpper();
-        textTimer.text = string.Format("{0:00}",time);
+        textTimer.text = convertime(time);
         textTimer.fontSize = textTitle.fontSize;
         if (fillImage != null)
         {
@@ -27,9 +28,9 @@ public class TimerBehavior : MonoBehaviour
 
     public void UpdateTimer(int time)
     {
-        if (textTimer.fontSize != textTitle.fontSize)
+        if (textTitle!=null && textTimer.fontSize != textTitle.fontSize)
             textTimer.fontSize = textTitle.fontSize;
-        textTimer.text = string.Format("{0:00}",time);
+        textTimer.text = convertime(time);
         if (fillImage != null)
             fillImage.fillAmount = (float)time / (float)initialTime;
         if(time <= 0) StopTimer();
@@ -40,6 +41,14 @@ public class TimerBehavior : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    
+    string convertime(int s)
+    {
+        string res = "";
+        string minutes = Mathf.Floor(s / 60).ToString("00");
+        string seconds = Mathf.Floor(s % 60).ToString("00");
+        res = minutes + ":" + seconds;
+
+        return res;
+    }
 
 }
