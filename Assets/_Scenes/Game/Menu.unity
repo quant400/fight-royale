@@ -938,7 +938,7 @@ MonoBehaviour:
   baseURL: https://C5FA3.playfabapi.com/
   SecretKey: 3W4J5SK6W8GWHZKMH89GAP3FS1CN5YF83436XAFMXMKGCMJASW
   Region: EastUS
-  _BuildId: 49953082-1300-4502-a090-4d67bf2d87a2
+  _BuildId: cd7d32c1-2456-48f4-a430-74aa20fbaddc
   EntityToken: 
   EntityTokenResponse:
     code: 0
@@ -4015,7 +4015,7 @@ PrefabInstance:
     - target: {fileID: 5479180407007317759, guid: dcade7979c3da534db27311c23ab15d5,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -1349867.9
+      value: -1372914.1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dcade7979c3da534db27311c23ab15d5, type: 3}
@@ -4521,6 +4521,7 @@ MonoBehaviour:
   buttonsToEnableAftrLogin: {fileID: 1261326156}
   buttonsToDisableAftrLogin: {fileID: 1261326155}
   logedin: 0
+  currentNFTs: []
 --- !u!114 &1127853166
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4939,11 +4940,26 @@ PrefabInstance:
       propertyPath: m_text
       value: PLAY
       objectReference: {fileID: 0}
+    - target: {fileID: 7174127212807374106, guid: 6729c163af2ca3b4ca895947a301f316,
+        type: 3}
+      propertyPath: CSV
+      value: 
+      objectReference: {fileID: 1261326165}
     - target: {fileID: 7174127213001769169, guid: 6729c163af2ca3b4ca895947a301f316,
         type: 3}
       propertyPath: m_TagString
       value: Untagged
       objectReference: {fileID: 0}
+    - target: {fileID: 7174127213024310035, guid: 6729c163af2ca3b4ca895947a301f316,
+        type: 3}
+      propertyPath: CSV
+      value: 
+      objectReference: {fileID: 1261326165}
+    - target: {fileID: 7174127213140877171, guid: 6729c163af2ca3b4ca895947a301f316,
+        type: 3}
+      propertyPath: CSV
+      value: 
+      objectReference: {fileID: 1261326165}
     - target: {fileID: 7174127213563622015, guid: 6729c163af2ca3b4ca895947a301f316,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -4974,6 +4990,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7174127213982858646, guid: 6729c163af2ca3b4ca895947a301f316,
+        type: 3}
+      propertyPath: CSV
+      value: 
+      objectReference: {fileID: 1261326165}
     - target: {fileID: 7174127214310805428, guid: 6729c163af2ca3b4ca895947a301f316,
         type: 3}
       propertyPath: m_Name

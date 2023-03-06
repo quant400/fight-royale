@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using CFC.Serializable;
 
 public class gameplayView : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class gameplayView : MonoBehaviour
     public GameObject buttonsToEnableAftrLogin, buttonsToDisableAftrLogin;
 
     public bool logedin=false;
+    public Account[] currentNFTs;
     private void Awake()
     {
         if (instance == null)
@@ -75,12 +77,16 @@ public class gameplayView : MonoBehaviour
                 buttonsToDisableAftrLogin = r.DAL; 
             if (buttonsToEnableAftrLogin == null)
                 buttonsToEnableAftrLogin = r.EAL;
+
+            if (logedin)
+            {
+                buttonsToDisableAftrLogin.SetActive(false);
+                buttonsToEnableAftrLogin.SetActive(true);
+                csv.gameObject.SetActive(true);
+                csv.Display(currentNFTs);
+            }
         }
 
-        if (logedin)
-        {
-            buttonsToDisableAftrLogin.SetActive(false);
-            buttonsToEnableAftrLogin.SetActive(true);
-        }
+       
     }
 }

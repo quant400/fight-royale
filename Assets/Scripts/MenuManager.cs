@@ -114,7 +114,7 @@ public class MenuManager : MonoBehaviour
     public void Reset() => OnReset();
     public void ShowTutorial(bool show = true)
     {
-        GameManager.Instance.timerBehavior.gameObject.SetActive(true);
+        //GameManager.Instance.timerBehavior.gameObject.SetActive(true);
         if (GO_Tutorial != null)
         {
             GO_Tutorial.SetActive(show);

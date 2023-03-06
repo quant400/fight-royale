@@ -69,7 +69,7 @@ public class characterSelectionView : MonoBehaviour
             noNFTCanvas.SetActive(false);
             SetData(used);
         }
-
+        gameplayView.instance.currentNFTs = NFTData;
     }
     void DisplayChar(int startingindex)
     {

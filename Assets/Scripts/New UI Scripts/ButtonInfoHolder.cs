@@ -20,6 +20,7 @@ public class ButtonInfoHolder : MonoBehaviour
     Sprite defaultImg;
     [SerializeField]
     TMP_Text nameText, info;
+    [SerializeField]
     characterSelectionView CSV;
     //[SerializeField]
     //ButtonInfoHolder currentSelected;
