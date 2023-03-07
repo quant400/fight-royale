@@ -397,57 +397,67 @@ public class TPFightingController : MonoBehaviour
 
     public void PlayPunchEffect()
     {
+        GameObject temp;
         if (_player._cfcInputs.move.magnitude == 0)
         {
             switch (m_PunchComboStep)
             {
                 case 1:
-                    GameObject.Instantiate(punchEffect, lHand.position, lHand.rotation);
+                    temp=GameObject.Instantiate(punchEffect, lHand.position, lHand.rotation);
                     break;
                 case 2:
-                    GameObject.Instantiate(punchEffect, rHand.position,rHand.rotation);
+                    temp = GameObject.Instantiate(punchEffect, rHand.position,rHand.rotation);
                     break;
                 case 3:
-                    GameObject.Instantiate(punchEffect, rHand.position, rHand.rotation);
+                    temp = GameObject.Instantiate(punchEffect, rHand.position, rHand.rotation);
                     break;
                 default:
-                    GameObject.Instantiate(punchEffect, rHand.position, rHand.rotation);
+                    temp = GameObject.Instantiate(punchEffect, rHand.position, rHand.rotation);
                     break;
             }
         }
 
         else
-            GameObject.Instantiate(punchEffect, rHand.position, rHand.rotation);
+            temp = GameObject.Instantiate(punchEffect, rHand.position, rHand.rotation);
+
+        temp.transform.localScale = new Vector3(2, 2, 2);
     }
 
     public void PlayKickEffect()
     {
+        GameObject temp;
         if (_player._cfcInputs.move.magnitude == 0)
         {
             switch (m_KickComboStep)
             {
                 case 1:
-                    GameObject.Instantiate(kickEffect, rFoot.position,rFoot.rotation);
+                    temp=GameObject.Instantiate(kickEffect, rFoot.position,rFoot.rotation);
                     break;
                 case 2:
-                    GameObject.Instantiate(kickEffect, lFoot.position, lFoot.rotation);
+                    temp = GameObject.Instantiate(kickEffect, lFoot.position, lFoot.rotation);
                     break;
                 case 3:
-                    GameObject.Instantiate(kickEffect, lFoot.position, lFoot.rotation);
+                    temp = GameObject.Instantiate(kickEffect, lFoot.position, lFoot.rotation);
                     break;
                 default:
-                    GameObject.Instantiate(kickEffect, rFoot.position, rFoot.rotation);
+                    temp = GameObject.Instantiate(kickEffect, rFoot.position, rFoot.rotation);
                     break;
             }
         }
 
         else
-            GameObject.Instantiate(kickEffect, rFoot.position, rFoot.rotation);
+            temp = GameObject.Instantiate(kickEffect, rFoot.position, rFoot.rotation);
+
+        temp.transform.localScale = new Vector3(3, 3, 3);
     }
 
     public void HitEffect()
     {
         if (_player.isLocalPlayer)
-            GameObject.Instantiate(punchEffect, transform.position + new Vector3(0, 1, 0), transform.rotation);
+        {
+            GameObject temp = GameObject.Instantiate(punchEffect, transform.position + new Vector3(0, 1, 0), transform.rotation);
+            temp.transform.localScale = new Vector3(2, 2, 2);
+        }
+        
     }
 }
