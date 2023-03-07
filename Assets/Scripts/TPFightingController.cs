@@ -39,6 +39,10 @@ public class TPFightingController : MonoBehaviour
     public Throwable_BehaviorV2 _carryingObject;
     [SerializeField] private NetworkTransformChild _carryTransformChild;
 
+    [SerializeField]
+    GameObject punchEffect, kickEffect;
+    [SerializeField] Transform lHand, rHand, lFoot, rFoot;
+
     public bool isAction = false;
     
     void Awake()
@@ -230,7 +234,7 @@ public class TPFightingController : MonoBehaviour
             _anim.Play("Hit");
             isHitted = true;
         }
-        
+        HitEffect();
     }
 
     public void ReturnFromHit() 
@@ -270,11 +274,13 @@ public class TPFightingController : MonoBehaviour
             if (isPunch)
             {
                 PlayPunchAudio();
+                PlayPunchEffect();
                 DealDamage(_attributes.PunchDamage(), collider);
             }
             else
             {
                 PlayKickAudio();
+                PlayKickEffect();
                 DealDamage(_attributes.KickDamage(), collider);
             }
             
@@ -387,5 +393,61 @@ public class TPFightingController : MonoBehaviour
     public void PlayKickAudio()
     {
         SFX_Manager.Play("Kick");
+    }
+
+    public void PlayPunchEffect()
+    {
+        if (_player._cfcInputs.move.magnitude == 0)
+        {
+            switch (m_PunchComboStep)
+            {
+                case 1:
+                    GameObject.Instantiate(punchEffect, lHand.position, lHand.rotation);
+                    break;
+                case 2:
+                    GameObject.Instantiate(punchEffect, rHand.position,rHand.rotation);
+                    break;
+                case 3:
+                    GameObject.Instantiate(punchEffect, rHand.position, rHand.rotation);
+                    break;
+                default:
+                    GameObject.Instantiate(punchEffect, rHand.position, rHand.rotation);
+                    break;
+            }
+        }
+
+        else
+            GameObject.Instantiate(punchEffect, rHand.position, rHand.rotation);
+    }
+
+    public void PlayKickEffect()
+    {
+        if (_player._cfcInputs.move.magnitude == 0)
+        {
+            switch (m_KickComboStep)
+            {
+                case 1:
+                    GameObject.Instantiate(kickEffect, rFoot.position,rFoot.rotation);
+                    break;
+                case 2:
+                    GameObject.Instantiate(kickEffect, lFoot.position, lFoot.rotation);
+                    break;
+                case 3:
+                    GameObject.Instantiate(kickEffect, lFoot.position, lFoot.rotation);
+                    break;
+                default:
+                    GameObject.Instantiate(kickEffect, rFoot.position, rFoot.rotation);
+                    break;
+            }
+        }
+
+        else
+            GameObject.Instantiate(kickEffect, rFoot.position, rFoot.rotation);
+    }
+
+    public void HitEffect()
+    {
+        if (_player.isLocalPlayer)
+            GameObject.Instantiate(punchEffect, transform.position + new Vector3(0, 1, 0), transform.rotation);
     }
 }
