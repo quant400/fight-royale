@@ -11,6 +11,7 @@ public class PlayerStatsController : MonoBehaviour
     [SerializeField] private TMP_Text _playerName;
     [SerializeField] private TMP_Text _healthValue;
     [SerializeField] private Image _healthBar;
+    [SerializeField] private Image _damageEffect;
 
     public void SetName(string name)
     {
@@ -22,6 +23,7 @@ public class PlayerStatsController : MonoBehaviour
         health = (int)Math.Round(health);
         _healthValue.text = health + "%";
         _healthBar.fillAmount = health / 100;
+        _damageEffect.color = new Vector4(_damageEffect.color.r, _damageEffect.color.g, _damageEffect.color.b,1-(health / 100));
 
         //for updating mini ui 
         IngameUIControler.instance.UpdatePlayerHealth(GetComponent<PlayerBehaviour>().netIdentity, health / 100);

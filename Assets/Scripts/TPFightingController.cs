@@ -42,12 +42,16 @@ public class TPFightingController : MonoBehaviour
     [SerializeField]
     GameObject punchEffect, kickEffect;
     [SerializeField] Transform lHand, rHand, lFoot, rFoot;
+    CameraShake cam;
+    [SerializeField]
+    Cinemachine.CinemachineImpulseSource s;
 
     public bool isAction = false;
     
     void Awake()
     {
         _player = GetComponent<PlayerBehaviour>();
+        cam = GameObject.FindGameObjectWithTag("PlayerCam").GetComponent<CameraShake>();
     }
 
     private float _stepOffset = 0.4f;
@@ -455,6 +459,7 @@ public class TPFightingController : MonoBehaviour
     {
         if (_player.isLocalPlayer)
         {
+            cam.Shake(s);
             GameObject temp = GameObject.Instantiate(punchEffect, transform.position + new Vector3(0, 1, 0), transform.rotation);
             temp.transform.localScale = new Vector3(2, 2, 2);
         }
