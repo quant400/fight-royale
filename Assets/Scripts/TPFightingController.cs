@@ -476,7 +476,8 @@ public class TPFightingController : MonoBehaviour
     {
         if(routineHolder!=null)
             StopCoroutine(routineHolder);
-        if(_damageEffect.color.a==0)
+        DOTween.Kill(_damageEffect);
+        if(_damageEffect.color.a<0.5f)
         {
             _damageEffect.color =new Vector4(_damageEffect.color.r, _damageEffect.color.g, _damageEffect.color.b, 0.5f);
         }
