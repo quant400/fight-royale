@@ -9,6 +9,8 @@ using StarterAssets;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using DG.Tweening;
 
 public class TPFightingController : MonoBehaviour
 {
@@ -45,6 +47,8 @@ public class TPFightingController : MonoBehaviour
     CameraShake cam;
     [SerializeField]
     Cinemachine.CinemachineImpulseSource s;
+    [SerializeField] private Image _damageEffect;
+    Coroutine routineHolder;
 
     public bool isAction = false;
     
@@ -460,10 +464,33 @@ public class TPFightingController : MonoBehaviour
         if (_player.isLocalPlayer)
         {
             cam.Shake(s);
+            EnableDamageEffect(1f);
             GameObject temp = GameObject.Instantiate(punchEffect, transform.position + new Vector3(0, 1, 0), transform.rotation);
             temp.transform.LookAt(cam.transform);
             temp.transform.localScale = new Vector3(2, 2, 2);
         }
         
+    }
+
+    public void EnableDamageEffect(float duration)
+    {
+        if(routineHolder!=null)
+            StopCoroutine(routineHolder);
+        if(_damageEffect.color.a==0)
+        {
+            _damageEffect.color =new Vector4(_damageEffect.color.r, _damageEffect.color.g, _damageEffect.color.b, 0.5f);
+        }
+        else
+        {
+            _damageEffect.color = new Vector4(_damageEffect.color.r, _damageEffect.color.g, _damageEffect.color.b, _damageEffect.color.a + 0.25f);
+
+        }
+       routineHolder= StartCoroutine(DisableDamageEffect(duration));
+    }
+
+    IEnumerator DisableDamageEffect(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+       _damageEffect.color= new Vector4(_damageEffect.color.r, _damageEffect.color.g, _damageEffect.color.b, 0);
     }
 }

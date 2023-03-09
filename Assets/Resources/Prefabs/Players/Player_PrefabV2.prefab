@@ -3704,7 +3704,6 @@ MonoBehaviour:
   _playerName: {fileID: 5886513760442040639}
   _healthValue: {fileID: 2053697182241012399}
   _healthBar: {fileID: 1924185672477663210}
-  _damageEffect: {fileID: 2134873211399937939}
 --- !u!95 &2326369553867373797
 Animator:
   serializedVersion: 3
@@ -3803,6 +3802,7 @@ MonoBehaviour:
   lFoot: {fileID: 5761592654493456501}
   rFoot: {fileID: 767821196074858763}
   s: {fileID: 4009009680745551755}
+  _damageEffect: {fileID: 2134873211399937939}
   isAction: 0
 --- !u!143 &9071112424790293551
 CharacterController:
