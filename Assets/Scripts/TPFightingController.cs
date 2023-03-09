@@ -491,6 +491,8 @@ public class TPFightingController : MonoBehaviour
     IEnumerator DisableDamageEffect(float duration)
     {
         yield return new WaitForSeconds(duration);
-       _damageEffect.color = new Vector4(_damageEffect.color.r, _damageEffect.color.g, _damageEffect.color.b, 0);
+        //_damageEffect.color = new Vector4(_damageEffect.color.r, _damageEffect.color.g, _damageEffect.color.b, 0);
+        _damageEffect.DOFade(0f, 1f);
+
     }
 }
