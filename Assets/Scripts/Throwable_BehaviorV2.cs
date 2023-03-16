@@ -24,6 +24,7 @@ public class Throwable_BehaviorV2 : NetworkBehaviour
     public void Awake()
     {
         _defaultPos = transform.position;
+        _defaultRot = transform.rotation;
         rb = GetComponent<Rigidbody>();
         collider = GetComponent<MeshCollider>();
     }
