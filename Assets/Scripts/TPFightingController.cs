@@ -428,7 +428,7 @@ public class TPFightingController : MonoBehaviour
         else
             temp = GameObject.Instantiate(punchEffect, rHand.position, rHand.rotation);
         temp.transform.LookAt(cam.transform);
-        temp.transform.localScale = new Vector3(2, 2, 2);
+        temp.transform.localScale = new Vector3(10, 10, 10);
     }
 
     public void PlayKickEffect()
@@ -456,7 +456,7 @@ public class TPFightingController : MonoBehaviour
         else
             temp = GameObject.Instantiate(kickEffect, rFoot.position, rFoot.rotation);
         temp.transform.LookAt(cam.transform);
-        temp.transform.localScale = new Vector3(3, 3, 3);
+        temp.transform.localScale = new Vector3(10, 10, 10);
     }
 
     public void HitEffect()
@@ -467,7 +467,7 @@ public class TPFightingController : MonoBehaviour
             EnableDamageEffect(1f);
             GameObject temp = GameObject.Instantiate(punchEffect, transform.position + new Vector3(0, 1, 0), transform.rotation);
             temp.transform.LookAt(cam.transform);
-            temp.transform.localScale = new Vector3(2, 2, 2);
+            temp.transform.localScale = new Vector3(10, 10, 10);
         }
         
     }
