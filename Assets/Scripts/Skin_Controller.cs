@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class Skin_Controller : MonoBehaviour
 {
-    [SerializeField] private SkinnedMeshRenderer _meshRenderer;
+    [SerializeField] private SkinnedMeshRenderer[] _meshRenderer;
     [SerializeField] private PlayerBehaviour _player;
 
     private string currentSkin;
@@ -17,6 +17,7 @@ public class Skin_Controller : MonoBehaviour
     {
         _player = GetComponent<PlayerBehaviour>();
         _isLocalPlayer = _player == null || _player.isLocalPlayer;
+        _meshRenderer = gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
     }
 
     void OnDisable()
@@ -56,34 +57,40 @@ public class Skin_Controller : MonoBehaviour
     public void ChangeSkin(Character character)
     {
         if (character == null) return;
-        _meshRenderer.material.mainTexture = character.Texture;
-        UpdateMeshRenderer(character.Asset.GetComponentInChildren<SkinnedMeshRenderer>());
+        //_meshRenderer.material.mainTexture = character.Texture;
+        UpdateMeshRenderer(character.Asset.GetComponentsInChildren<SkinnedMeshRenderer>());
     }
 
-    public void UpdateMeshRenderer (SkinnedMeshRenderer newMeshRenderer)
+    public void UpdateMeshRenderer (SkinnedMeshRenderer[] newMeshRenderers)
     {
-        // update mesh
-        //_meshRenderer.sharedMesh = newMeshRenderer.sharedMesh;
-        if (newMeshRenderer.sharedMaterials.Length > 1)
+        for (int i = 0; i < newMeshRenderers.Length; i++)
         {
-            _meshRenderer.sharedMaterials = newMeshRenderer.sharedMaterials;
-           
-        }
-        else
-        {
-            _meshRenderer.material.mainTexture = newMeshRenderer.sharedMaterial.mainTexture;
-        }
-            
+            // update mesh
+            //_meshRenderer.sharedMesh = newMeshRenderer.sharedMesh;
+            if (newMeshRenderers[i].sharedMaterials.Length > 1)
+            {
+                _meshRenderer[i].sharedMaterials = newMeshRenderers[i].sharedMaterials;
 
-        GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = newMeshRenderer.sharedMesh;
+            }
+            else
+            {
+                _meshRenderer[i].material.mainTexture = newMeshRenderers[i].sharedMaterial.mainTexture;
+            }
 
-        Transform[] childrens = transform.GetComponentsInChildren<Transform> (true);
-        
-        // sort bones.
-        Transform[] bones = new Transform[newMeshRenderer.bones.Length];
-        for (int boneOrder = 0; boneOrder < newMeshRenderer.bones.Length; boneOrder++) {
-            bones [boneOrder] = Array.Find<Transform> (childrens, c => c.name == newMeshRenderer.bones [boneOrder].name);
+
+            _meshRenderer[i].sharedMesh = newMeshRenderers[i].sharedMesh;
+
+            Transform[] childrens = transform.GetComponentsInChildren<Transform>(true);
+
+            // sort bones.
+            Transform[] bones = new Transform[newMeshRenderers[i].bones.Length];
+            for (int boneOrder = 0; boneOrder < newMeshRenderers[i].bones.Length; boneOrder++)
+            {
+                bones[boneOrder] = Array.Find<Transform>(childrens, c => c.name == newMeshRenderers[i].bones[boneOrder].name);
+            }
+            _meshRenderer[i].bones = bones;
+
+            _meshRenderer[i].gameObject.name = newMeshRenderers[i].gameObject.name;
         }
-        _meshRenderer.bones = bones;
     }
 }

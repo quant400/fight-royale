@@ -8,10 +8,12 @@ public class IPFSUploadExample : MonoBehaviour
     
     async void Start()
     {
+        /*
         var data = System.Text.Encoding.UTF8.GetBytes("YOUR_DATA");
         
         var ipfs = new IPFS(apiKey);
         var cid  = await ipfs.Upload("BUCKET_ID", "/PATH", "FILENAME.ext", data, "application/octet-stream");
         print(cid);
+        */
     }
 }

@@ -21,6 +21,7 @@ public class ClientStartUp : MonoBehaviour
 
 	public void OnLoginUserButtonClick()
 	{
+		/*
 		if (configuration.buildType == BuildType.REMOTE_CLIENT)
 		{
 			if (configuration.buildId == "")
@@ -36,10 +37,12 @@ public class ClientStartUp : MonoBehaviour
 		{
 			networkManager.StartClient();
 		}
+		*/
 	}
 
 	public void LoginRemoteUser()
 	{
+		/*
 		Debug.Log("[ClientStartUp].LoginRemoteUser");
 		
 		//We need to login a user to get at PlayFab API's. 
@@ -51,6 +54,7 @@ public class ClientStartUp : MonoBehaviour
 		};
 
 		PlayFabClientAPI.LoginWithCustomID(request, OnPlayFabLoginSuccess, OnLoginError);
+		*/
 	}
 
 	private void OnLoginError(PlayFabError response)
@@ -59,7 +63,7 @@ public class ClientStartUp : MonoBehaviour
 	}
 
 	private void OnPlayFabLoginSuccess(LoginResult response)
-	{
+	{/*
 		Debug.Log(response.ToString());
 		if (configuration.ipAddress == "")
 		{   //We need to grab an IP and Port from a server based on the buildId. Copy this and add it to your Configuration.
@@ -69,6 +73,7 @@ public class ClientStartUp : MonoBehaviour
 		{
 			ConnectRemoteClient();
 		}
+		*/
 	}
 
 	private void RequestMultiplayerServer()
@@ -89,6 +94,7 @@ public class ClientStartUp : MonoBehaviour
 
 	private void ConnectRemoteClient(RequestMultiplayerServerResponse response = null)
 	{
+		
 		if(response == null) 
 		{
 			networkManager.networkAddress = configuration.ipAddress;
@@ -100,7 +106,7 @@ public class ClientStartUp : MonoBehaviour
 			networkManager.networkAddress = response.IPV4Address;
 			webTransport.port = (ushort)response.Ports[0].Num;
 		}
-
+		
 		networkManager.StartClient();
 	}
 
