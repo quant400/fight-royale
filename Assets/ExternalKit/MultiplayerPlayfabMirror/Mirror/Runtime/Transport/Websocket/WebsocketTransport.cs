@@ -56,10 +56,12 @@ namespace Mirror.Websocket
         {
             if (Secure)
             {
-                client.Connect(new Uri($"wss://{host}:{port}"));
+                Debug.LogError(PlayerPrefs.GetString("ConnectInfo"));
+                client.Connect(new Uri($"wss://cfcreverseproxy.azurewebsites.net:443/"+ PlayerPrefs.GetString("ConnectInfo")+"/"));
             }
             else
             {
+                Debug.LogError( PlayerPrefs.GetString("ConnectInfo"));
                 client.Connect(new Uri($"ws://{host}:{port}"));
             }
         }

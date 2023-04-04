@@ -89,10 +89,11 @@ public class ClientStartUp : MonoBehaviour
 
 	private void ConnectRemoteClient(RequestMultiplayerServerResponse response = null)
 	{
-		if(response == null) 
+		if (response == null)
 		{
 			networkManager.networkAddress = configuration.ipAddress;
 			webTransport.port = configuration.port;
+			PlayerPrefs.SetString("ConnectInfo", gameplayView.instance.apiPlayfab.BuildId + "/" + gameplayView.instance.apiPlayfab.CurrentMultiplayerServerSummary.SessionId + "/" + "EastUS");
 		}
 		else
 		{

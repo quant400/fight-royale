@@ -30335,7 +30335,7 @@ PrefabInstance:
     - target: {fileID: 5479180407007317759, guid: dcade7979c3da534db27311c23ab15d5,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -14455173
+      value: -14573893
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dcade7979c3da534db27311c23ab15d5, type: 3}
@@ -30595,22 +30595,22 @@ PrefabInstance:
     - target: {fileID: 9035479014350175203, guid: da9ba81f4c6991a4e923dfcce979f729,
         type: 3}
       propertyPath: Secure
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9035479014350175203, guid: da9ba81f4c6991a4e923dfcce979f729,
         type: 3}
       propertyPath: CertificatePath
-      value: Certificate/my-cert.pem
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 9035479014350175203, guid: da9ba81f4c6991a4e923dfcce979f729,
         type: 3}
       propertyPath: CertificatePassword
-      value: qwerty123
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 9035479014350965172, guid: da9ba81f4c6991a4e923dfcce979f729,
         type: 3}
       propertyPath: buildId
-      value: 5d43cc52-5522-48f8-934f-facd514cff1f
+      value: f8189996-6c02-4024-b772-ce637d96be88
       objectReference: {fileID: 0}
     - target: {fileID: 9035479014350965172, guid: da9ba81f4c6991a4e923dfcce979f729,
         type: 3}
