@@ -89,6 +89,10 @@ public class SkinnedMeshRendererBones : MonoBehaviour
     private string GlovesModelsPath = "WearableModels/Gloves";
 
     private string ShortsModelsPath = "WearableModels/Shorts";
+    [SerializeField]
+    RuntimeAnimatorController oldConttoller,controller;
+    [SerializeField]
+    Avatar avatar;
 
     // Start is called before the first frame update
     void Start()
@@ -144,7 +148,7 @@ public class SkinnedMeshRendererBones : MonoBehaviour
         currentGlove = -1;
 
         currentshort = -1;
-
+        
         if(!changeAnimatorCoroutine)
         {
             StartCoroutine(ChangeAnimator(0.01f, modelToInstantiate));
@@ -542,13 +546,14 @@ public class SkinnedMeshRendererBones : MonoBehaviour
 
     IEnumerator ChangeAnimator(float secs, GameObject model)
     {
+        playerAnimator.runtimeAnimatorController=oldConttoller;
         changeAnimatorCoroutine = true;
 
         yield return new WaitForSeconds(secs);
-
-        playerAnimator.avatar = model.GetComponent<Animator>().avatar;
-
+        playerAnimator.avatar = avatar;
+        playerAnimator.runtimeAnimatorController = controller;
         rootBone = playerModelParentObject.transform.GetChild(1).GetComponent<SkinnedMeshRenderer>().rootBone;
+        
 
         changeAnimatorCoroutine = false;
     }

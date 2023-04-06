@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657755, g: 0.4964127, b: 0.57481825, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657642, g: 0.49641156, b: 0.5748181, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4517,6 +4517,9 @@ MonoBehaviour:
   playerBody: {fileID: 1521894456}
   baseObject: {fileID: 932713857}
   gridObject: {fileID: 374443120}
+  oldConttoller: {fileID: 9100000, guid: 40db3173a05ae3242b1c182a09b0a183, type: 2}
+  controller: {fileID: 9100000, guid: 8eb97857a112b0c42a3c9faeca9b01db, type: 2}
+  avatar: {fileID: 9000000, guid: d26dc38ccd1359144a9cd219c1600811, type: 2}
 --- !u!4 &622644763
 Transform:
   m_ObjectHideFlags: 0
@@ -7433,6 +7436,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1521894457}
+  - {fileID: 1366716826}
   m_Father: {fileID: 1920637623}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -10418,6 +10422,55 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1362356439}
   m_CullTransparentMesh: 1
+--- !u!1 &1366716825
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1366716826}
+  - component: {fileID: 1366716827}
+  m_Layer: 7
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1366716826
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1366716825}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 932713858}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 35}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!65 &1366716827
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1366716825}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1000, y: 10, z: 1000}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1392975170
 GameObject:
   m_ObjectHideFlags: 0
@@ -13756,13 +13809,13 @@ MonoBehaviour:
   SprintSpeed: 10.5
   RotationSmoothTime: 0.15
   SpeedChangeRate: 1000
-  LandingAudioClip: {fileID: 0}
+  LandingAudioClip: {fileID: 8300000, guid: 72f526a6a9890f643a88e85a61c86c8a, type: 3}
   FootstepAudioClips: []
   FootstepAudioVolume: 0.5
   JumpHeight: 2
   Gravity: -15
   JumpTimeout: 0
-  FallTimeout: 0.15
+  FallTimeout: 0
   Grounded: 1
   GroundedOffset: -0.14
   GroundedRadius: 0.28
@@ -13774,7 +13827,8 @@ MonoBehaviour:
   BottomClamp: -10
   CameraAngleOverride: 0
   LockCameraPosition: 0
-  canMove: 0
+  canMove: 1
+  isLockerRoom: 1
 --- !u!114 &1703057591
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13792,7 +13846,7 @@ MonoBehaviour:
   jump: 0
   sprint: 0
   analogMovement: 0
-  cursorLocked: 1
+  cursorLocked: 0
   cursorInputForLook: 1
 --- !u!95 &1703057592
 Animator:
@@ -13803,8 +13857,8 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1703057586}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 8745e0fbda9bf6a4e934973df3892cd3, type: 3}
-  m_Controller: {fileID: 9100000, guid: 40db3173a05ae3242b1c182a09b0a183, type: 2}
+  m_Avatar: {fileID: 9000000, guid: d26dc38ccd1359144a9cd219c1600811, type: 2}
+  m_Controller: {fileID: 9100000, guid: 8eb97857a112b0c42a3c9faeca9b01db, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -13827,7 +13881,7 @@ CharacterController:
   m_Height: 2
   m_Radius: 0.5
   m_SlopeLimit: 45
-  m_StepOffset: 0.3
+  m_StepOffset: 0
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
