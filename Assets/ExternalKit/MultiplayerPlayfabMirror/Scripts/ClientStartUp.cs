@@ -90,10 +90,11 @@ public class ClientStartUp : MonoBehaviour
 	private void ConnectRemoteClient(RequestMultiplayerServerResponse response = null)
 	{
 		if (response == null)
-		{
+		{ 
 			networkManager.networkAddress = configuration.ipAddress;
 			webTransport.port = configuration.port;
-			PlayerPrefs.SetString("ConnectInfo", gameplayView.instance.apiPlayfab.BuildId + "/" + gameplayView.instance.apiPlayfab.CurrentMultiplayerServerSummary.SessionId + "/" + "EastUS");
+				
+			
 		}
 		else
 		{
@@ -101,7 +102,7 @@ public class ClientStartUp : MonoBehaviour
 			networkManager.networkAddress = response.IPV4Address;
 			webTransport.port = (ushort)response.Ports[0].Num;
 		}
-
+		PlayerPrefs.SetString("ConnectInfo", gameplayView.instance.apiPlayfab.BuildId + "/" + gameplayView.instance.apiPlayfab.CurrentMultiplayerServerSummary.SessionId + "/" + "EastUS");
 		networkManager.StartClient();
 	}
 

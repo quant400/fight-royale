@@ -56,12 +56,13 @@ namespace Mirror.Websocket
         {
             if (Secure)
             {
-                Debug.LogError(PlayerPrefs.GetString("ConnectInfo"));
-                client.Connect(new Uri($"wss://cfcreverseproxy.azurewebsites.net/"+ PlayerPrefs.GetString("ConnectInfo")+"/"));
+               
+                Debug.LogError($"wss://{host}:{port}");
+                client.Connect(new Uri($"wss://{host}:{port}"));
             }
             else
             {
-                Debug.LogError( PlayerPrefs.GetString("ConnectInfo"));
+                Debug.LogError($"ws://{host}:{port}");
                 client.Connect(new Uri($"ws://{host}:{port}"));
             }
         }
@@ -111,8 +112,7 @@ namespace Mirror.Websocket
                 server._sslConfig = new Server.SslConfiguration
                 {
                     Certificate = new System.Security.Cryptography.X509Certificates.X509Certificate2(
-                        System.IO.Path.Combine(Application.dataPath, CertificatePath),
-                        CertificatePassword),
+                        CertificatePath),
                     ClientCertificateRequired = false,
                     CheckCertificateRevocation = false,
                     EnabledSslProtocols = System.Security.Authentication.SslProtocols.Default
