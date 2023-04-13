@@ -41,12 +41,18 @@ public class SkinnedMeshRendererBones : MonoBehaviour
 
     public List<string> models;
     private int currentModel;
+    public List<string> belts;
+    private int currentBelts;
+    public List<string> glasses;
+    private int currentGlasses;
     public List<string> gloves;
     private int currentGlove;
+    public List<string> shoes;
+    private int currentShoes;
     public List<string> shorts;
-    private int currentshort;
+    private int currentShort;
 
-    [SerializeField] private Transform rootBone;
+    private Transform rootBone;
 
     GameObject currentActiveModel;
 
@@ -56,7 +62,7 @@ public class SkinnedMeshRendererBones : MonoBehaviour
 
     private bool isShorts;
 
-
+    private int[] wearableButtonSelected;
 
     [SerializeField]
     private GameObject[] wearableButtons;
@@ -82,15 +88,32 @@ public class SkinnedMeshRendererBones : MonoBehaviour
     private RectTransform gridObjectRectTransform;
     private CanvasGroup gridObjectCanvasGroup;
 
+    private int currentPage = 0;
+    private int totalPages = 0;
+
+    [SerializeField]
+    private TMP_Text pageNumbersText;
+
     private UnityEngine.Object[] info;
 
     private string characterModelsPath = "FIGHTERS2.0Redone";
 
+    private string BeltsModelsPath = "WearableModels/Belts";
+    private string BeltsSpritePath = "DisplaySprites/Wearables/Belts/";
+
+    private string GlassesModelsPath = "WearableModels/Glasses";
+    private string GlassesSpritePath = "DisplaySprites/Wearables/Glasses/";
+
     private string GlovesModelsPath = "WearableModels/Gloves";
+    private string GlovesSpritePath = "DisplaySprites/Wearables/Gloves/";
+
+    private string ShoesModelsPath = "WearableModels/Shoes";
+    private string ShoesSpritePath = "DisplaySprites/Wearables/Shoes/";
 
     private string ShortsModelsPath = "WearableModels/Shorts";
+    private string ShortsSpritePath = "DisplaySprites/Wearables/Shorts/";
     [SerializeField]
-    RuntimeAnimatorController oldConttoller,controller;
+    RuntimeAnimatorController oldConttoller, controller;
     [SerializeField]
     Avatar avatar;
 
@@ -104,9 +127,6 @@ public class SkinnedMeshRendererBones : MonoBehaviour
         changeAnimatorCoroutine = false;
 
         playerAnimator = playerModelParentObject.GetComponent<Animator>();
-
-        Cursor.lockState = CursorLockMode.None;
-
 
         Intialize();
 
@@ -145,10 +165,16 @@ public class SkinnedMeshRendererBones : MonoBehaviour
             currentActiveModel.transform.GetChild(0).parent = playerModelParentObject.transform;
         }
 
+        currentBelts = -1;
+
+        currentGlasses = -1;
+
         currentGlove = -1;
 
-        currentshort = -1;
-        
+        currentShoes = -1;
+
+        currentShort = -1;
+
         if(!changeAnimatorCoroutine)
         {
             StartCoroutine(ChangeAnimator(0.01f, modelToInstantiate));
@@ -183,7 +209,7 @@ public class SkinnedMeshRendererBones : MonoBehaviour
         ActiveModelSwap(models[currentModel]);
     }
 
-
+    
     public void WearableRightButton(string wearableString)
     {
         if (wearableString.Contains("glove") || wearableString.Contains("Glove") || wearableString.Contains("GLOVE") || wearableString.Contains("gloves") || wearableString.Contains("Gloves") || wearableString.Contains("GLOVES"))
@@ -235,11 +261,11 @@ public class SkinnedMeshRendererBones : MonoBehaviour
 
             if (currentGlove == -1)
             {
-                WearableSwapper(models[currentModel], true);
+                WearableSwapper(models[currentModel]);
             }
             else
             {
-                WearableSwapper(gloves[currentGlove], true);
+                WearableSwapper(gloves[currentGlove]);
             }
             
         }
@@ -247,52 +273,67 @@ public class SkinnedMeshRendererBones : MonoBehaviour
         {
             if (isRight)
             {
-                currentshort++;
+                currentShort++;
 
-                if (currentshort == shorts.Count)
+                if (currentShort == shorts.Count)
                 {
-                    currentshort = -1;
+                    currentShort = -1;
                 }
             }
             else
             {
-                currentshort--;
+                currentShort--;
 
-                if (currentshort < -1)
+                if (currentShort < -1)
                 {
-                    currentshort = shorts.Count - 1;
+                    currentShort = shorts.Count - 1;
                 }
             }
 
-            if (currentshort == -1)
+            if (currentShort == -1)
             {
-                WearableSwapper(models[currentModel], false);
+                WearableSwapper(models[currentModel]);
             }
             else
             {
-                WearableSwapper(shorts[currentshort], false);
+                WearableSwapper(shorts[currentShort]);
             }
         }
     }
+    
 
-    private void WearableSwapper(string wearableModel, bool isGlove)
+
+    private void WearableSwapper(string wearableModel)
     {
-        GameObject modelToInstantiate;
+        GameObject modelToInstantiate = null;
 
         if (models.Contains(wearableModel))
         {
-            modelToInstantiate = Resources.Load(Path.Combine((characterModelsPath), wearableModel)) as GameObject;
+            modelToInstantiate = Resources.Load(Path.Combine(characterModelsPath, wearableModel)) as GameObject;
         }
         else
         {
-            if (isGlove)
+            if (wearableButtonSelected[0] == 1)
             {
-                modelToInstantiate = Resources.Load(Path.Combine((GlovesModelsPath), wearableModel)) as GameObject;
+                modelToInstantiate = Resources.Load(Path.Combine(BeltsModelsPath, wearableModel)) as GameObject;
             }
-            else
+            else if (wearableButtonSelected[1] == 1)
             {
-                modelToInstantiate = Resources.Load(Path.Combine((ShortsModelsPath), wearableModel)) as GameObject;
+                modelToInstantiate = Resources.Load(Path.Combine(GlassesModelsPath, wearableModel)) as GameObject;
             }
+            else if (wearableButtonSelected[2] == 1)
+            {
+                modelToInstantiate = Resources.Load(Path.Combine(GlovesModelsPath, wearableModel)) as GameObject;
+            }
+            else if (wearableButtonSelected[3] == 1)
+            {
+                modelToInstantiate = Resources.Load(Path.Combine(ShoesModelsPath, wearableModel)) as GameObject;
+            }
+            else if (wearableButtonSelected[4] == 1)
+            {
+                modelToInstantiate = Resources.Load(Path.Combine(ShortsModelsPath, wearableModel)) as GameObject;
+            }
+
         }
 
         GameObject instantiatedWearable = Instantiate(modelToInstantiate);
@@ -301,133 +342,73 @@ public class SkinnedMeshRendererBones : MonoBehaviour
         
         SkinnedMeshRenderer spawnedSkinnedMeshRenderer;
 
-        SkinnedMeshRenderer currentSkinnedMeshRenderer;
+        int childIndex = 1;
 
-        Bounds currentBounds;
-
-        int childIndex;
-
-        if (isGlove)
+        if (wearableButtonSelected[0] == 1)
+        {
+            
+        }
+        else if (wearableButtonSelected[1] == 1)
+        {
+            
+        }
+        else if (wearableButtonSelected[2] == 1)
         {
             childIndex = 5;
+        }
+        else if (wearableButtonSelected[3] == 1)
+        {
+            
+        }
+        else if (wearableButtonSelected[4] == 1)
+        {
+            childIndex = playerModelParentObject.transform.childCount - 1;
+        }
 
-            if (models.Contains(wearableModel))
-            {
-                wearable = instantiatedWearable.transform.GetChild(childIndex).gameObject;
-
-                //SpawnModel(wearableModel, childIndex, isGlove, true);
-            }
-            else
-            {
-                /*
-                wearable = instantiatedWearable.transform.GetChild(1).gameObject;
-
-                foreach (string color in colors)
-                {
-                    if (playerModelParentObject.transform.GetChild(childIndex).name.Contains(color))
-                    {
-                        foreach (Transform child in instantiatedWearable.transform)
-                        {
-                            if (child.name.Contains(color))
-                            {
-                                wearable = child.gameObject;
-                            }
-                        }
-                    }
-                }
-
-                SpawnModel(wearableModel, childIndex, isGlove, false);
-                */
-
-                wearable = instantiatedWearable.transform.GetChild(1).gameObject;
-
-                //SpawnModel(wearableModel, childIndex, isGlove, false);
-            }
-
-
-            spawnedSkinnedMeshRenderer = wearable.GetComponent<SkinnedMeshRenderer>();
-
-            currentSkinnedMeshRenderer = playerModelParentObject.transform.GetChild(childIndex).GetComponent<SkinnedMeshRenderer>();
-
-            currentBounds = currentSkinnedMeshRenderer.localBounds;
-
-            Vector3 size = currentBounds.size;
-
-            spawnedSkinnedMeshRenderer.bones = playerModelParentObject.transform.GetChild(childIndex).GetComponent<SkinnedMeshRenderer>().bones;
-            spawnedSkinnedMeshRenderer.rootBone = rootBone;
-            spawnedSkinnedMeshRenderer.localBounds = currentBounds;
-
-            wearable.transform.parent = playerModelParentObject.transform;
-            Destroy(playerModelParentObject.transform.GetChild(childIndex).transform.gameObject);
-            Destroy(instantiatedWearable);
-            wearable.transform.SetSiblingIndex(childIndex);
-
-            //Debug.Log("Original: " + size + " vs New: " + spawnedSkinnedMeshRenderer.localBounds.size);
+        if (models.Contains(wearableModel))
+        {
+            wearable = instantiatedWearable.transform.GetChild(childIndex).gameObject;
         }
         else
         {
-            childIndex = playerModelParentObject.transform.childCount - 1;
+            wearable = instantiatedWearable.transform.GetChild(1).gameObject;
 
-            if (models.Contains(wearableModel))
+            foreach (string color in colors)
             {
-                wearable = instantiatedWearable.transform.GetChild(childIndex).gameObject;
-
-                //SpawnModel(wearableModel, childIndex, isGlove, true);
-            }
-            else
-            {
-                wearable = instantiatedWearable.transform.GetChild(1).gameObject;
-
-                foreach (string color in colors)
+                if (playerModelParentObject.transform.GetChild(childIndex).name.Contains(color))
                 {
-                    if (playerModelParentObject.transform.GetChild(childIndex).name.Contains(color))
+                    foreach (Transform child in instantiatedWearable.transform)
                     {
-                        foreach (Transform child in instantiatedWearable.transform)
+                        string wearableColor = "COLOR 1";
+
+                        if (color == "-c2")
                         {
-                            string wearableColor = "COLOR 1";
+                            wearableColor = "COLOR 2";
+                        }
+                        else if (color == "-c3")
+                        {
+                            wearableColor = "COLOR 3";
+                        }
 
-                            if (color == "-c2")
-                            {
-                                wearableColor = "COLOR 2";
-                            }
-                            else if (color == "-c3")
-                            {
-                                wearableColor = "COLOR 3";
-                            }
-
-                            //Debug.Log(wearableColor);
-
-                            if (child.name.Contains(wearableColor))
-                            {
-                                wearable = child.gameObject;
-                            }
+                        if (child.name.Contains(wearableColor))
+                        {
+                            wearable = child.gameObject;
                         }
                     }
                 }
-                
-                //SpawnModel(wearableModel, childIndex, isGlove, false);
-
             }
 
-            spawnedSkinnedMeshRenderer = wearable.GetComponent<SkinnedMeshRenderer>();
-
-            currentSkinnedMeshRenderer = playerModelParentObject.transform.GetChild(childIndex).GetComponent<SkinnedMeshRenderer>();
-
-            currentBounds = currentSkinnedMeshRenderer.localBounds;
-
-            Vector3 size = currentBounds.size;
-
-            spawnedSkinnedMeshRenderer.bones = playerModelParentObject.transform.GetChild(childIndex).GetComponent<SkinnedMeshRenderer>().bones;
-            spawnedSkinnedMeshRenderer.rootBone = rootBone;
-            spawnedSkinnedMeshRenderer.localBounds = currentBounds;
-
-            wearable.transform.parent = playerModelParentObject.transform;
-            Destroy(playerModelParentObject.transform.GetChild(childIndex).transform.gameObject);
-            Destroy(instantiatedWearable);
-            wearable.transform.SetSiblingIndex(childIndex);
-
-            //Debug.Log("Original: " + size + " vs New: " + spawnedSkinnedMeshRenderer.bounds.size);
         }
+
+        spawnedSkinnedMeshRenderer = wearable.GetComponent<SkinnedMeshRenderer>();
+
+        spawnedSkinnedMeshRenderer.bones = playerModelParentObject.transform.GetChild(childIndex).GetComponent<SkinnedMeshRenderer>().bones;
+        spawnedSkinnedMeshRenderer.rootBone = rootBone;
+
+        wearable.transform.parent = playerModelParentObject.transform;
+        Destroy(playerModelParentObject.transform.GetChild(childIndex).transform.gameObject);
+        Destroy(instantiatedWearable);
+        wearable.transform.SetSiblingIndex(childIndex);
     }
 
     private void SpawnModel(GameObject objectToSpawn, int childIndex, bool isGlove, bool isCharModel)
@@ -508,29 +489,114 @@ public class SkinnedMeshRendererBones : MonoBehaviour
 
     public void GridSelection(int wearableNum)
     {
-        if(wearableNum == 1)
+        if(currentPage == 1)
         {
-            WearableSwapper(models[currentModel], !isShorts);
-        }
-        else if(isShorts)
-        {
-            if ((wearableNum - 2) < shorts.Count)
-            {
-                WearableSwapper(shorts[wearableNum - 2], !isShorts);
 
-                wearableButtons[1].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine("DisplaySprites/Wearables/Shorts/", 
-                    shorts[wearableNum - 2]), typeof(Sprite)) as Sprite;
-            }
+        }
+
+        if (wearableNum == 1 && currentPage == 1)
+        {
+            WearableSwapper(models[currentModel]);
         }
         else
         {
-            if((wearableNum - 2) < gloves.Count)
+            if (wearableButtonSelected[0] == 1)
             {
-                WearableSwapper(gloves[wearableNum - 2], !isShorts);
+                if ((wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) < belts.Count)
+                {
+                    WearableSwapper(belts[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]);
 
-                wearableButtons[0].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine("DisplaySprites/Wearables/Gloves/", 
-                    gloves[wearableNum - 2]), typeof(Sprite)) as Sprite;
+                    wearableButtons[1].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(BeltsSpritePath,
+                        belts[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]), typeof(Sprite)) as Sprite;
+                }
             }
+            else if (wearableButtonSelected[1] == 1)
+            {
+                if ((wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) < glasses.Count)
+                {
+                    WearableSwapper(glasses[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]);
+
+                    wearableButtons[1].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlassesSpritePath,
+                        glasses[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]), typeof(Sprite)) as Sprite;
+                }
+            }
+            else if (wearableButtonSelected[2] == 1)
+            {
+                if ((wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) < gloves.Count)
+                {
+                    WearableSwapper(gloves[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]);
+
+                    wearableButtons[0].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlovesSpritePath,
+                        gloves[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]), typeof(Sprite)) as Sprite;
+                }
+            }
+            else if (wearableButtonSelected[3] == 1)
+            {
+                if ((wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) < shoes.Count)
+                {
+                    WearableSwapper(shoes[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]);
+
+                    wearableButtons[1].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(ShoesSpritePath,
+                        shoes[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]), typeof(Sprite)) as Sprite;
+                }
+            }
+            else if (wearableButtonSelected[4] == 1)
+            {
+                if ((wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) < shorts.Count)
+                {
+                    WearableSwapper(shorts[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]);
+
+                    wearableButtons[1].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(ShortsSpritePath,
+                        shorts[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]), typeof(Sprite)) as Sprite;
+                }
+            }
+            
+        }
+    }
+
+    public void GridNextPage()
+    {
+        if(currentPage < totalPages)
+        {
+            currentPage++;
+
+            SelectionScreenImages();
+        }
+
+        if(currentPage != 1)
+        {
+            gridObject.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
+
+            gridObject.transform.GetChild(0).transform.GetChild(1).gameObject.SetActive(false);
+        }
+        else
+        {
+            gridObject.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(false);
+
+            gridObject.transform.GetChild(0).transform.GetChild(1).gameObject.SetActive(true);
+        }
+    }
+
+    public void GridPreviousPage()
+    {
+        if (currentPage > 1)
+        {
+            currentPage--;
+
+            SelectionScreenImages();
+        }
+
+        if (currentPage != 1)
+        {
+            gridObject.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
+
+            gridObject.transform.GetChild(0).transform.GetChild(1).gameObject.SetActive(false);
+        }
+        else
+        {
+            gridObject.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(false);
+
+            gridObject.transform.GetChild(0).transform.GetChild(1).gameObject.SetActive(true);
         }
     }
 
@@ -544,16 +610,91 @@ public class SkinnedMeshRendererBones : MonoBehaviour
         return isShorts;
     }
 
+    public void BeltsButton()
+    {
+        for (int i = 0; i < wearableButtonSelected.Length; i++)
+        {
+            if (i == 0)
+            {
+                wearableButtonSelected[i] = 1;
+            }
+            else
+            {
+                wearableButtonSelected[i] = 0;
+            }
+        }
+    }
+
+    public void GlassesButton()
+    {
+        for (int i = 0; i < wearableButtonSelected.Length; i++)
+        {
+            if (i == 1)
+            {
+                wearableButtonSelected[i] = 1;
+            }
+            else
+            {
+                wearableButtonSelected[i] = 0;
+            }
+        }
+    }
+
+    public void GlovesButton()
+    {
+        for (int i = 0; i < wearableButtonSelected.Length; i++)
+        {
+            if (i == 2)
+            {
+                wearableButtonSelected[i] = 1;
+            }
+            else
+            {
+                wearableButtonSelected[i] = 0;
+            }
+        }
+    }
+
+    public void ShoesButton()
+    {
+        for (int i = 0; i < wearableButtonSelected.Length; i++)
+        {
+            if (i == 3)
+            {
+                wearableButtonSelected[i] = 1;
+            }
+            else
+            {
+                wearableButtonSelected[i] = 0;
+            }
+        }
+    }
+
+    public void ShortsButton()
+    {
+        for(int i = 0; i < wearableButtonSelected.Length; i++)
+        {
+            if(i == 4)
+            {
+                wearableButtonSelected[i] = 1;
+            }
+            else
+            {
+                wearableButtonSelected[i] = 0;
+            }
+        }
+    }
+
     IEnumerator ChangeAnimator(float secs, GameObject model)
     {
-        playerAnimator.runtimeAnimatorController=oldConttoller;
+        playerAnimator.runtimeAnimatorController = oldConttoller;
         changeAnimatorCoroutine = true;
 
         yield return new WaitForSeconds(secs);
         playerAnimator.avatar = avatar;
         playerAnimator.runtimeAnimatorController = controller;
         rootBone = playerModelParentObject.transform.GetChild(1).GetComponent<SkinnedMeshRenderer>().rootBone;
-        
+
 
         changeAnimatorCoroutine = false;
     }
@@ -564,11 +705,94 @@ public class SkinnedMeshRendererBones : MonoBehaviour
     {
         if (!isWearableSelectionScreen)
         {
-            //DiableInteractable();
+            if (wearableButtonSelected[0] == 1)
+            {
+                totalPages = belts.Count / (gridObject.transform.childCount - 1);
+
+                if (belts.Count < (gridObject.transform.childCount - 1))
+                {
+                    totalPages += 1;
+                }
+                else
+                {
+                    if (belts.Count % (gridObject.transform.childCount - 1) != 0)
+                    {
+                        totalPages += 1;
+                    }
+                }
+            }
+            else if (wearableButtonSelected[1] == 1)
+            {
+                totalPages = glasses.Count / (gridObject.transform.childCount - 1);
+
+                if (glasses.Count < (gridObject.transform.childCount - 1))
+                {
+                    totalPages += 1;
+                }
+                else
+                {
+                    if (glasses.Count % (gridObject.transform.childCount - 1) != 0)
+                    {
+                        totalPages += 1;
+                    }
+                }
+            }
+            else if (wearableButtonSelected[2] == 1)
+            {
+                totalPages = gloves.Count / (gridObject.transform.childCount - 1);
+
+                if (gloves.Count < (gridObject.transform.childCount - 1))
+                {
+                    totalPages += 1;
+                }
+                else
+                {
+                    if (gloves.Count % (gridObject.transform.childCount - 1) != 0)
+                    {
+                        totalPages += 1;
+                    }
+                }
+            }
+            else if (wearableButtonSelected[3] == 1)
+            {
+                totalPages = shoes.Count / (gridObject.transform.childCount - 1);
+
+                if (shoes.Count < (gridObject.transform.childCount - 1))
+                {
+                    totalPages += 1;
+                }
+                else
+                {
+                    if (shoes.Count % (gridObject.transform.childCount - 1) != 0)
+                    {
+                        totalPages += 1;
+                    }
+                }
+            }
+            else if (wearableButtonSelected[4] == 1)
+            {
+                totalPages = shorts.Count / (gridObject.transform.childCount - 1);
+
+                if (shorts.Count < (gridObject.transform.childCount - 1))
+                {
+                    totalPages += 1;
+                }
+                else
+                {
+                    if (shorts.Count % (gridObject.transform.childCount - 1) != 0)
+                    {
+                        totalPages += 1;
+                    }
+                }
+            }
+
+            currentPage = 1;
 
             SelectionScreenImages();
 
             isWearableSelectionScreen = true;
+
+            pageNumbersText.text = currentPage.ToString() + "/" + totalPages.ToString();
 
             GoToSelectionScreenAnimation();
         }
@@ -604,6 +828,8 @@ public class SkinnedMeshRendererBones : MonoBehaviour
 
         canvasGroups = new CanvasGroup[wearableButtons.Length];
 
+        wearableButtonSelected = new int[5];
+
         for (int i = 0; i < wearableButtons.Length; i++)
         {
             objectButtons[i] = wearableButtons[i].GetComponent<Button>();
@@ -615,7 +841,13 @@ public class SkinnedMeshRendererBones : MonoBehaviour
 
         models = ModelNames(characterModelsPath);
 
+        belts = ModelNames(BeltsModelsPath);
+
+        glasses = ModelNames(GlassesModelsPath);
+
         gloves = ModelNames(GlovesModelsPath);
+
+        shoes = ModelNames(ShoesModelsPath);
 
         shorts = ModelNames(ShortsModelsPath);
     }
@@ -638,42 +870,168 @@ public class SkinnedMeshRendererBones : MonoBehaviour
 
     private void SelectionScreenImages()
     {
-        for (int i = 1; i < gridObject.transform.childCount - 1; i++)
+        string path;
+
+        if(currentPage == 1)
         {
-            if (isShorts)
-            {
-                if(i < shorts.Count + 1)
-                {
-                    gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color = new Color(gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.r, 
-                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.g, gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.b, 255);
+            gridObject.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(false);
 
-                    gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine("DisplaySprites/Wearables/Shorts/", 
-                        shorts[i - 1]), typeof(Sprite)) as Sprite;
-                }
-                else
-                {
-                    gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color = new Color(gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.r, 
-                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.g, gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.b, 0);
-                }
-            }
-            else
-            {
-                if (i < gloves.Count + 1)
-                {
-                    gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color = new Color(gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.r, 
-                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.g, gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.b, 255);
-
-                    gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine("DisplaySprites/Wearables/Gloves/", 
-                        gloves[i - 1]), typeof(Sprite)) as Sprite;
-                }
-                else
-                {
-                    gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color = new Color(gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.r, 
-                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.g, gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.b, 0);
-                }
-            }
-
+            gridObject.transform.GetChild(0).transform.GetChild(1).gameObject.SetActive(true);
         }
+
+        for (int i = 0; i < gridObject.transform.childCount - 1; i++)
+        {
+            gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color = new Color(gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.r,
+                gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.g, gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.b, 255);
+
+            if (wearableButtonSelected[0] == 1)
+            {
+                if (currentPage == 1)
+                {
+                    if (i < belts.Count + 1 && i > 0) 
+                    {
+                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(BeltsSpritePath,
+                            belts[i - 1]), typeof(Sprite)) as Sprite;
+                    }
+                    else
+                    {
+                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color = new Color(gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.r,
+                            gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.g, gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.b, 0);
+                    }
+                }
+                else
+                {
+                    if (i + ((currentPage - 1) * (gridObject.transform.childCount - 2)) < belts.Count)
+                    {
+                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(BeltsSpritePath,
+                            belts[i + ((currentPage - 1) * (gridObject.transform.childCount - 2))]), typeof(Sprite)) as Sprite;
+                    }
+                    else
+                    {
+                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color = new Color(gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.r,
+                            gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.g, gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.b, 0);
+                    }
+                }
+            }
+            else if (wearableButtonSelected[1] == 1)
+            {
+                if (currentPage == 1)
+                {
+                    if (i < glasses.Count + 1 && i > 0)
+                    {
+                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlassesSpritePath,
+                            glasses[i - 1]), typeof(Sprite)) as Sprite;
+                    }
+                    else
+                    {
+                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color = new Color(gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.r,
+                            gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.g, gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.b, 0);
+                    }
+                }
+                else
+                {
+                    if (i + ((currentPage - 1) * (gridObject.transform.childCount - 2)) < glasses.Count)
+                    {
+                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlassesSpritePath,
+                            glasses[i + ((currentPage - 1) * (gridObject.transform.childCount - 2))]), typeof(Sprite)) as Sprite;
+                    }
+                    else
+                    {
+                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color = new Color(gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.r,
+                            gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.g, gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.b, 0);
+                    }
+                }
+            }
+            else if (wearableButtonSelected[2] == 1)
+            {
+                if (currentPage == 1)
+                {
+                    if (i < gloves.Count + 1 && i > 0)
+                    {
+                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlovesSpritePath,
+                            gloves[i - 1]), typeof(Sprite)) as Sprite;
+                    }
+                    else
+                    {
+                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color = new Color(gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.r,
+                            gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.g, gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.b, 0);
+                    }
+                }
+                else
+                {
+                    if (i + ((currentPage - 1) * (gridObject.transform.childCount - 2)) < gloves.Count)
+                    {
+                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlovesSpritePath,
+                            gloves[i + ((currentPage - 1) * (gridObject.transform.childCount - 2))]), typeof(Sprite)) as Sprite;
+                    }
+                    else
+                    {
+                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color = new Color(gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.r,
+                            gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.g, gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.b, 0);
+                    }
+                }
+            }
+            else if (wearableButtonSelected[3] == 1)
+            {
+                if (currentPage == 1)
+                {
+                    if (i < shoes.Count + 1 && i > 0)
+                    {
+                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(ShoesSpritePath,
+                            shoes[i - 1]), typeof(Sprite)) as Sprite;
+                    }
+                    else
+                    {
+                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color = new Color(gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.r,
+                            gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.g, gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.b, 0);
+                    }
+                }
+                else
+                {
+                    if (i + ((currentPage - 1) * (gridObject.transform.childCount - 2)) < shoes.Count)
+                    {
+                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(ShoesSpritePath,
+                            shoes[i + ((currentPage - 1) * (gridObject.transform.childCount - 2))]), typeof(Sprite)) as Sprite;
+                    }
+                    else
+                    {
+                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color = new Color(gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.r,
+                            gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.g, gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.b, 0);
+                    }
+                }
+            }
+            else if (wearableButtonSelected[4] == 1)
+            {
+                if (currentPage == 1)
+                {
+                    if (i < shorts.Count + 1 && i > 0)
+                    {
+                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(ShortsSpritePath,
+                            shorts[i - 1]), typeof(Sprite)) as Sprite;
+                    }
+                    else
+                    {
+                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color = new Color(gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.r,
+                            gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.g, gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.b, 0);
+                    }
+                }
+                else
+                {
+                    if (i + ((currentPage - 1) * (gridObject.transform.childCount - 2)) < shorts.Count)
+                    {
+                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(ShortsSpritePath,
+                            shorts[i + ((currentPage - 1) * (gridObject.transform.childCount - 2))]), typeof(Sprite)) as Sprite;
+                    }
+                    else
+                    {
+                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color = new Color(gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.r,
+                            gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.g, gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.b, 0);
+                    }
+                }
+
+            }
+        }
+        
     }
 
     private void GoToSelectionScreenAnimation()
@@ -690,7 +1048,7 @@ public class SkinnedMeshRendererBones : MonoBehaviour
 
             gridObjectCanvasGroup.DOFade(1.0f, 0.5f);
 
-            gridObjectRectTransform.DOScale(new Vector3(1, 1, 1), 1);
+            gridObjectRectTransform.DOScale(new Vector3(0.9f, 0.9f, 0.9f), 1);
         }
     }
 
