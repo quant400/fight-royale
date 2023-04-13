@@ -56,7 +56,6 @@ namespace Mirror.Websocket
         {
             if (Secure)
             {
-               
                 Debug.LogError($"wss://{host}:{port}");
                 client.Connect(new Uri($"wss://{host}:{port}"));
             }
@@ -112,11 +111,15 @@ namespace Mirror.Websocket
                 server._sslConfig = new Server.SslConfiguration
                 {
                     Certificate = new System.Security.Cryptography.X509Certificates.X509Certificate2(
-                        CertificatePath),
+                        CertificatePath,CertificatePassword),
                     ClientCertificateRequired = false,
                     CheckCertificateRevocation = false,
                     EnabledSslProtocols = System.Security.Authentication.SslProtocols.Default
                 };
+
+                var cert = new System.Security.Cryptography.X509Certificates.X509Certificate2(CertificatePath, CertificatePassword);
+                Debug.Log(cert.Subject);
+                Debug.Log(cert.HasPrivateKey);
             }
             _ = server.Listen(port);
         }
