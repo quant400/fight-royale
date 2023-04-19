@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class SkinnedMeshRendererBones : MonoBehaviour
 {
@@ -810,6 +811,11 @@ public class SkinnedMeshRendererBones : MonoBehaviour
         }
     }
 
+    public void ChangeScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+    }
+
     private void Intialize()
     {
         isWearableSelectionScreen = false;
@@ -892,11 +898,25 @@ public class SkinnedMeshRendererBones : MonoBehaviour
                     {
                         gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(BeltsSpritePath,
                             belts[i - 1]), typeof(Sprite)) as Sprite;
+
+                        if (i == 0)
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(2).transform.gameObject.SetActive(false);
+                        }
+                        else
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(1).transform.gameObject.SetActive(false);
+                        }
                     }
                     else
                     {
                         gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color = new Color(gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.r,
                             gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.g, gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.b, 0);
+
+                        if(i != 0)
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(1).transform.gameObject.SetActive(true);
+                        }
                     }
                 }
                 else
@@ -905,11 +925,29 @@ public class SkinnedMeshRendererBones : MonoBehaviour
                     {
                         gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(BeltsSpritePath,
                             belts[i + ((currentPage - 1) * (gridObject.transform.childCount - 2))]), typeof(Sprite)) as Sprite;
+
+                        if (i == 0)
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(2).transform.gameObject.SetActive(false);
+                        }
+                        else
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(1).transform.gameObject.SetActive(false);
+                        }
                     }
                     else
                     {
                         gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color = new Color(gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.r,
                             gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.g, gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.b, 0);
+
+                        if (i == 0)
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(2).transform.gameObject.SetActive(true);
+                        }
+                        else
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(1).transform.gameObject.SetActive(true);
+                        }
                     }
                 }
             }
@@ -921,11 +959,25 @@ public class SkinnedMeshRendererBones : MonoBehaviour
                     {
                         gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlassesSpritePath,
                             glasses[i - 1]), typeof(Sprite)) as Sprite;
+
+                        if (i == 0)
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(2).transform.gameObject.SetActive(false);
+                        }
+                        else
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(1).transform.gameObject.SetActive(false);
+                        }
                     }
                     else
                     {
                         gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color = new Color(gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.r,
                             gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.g, gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.b, 0);
+
+                        if (i != 0)
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(1).transform.gameObject.SetActive(true);
+                        }
                     }
                 }
                 else
@@ -934,11 +986,29 @@ public class SkinnedMeshRendererBones : MonoBehaviour
                     {
                         gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlassesSpritePath,
                             glasses[i + ((currentPage - 1) * (gridObject.transform.childCount - 2))]), typeof(Sprite)) as Sprite;
+
+                        if (i == 0)
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(2).transform.gameObject.SetActive(false);
+                        }
+                        else
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(1).transform.gameObject.SetActive(false);
+                        }
                     }
                     else
                     {
                         gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color = new Color(gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.r,
                             gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.g, gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.b, 0);
+
+                        if (i == 0)
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(2).transform.gameObject.SetActive(true);
+                        }
+                        else
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(1).transform.gameObject.SetActive(true);
+                        }
                     }
                 }
             }
@@ -950,11 +1020,25 @@ public class SkinnedMeshRendererBones : MonoBehaviour
                     {
                         gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlovesSpritePath,
                             gloves[i - 1]), typeof(Sprite)) as Sprite;
+
+                        if (i == 0)
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(2).transform.gameObject.SetActive(false);
+                        }
+                        else
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(1).transform.gameObject.SetActive(false);
+                        }
                     }
                     else
                     {
                         gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color = new Color(gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.r,
                             gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.g, gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.b, 0);
+
+                        if (i != 0)
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(1).transform.gameObject.SetActive(true);
+                        }
                     }
                 }
                 else
@@ -963,11 +1047,29 @@ public class SkinnedMeshRendererBones : MonoBehaviour
                     {
                         gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlovesSpritePath,
                             gloves[i + ((currentPage - 1) * (gridObject.transform.childCount - 2))]), typeof(Sprite)) as Sprite;
+
+                        if (i == 0)
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(2).transform.gameObject.SetActive(false);
+                        }
+                        else
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(1).transform.gameObject.SetActive(false);
+                        }
                     }
                     else
                     {
                         gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color = new Color(gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.r,
                             gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.g, gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.b, 0);
+
+                        if (i == 0)
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(2).transform.gameObject.SetActive(true);
+                        }
+                        else
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(1).transform.gameObject.SetActive(true);
+                        }
                     }
                 }
             }
@@ -979,11 +1081,25 @@ public class SkinnedMeshRendererBones : MonoBehaviour
                     {
                         gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(ShoesSpritePath,
                             shoes[i - 1]), typeof(Sprite)) as Sprite;
+
+                        if (i == 0)
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(2).transform.gameObject.SetActive(false);
+                        }
+                        else
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(1).transform.gameObject.SetActive(false);
+                        }
                     }
                     else
                     {
                         gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color = new Color(gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.r,
                             gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.g, gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.b, 0);
+
+                        if (i != 0)
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(1).transform.gameObject.SetActive(true);
+                        }
                     }
                 }
                 else
@@ -992,11 +1108,29 @@ public class SkinnedMeshRendererBones : MonoBehaviour
                     {
                         gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(ShoesSpritePath,
                             shoes[i + ((currentPage - 1) * (gridObject.transform.childCount - 2))]), typeof(Sprite)) as Sprite;
+
+                        if (i == 0)
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(2).transform.gameObject.SetActive(false);
+                        }
+                        else
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(1).transform.gameObject.SetActive(false);
+                        }
                     }
                     else
                     {
                         gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color = new Color(gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.r,
                             gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.g, gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.b, 0);
+
+                        if (i == 0)
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(2).transform.gameObject.SetActive(true);
+                        }
+                        else
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(1).transform.gameObject.SetActive(true);
+                        }
                     }
                 }
             }
@@ -1008,11 +1142,25 @@ public class SkinnedMeshRendererBones : MonoBehaviour
                     {
                         gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(ShortsSpritePath,
                             shorts[i - 1]), typeof(Sprite)) as Sprite;
+
+                        if (i == 0)
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(2).transform.gameObject.SetActive(false);
+                        }
+                        else
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(1).transform.gameObject.SetActive(false);
+                        }
                     }
                     else
                     {
                         gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color = new Color(gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.r,
                             gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.g, gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.b, 0);
+
+                        if (i != 0)
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(1).transform.gameObject.SetActive(true);
+                        }
                     }
                 }
                 else
@@ -1021,11 +1169,29 @@ public class SkinnedMeshRendererBones : MonoBehaviour
                     {
                         gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(ShortsSpritePath,
                             shorts[i + ((currentPage - 1) * (gridObject.transform.childCount - 2))]), typeof(Sprite)) as Sprite;
+
+                        if (i == 0)
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(2).transform.gameObject.SetActive(false);
+                        }
+                        else
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(1).transform.gameObject.SetActive(false);
+                        }
                     }
                     else
                     {
                         gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color = new Color(gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.r,
                             gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.g, gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.b, 0);
+
+                        if (i == 0)
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(2).transform.gameObject.SetActive(true);
+                        }
+                        else
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(1).transform.gameObject.SetActive(true);
+                        }
                     }
                 }
 
