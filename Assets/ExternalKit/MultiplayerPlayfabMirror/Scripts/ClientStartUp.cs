@@ -60,13 +60,18 @@ public class ClientStartUp : MonoBehaviour
 
 	private void OnPlayFabLoginSuccess(LoginResult response)
 	{
-		Debug.Log(response.ToString());
-		if (configuration.ipAddress == "")
+		//Debug.Log(response.ToString());
+		//Debug.Log(configuration.ipAddress == "");
+		//Debug.Log(gameplayView.instance.apiPlayfab.CurrentMultiplayerServerSummary.SessionId==null);
+
+		if (configuration.ipAddress == "" || gameplayView.instance.apiPlayfab.CurrentMultiplayerServerSummary.SessionId==null)
 		{   //We need to grab an IP and Port from a server based on the buildId. Copy this and add it to your Configuration.
+			//Debug.Log(1);
 			RequestMultiplayerServer(); 
 		}
 		else
 		{
+			//Debug.Log(2);
 			ConnectRemoteClient();
 		}
 	}
@@ -102,7 +107,7 @@ public class ClientStartUp : MonoBehaviour
 			networkManager.networkAddress = response.IPV4Address;
 			webTransport.port = (ushort)response.Ports[0].Num;
 		}
-		PlayerPrefs.SetString("ConnectInfo", gameplayView.instance.apiPlayfab.BuildId + "/" + gameplayView.instance.apiPlayfab.CurrentMultiplayerServerSummary.SessionId + "/" + "EastUS");
+		PlayerPrefs.SetString("ConnectInfo", configuration.buildId + "/" + gameplayView.instance.apiPlayfab.CurrentMultiplayerServerSummary.SessionId + "/" + "EastUs");
 		networkManager.StartClient();
 	}
 

@@ -125,7 +125,7 @@ public class API_CryptoFightClub : MonoBehaviour
             if (request.error == null)
             {
                 string result = Encoding.UTF8.GetString(request.downloadHandler.data);
-                Debug.Log(result);
+                //Debug.Log(result);
                 onSuccess?.Invoke(request.downloadHandler.text);
 
             }

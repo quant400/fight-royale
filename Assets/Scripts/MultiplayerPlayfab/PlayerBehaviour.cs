@@ -67,7 +67,7 @@ public class PlayerBehaviour : NetworkBehaviour
         if (isClient)
             SetupComponents();
         
-        Debug.Log(_pAttributes.category);
+        //Debug.Log(_pAttributes.category);
 
         _pStatsController.SetHealth(pHealth);
         if (isLocalPlayer)

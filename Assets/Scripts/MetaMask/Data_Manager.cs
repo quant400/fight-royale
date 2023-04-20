@@ -75,7 +75,7 @@ public class Data_Manager : MonoBehaviour
         Debug.Log("Starting the account");
         try
         {
-            Debug.Log(json);
+            //Debug.Log(json);
 
             var tempAccounts = JsonUtility.FromJson<RootAccount>(json);
 

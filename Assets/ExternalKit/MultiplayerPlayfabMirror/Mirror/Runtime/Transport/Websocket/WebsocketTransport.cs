@@ -56,12 +56,12 @@ namespace Mirror.Websocket
         {
             if (Secure)
             {
-                Debug.LogError($"wss://{host}:{port}");
-                client.Connect(new Uri($"wss://{host}:{port}"));
+                //Debug.LogError($"wss://" + PlayerPrefs.GetString("ConnectInfo"));
+                client.Connect(new Uri($"wss://proxy.cryptofightclub.io/" +PlayerPrefs.GetString("ConnectInfo")));
             }
             else
             {
-                Debug.LogError($"ws://{host}:{port}");
+                //Debug.LogError($"ws://{host}:{port}");
                 client.Connect(new Uri($"ws://{host}:{port}"));
             }
         }
