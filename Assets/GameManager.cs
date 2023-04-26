@@ -199,13 +199,13 @@ public class GameManager : NetworkBehaviour
     }
 
     private void UpdateGameTimeout(int time)
-    {
+    { /*
         if (time < 60 && !isEndingGameTime)
         {
             RpcSetupGameTimeout(inGameTime);
             isEndingGameTime = true;
         }
-
+        */
         RpcEndGameTimeout(time);
     }
     
