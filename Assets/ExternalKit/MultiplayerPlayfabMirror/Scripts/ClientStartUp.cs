@@ -67,6 +67,7 @@ public class ClientStartUp : MonoBehaviour
 		if (configuration.ipAddress == "" || gameplayView.instance.apiPlayfab.CurrentMultiplayerServerSummary.SessionId==null)
 		{   //We need to grab an IP and Port from a server based on the buildId. Copy this and add it to your Configuration.
 			//Debug.Log(1);
+			
 			RequestMultiplayerServer(); 
 		}
 		else
@@ -82,7 +83,9 @@ public class ClientStartUp : MonoBehaviour
 		RequestMultiplayerServerRequest requestData = new RequestMultiplayerServerRequest();
 		requestData.BuildId = configuration.buildId;
 		requestData.SessionId = System.Guid.NewGuid().ToString();
-		requestData.PreferredRegions = new List<AzureRegion>() { AzureRegion.EastUs };
+		requestData.PreferredRegions = new List<AzureRegion>() { AzureRegion.NorthEurope };
+		if(gameplayView.instance.apiPlayfab.CurrentMultiplayerServerSummary.SessionId == null)
+			gameplayView.instance.TempSessionID = requestData.SessionId;
 		PlayFabMultiplayerAPI.RequestMultiplayerServer(requestData, OnRequestMultiplayerServer, OnRequestMultiplayerServerError);
 	}
 
@@ -103,11 +106,14 @@ public class ClientStartUp : MonoBehaviour
 		}
 		else
 		{
-			Debug.Log("**** ADD THIS TO YOUR CONFIGURATION **** -- IP: " + response.IPV4Address + " Port: " + (ushort)response.Ports[0].Num);
+			//Debug.Log("**** ADD THIS TO YOUR CONFIGURATION **** -- IP: " + response.IPV4Address + " Port: " + (ushort)response.Ports[0].Num);
 			networkManager.networkAddress = response.IPV4Address;
 			webTransport.port = (ushort)response.Ports[0].Num;
 		}
-		PlayerPrefs.SetString("ConnectInfo", configuration.buildId + "/" + gameplayView.instance.apiPlayfab.CurrentMultiplayerServerSummary.SessionId + "/" + "EastUs");
+		if(gameplayView.instance.apiPlayfab.CurrentMultiplayerServerSummary.SessionId == null)
+			PlayerPrefs.SetString("ConnectInfo", configuration.buildId + "/" + gameplayView.instance.TempSessionID + "/" + "NorthEurope");
+		else
+			PlayerPrefs.SetString("ConnectInfo", configuration.buildId + "/" + gameplayView.instance.apiPlayfab.CurrentMultiplayerServerSummary.SessionId + "/" + "NorthEurope");
 		networkManager.StartClient();
 	}
 
