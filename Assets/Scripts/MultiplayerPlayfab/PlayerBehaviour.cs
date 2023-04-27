@@ -64,8 +64,12 @@ public class PlayerBehaviour : NetworkBehaviour
 
     void Start()
     {
-        if (isClient)
+        Debug.Log(isClient);
+        if (!isServer)
+        {
             SetupComponents();
+            Debug.Log("ok");
+        }
         
         //Debug.Log(_pAttributes.category);
 
@@ -136,6 +140,7 @@ public class PlayerBehaviour : NetworkBehaviour
 
         if (!isLocalPlayer)
         {
+            Debug.LogError("!Local");
             _pInput.enabled = false;
             //_cControler.enabled = false;
             _tpControler.enabled = false;
@@ -144,6 +149,7 @@ public class PlayerBehaviour : NetworkBehaviour
         }
         else
         {
+            Debug.LogError("Local");
             _pInput.enabled = true;
             Camera_Manager.Instance.followCam.m_Follow = _camTarget;
             ChatGlobal_Manager.Instance.player = this;
