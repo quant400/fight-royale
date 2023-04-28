@@ -172,7 +172,7 @@ public class KeyMaker : MonoBehaviour
     public IEnumerator GetRequest()
     {
         int sequence = UnityEngine.Random.Range(1, 8);
-        Debug.Log(gameplayView.instance.GetLoggedPlayerString());
+        //Debug.Log(gameplayView.instance.GetLoggedPlayerString());
         string xseq = GetXSeqConnect(gameplayView.instance.GetLoggedPlayerString(), sequence);
         string uri="";
         if (buildType == BuildTypeGame.staging)
@@ -207,7 +207,7 @@ public class KeyMaker : MonoBehaviour
                 case UnityWebRequest.Result.Success:
                     ResponseObject temp = JsonUtility.FromJson<ResponseObject>(webRequest.downloadHandler.text);
                     SetCode(temp.code);
-                    Debug.Log(webRequest.downloadHandler.text);
+                    //Debug.Log(webRequest.downloadHandler.text);
                     string json = "{ \"accounts\": " + JsonHelper.ToJson(temp.nfts).Replace("{\"Items\":", "");
                     if (!gameplayView.instance.usingMeta && temp.nfts.Length == 0)
                     {

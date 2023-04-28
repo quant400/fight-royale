@@ -21,6 +21,8 @@ public class gameplayView : MonoBehaviour
 
     public bool logedin=false;
     public Account[] currentNFTs;
+    public API_PlayfabMatchmaking apiPlayfab;
+    public string TempSessionID;
     private void Awake()
     {
         if (instance == null)

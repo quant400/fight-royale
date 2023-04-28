@@ -60,13 +60,19 @@ public class ClientStartUp : MonoBehaviour
 
 	private void OnPlayFabLoginSuccess(LoginResult response)
 	{
-		Debug.Log(response.ToString());
-		if (configuration.ipAddress == "")
+		//Debug.Log(response.ToString());
+		//Debug.Log(configuration.ipAddress == "");
+		//Debug.Log(gameplayView.instance.apiPlayfab.CurrentMultiplayerServerSummary.SessionId==null);
+
+		if (configuration.ipAddress == "" || gameplayView.instance.apiPlayfab.CurrentMultiplayerServerSummary.SessionId==null)
 		{   //We need to grab an IP and Port from a server based on the buildId. Copy this and add it to your Configuration.
+			//Debug.Log(1);
+			
 			RequestMultiplayerServer(); 
 		}
 		else
 		{
+			//Debug.Log(2);
 			ConnectRemoteClient();
 		}
 	}
@@ -77,7 +83,9 @@ public class ClientStartUp : MonoBehaviour
 		RequestMultiplayerServerRequest requestData = new RequestMultiplayerServerRequest();
 		requestData.BuildId = configuration.buildId;
 		requestData.SessionId = System.Guid.NewGuid().ToString();
-		requestData.PreferredRegions = new List<AzureRegion>() { AzureRegion.EastUs };
+		requestData.PreferredRegions = new List<AzureRegion>() { AzureRegion.NorthEurope };
+		if(gameplayView.instance.apiPlayfab.CurrentMultiplayerServerSummary.SessionId == null)
+			gameplayView.instance.TempSessionID = requestData.SessionId;
 		PlayFabMultiplayerAPI.RequestMultiplayerServer(requestData, OnRequestMultiplayerServer, OnRequestMultiplayerServerError);
 	}
 
@@ -89,18 +97,23 @@ public class ClientStartUp : MonoBehaviour
 
 	private void ConnectRemoteClient(RequestMultiplayerServerResponse response = null)
 	{
-		if(response == null) 
-		{
+		if (response == null)
+		{ 
 			networkManager.networkAddress = configuration.ipAddress;
 			webTransport.port = configuration.port;
+				
+			
 		}
 		else
 		{
-			Debug.Log("**** ADD THIS TO YOUR CONFIGURATION **** -- IP: " + response.IPV4Address + " Port: " + (ushort)response.Ports[0].Num);
+			//Debug.Log("**** ADD THIS TO YOUR CONFIGURATION **** -- IP: " + response.IPV4Address + " Port: " + (ushort)response.Ports[0].Num);
 			networkManager.networkAddress = response.IPV4Address;
 			webTransport.port = (ushort)response.Ports[0].Num;
 		}
-
+		if(gameplayView.instance.apiPlayfab.CurrentMultiplayerServerSummary.SessionId == null)
+			PlayerPrefs.SetString("ConnectInfo", configuration.buildId + "/" + gameplayView.instance.TempSessionID + "/" + "NorthEurope");
+		else
+			PlayerPrefs.SetString("ConnectInfo", configuration.buildId + "/" + gameplayView.instance.apiPlayfab.CurrentMultiplayerServerSummary.SessionId + "/" + "NorthEurope");
 		networkManager.StartClient();
 	}
 

@@ -290,15 +290,15 @@ public class Connection_Manager : MonoBehaviour
         {
             try
             {
-                Debug.Log(data);
+                //Debug.Log(data);
                 var json = data;
                 playerPvpScore = JsonUtility.FromJson<CFC.Serializable.PlayerPvpScore>(json);
                 actionOnSuccess(playerPvpScore);
             }
             catch (Exception e)
             {
-                Debug.Log(3);
-                Debug.Log(e);
+                //Debug.Log(3);
+               // Debug.Log(e);
                 actionOnFail(e.Message);
             }
         }

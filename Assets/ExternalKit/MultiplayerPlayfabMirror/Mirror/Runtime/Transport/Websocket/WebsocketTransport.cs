@@ -56,10 +56,11 @@ namespace Mirror.Websocket
         {
             if (Secure)
             {
-                client.Connect(new Uri($"wss://{host}:{port}"));
+                client.Connect(new Uri($"wss://proxy.cryptofightclub.io/" +PlayerPrefs.GetString("ConnectInfo")));
             }
             else
             {
+                //Debug.LogError($"ws://{host}:{port}");
                 client.Connect(new Uri($"ws://{host}:{port}"));
             }
         }
@@ -109,12 +110,15 @@ namespace Mirror.Websocket
                 server._sslConfig = new Server.SslConfiguration
                 {
                     Certificate = new System.Security.Cryptography.X509Certificates.X509Certificate2(
-                        System.IO.Path.Combine(Application.dataPath, CertificatePath),
-                        CertificatePassword),
+                        CertificatePath,CertificatePassword),
                     ClientCertificateRequired = false,
                     CheckCertificateRevocation = false,
                     EnabledSslProtocols = System.Security.Authentication.SslProtocols.Default
                 };
+
+                var cert = new System.Security.Cryptography.X509Certificates.X509Certificate2(CertificatePath, CertificatePassword);
+                Debug.Log(cert.Subject);
+                Debug.Log(cert.HasPrivateKey);
             }
             _ = server.Listen(port);
         }

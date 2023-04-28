@@ -62,7 +62,7 @@ public class TPFightingController : MonoBehaviour
 
     void Update()
     {
-        if (_player.isServer) return;
+        if (_player.isServer || !_player.isLocalPlayer) return;
 
         _player._cControler.stepOffset = _player._tpControler.Grounded ? _stepOffset : 0.1f;
         

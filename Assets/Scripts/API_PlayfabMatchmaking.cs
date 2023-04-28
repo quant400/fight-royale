@@ -15,7 +15,7 @@ public class API_PlayfabMatchmaking : MonoBehaviour
     [Header("PlayfabAPI")]
     [SerializeField] private string baseURL = "https://C5FA3.playfabapi.com/";
     [SerializeField] private string SecretKey = "3W4J5SK6W8GWHZKMH89GAP3FS1CN5YF83436XAFMXMKGCMJASW";
-    [SerializeField] private string Region = "EastUS";
+    [SerializeField] private string Region = "NorthEurope";
 
     [SerializeField] private string _BuildId = null;
 
