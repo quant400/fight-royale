@@ -938,7 +938,7 @@ MonoBehaviour:
   baseURL: https://C5FA3.playfabapi.com/
   SecretKey: 3W4J5SK6W8GWHZKMH89GAP3FS1CN5YF83436XAFMXMKGCMJASW
   Region: NorthEurope
-  _BuildId: c92cb46e-bc7a-4412-97c3-de8c19ee35bd
+  _BuildId: 62ff08f3-7e5f-4708-9684-db8874a08bb6
   EntityToken: 
   EntityTokenResponse:
     code: 0
@@ -4015,7 +4015,7 @@ PrefabInstance:
     - target: {fileID: 5479180407007317759, guid: dcade7979c3da534db27311c23ab15d5,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -1694442.9
+      value: -1699365.4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dcade7979c3da534db27311c23ab15d5, type: 3}
@@ -4523,6 +4523,7 @@ MonoBehaviour:
   logedin: 0
   currentNFTs: []
   apiPlayfab: {fileID: 328948564}
+  TempSessionID: 
 --- !u!114 &1127853166
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5104,6 +5105,11 @@ PrefabInstance:
     - target: {fileID: 7174127214310805448, guid: 6729c163af2ca3b4ca895947a301f316,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7174127214378743780, guid: 6729c163af2ca3b4ca895947a301f316,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7174127214378743802, guid: 6729c163af2ca3b4ca895947a301f316,

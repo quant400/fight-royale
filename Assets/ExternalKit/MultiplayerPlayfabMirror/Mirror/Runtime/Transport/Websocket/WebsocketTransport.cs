@@ -56,7 +56,6 @@ namespace Mirror.Websocket
         {
             if (Secure)
             {
-                Debug.LogError($"wss://" + PlayerPrefs.GetString("ConnectInfo"));
                 client.Connect(new Uri($"wss://proxy.cryptofightclub.io/" +PlayerPrefs.GetString("ConnectInfo")));
             }
             else
