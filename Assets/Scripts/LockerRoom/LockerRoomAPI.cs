@@ -29,9 +29,7 @@ public class LockerRoomAPI : MonoBehaviour
     {
         public int id;
 
-        public string name;
-
-        public string slot;
+        public int sku;
 
         public string is_equiped;
 
@@ -66,9 +64,7 @@ public class LockerRoomAPI : MonoBehaviour
 
         //MintWearable("175", "SHORTS");
 
-        //GetWearables("hassan.iqbal@quids.tech$$$0tuicf75vgosrhtbpywalketugg2");
-
-        GetWearables("175");
+        GetWearables(gameplayView.instance.currentNFTs[0].id);
     }
 
     // Update is called once per frame
@@ -165,8 +161,7 @@ public class LockerRoomAPI : MonoBehaviour
                 for (int i = 0; i < r.wearables.Length; i++)
                 {
                     Debug.Log("id: = " + r.wearables[i].id);
-                    Debug.Log("name: = " + r.wearables[i].name);
-                    Debug.Log("slot: = " + r.wearables[i].slot);
+                    Debug.Log("name: = " + r.wearables[i].sku);
                     Debug.Log("is_equiped: = " + r.wearables[i].is_equiped);
                     Debug.Log("health: = " + r.wearables[i].health);
                 }

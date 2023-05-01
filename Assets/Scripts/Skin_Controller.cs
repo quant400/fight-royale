@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 
@@ -9,9 +10,21 @@ public class Skin_Controller : MonoBehaviour
     [SerializeField] private SkinnedMeshRenderer[] _meshRenderer;
     [SerializeField] private PlayerBehaviour _player;
 
+    private string[] wearablesWorn;
+    private string BeltsModelsPath = "WearableModels/Belts";
+
+    private string GlassesModelsPath = "WearableModels/Glasses";
+
+    private string GlovesModelsPath = "WearableModels/Gloves";
+
+    private string ShoesModelsPath = "WearableModels/Shoes";
+
+    private string ShortsModelsPath = "WearableModels/Shorts";
+
     private string currentSkin;
     private bool _isLocalPlayer;
-    
+
+    private Transform rootBone;
     
     void Awake()
     {
@@ -31,6 +44,10 @@ public class Skin_Controller : MonoBehaviour
 
     void Start()
     {
+        wearablesWorn = new string[] { "Shorts_world-champion", "Gloves_mediocre" };
+
+        SetUpSkin("a rod");
+
         if (_isLocalPlayer)
         {
             Character_Manager.Instance?.OnCharacterChanged.AddListener(SetUpSkin);
@@ -44,8 +61,12 @@ public class Skin_Controller : MonoBehaviour
     
     public void SetUpSkin(string skinName)
     {
+        /*
         var currentCharacter = Character_Manager.Instance.GetCharacters.FirstOrDefault(
             auxChar => auxChar.Name.ToLower().Equals(skinName.ToLower()));
+        */
+
+        Character currentCharacter = Resources.Load("Characters/a rod") as Character;
 
         if (currentCharacter != null)
         {
@@ -90,7 +111,61 @@ public class Skin_Controller : MonoBehaviour
             }
             _meshRenderer[i].bones = bones;
 
+            rootBone = _meshRenderer[i].rootBone;
+
             _meshRenderer[i].gameObject.name = newMeshRenderers[i].gameObject.name;
         }
+
+        GameObject modelToInstantiate = null;
+
+        int childIndex;
+
+        GameObject wearable;
+
+        SkinnedMeshRenderer spawnedSkinnedMeshRenderer;
+
+        foreach (string wearableWorn in wearablesWorn)
+        {
+            Debug.Log("Wearables Worn");
+
+            var x = wearableWorn.Split('_');
+
+            Debug.Log("WearableModels/" + x[0]);
+
+            modelToInstantiate = Resources.Load(Path.Combine("WearableModels/" + x[0], x[1])) as GameObject;
+
+            GameObject instantiatedWearable = Instantiate(modelToInstantiate);
+
+            childIndex = GetIndex(x[0]);
+
+            if (childIndex != -1)
+            {
+                wearable = instantiatedWearable.transform.GetChild(1).gameObject;
+
+                spawnedSkinnedMeshRenderer = wearable.GetComponent<SkinnedMeshRenderer>();
+
+                spawnedSkinnedMeshRenderer.bones = gameObject.transform.GetChild(childIndex).GetComponent<SkinnedMeshRenderer>().bones;
+                spawnedSkinnedMeshRenderer.rootBone = rootBone;
+
+                wearable.transform.parent = gameObject.transform;
+                Destroy(gameObject.transform.GetChild(childIndex).transform.gameObject);
+                Destroy(instantiatedWearable);
+                wearable.transform.SetSiblingIndex(childIndex);
+            }
+        }
     }
+
+    private int GetIndex(string wearableType)
+    {
+        switch (wearableType)
+        {
+            case "Gloves":
+                return 8;
+            case "Shorts":
+                return 12;
+        }
+
+        return -1;
+    }
+
 }

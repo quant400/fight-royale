@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
 using UnityEngine.SceneManagement;
+using CFC.Serializable;
 
 public class SkinnedMeshRendererBones : MonoBehaviour
 {
@@ -52,6 +54,8 @@ public class SkinnedMeshRendererBones : MonoBehaviour
     private int currentShoes;
     public List<string> shorts;
     private int currentShort;
+    public List<string> masks;
+    private int currentMask;
 
     private Transform rootBone;
 
@@ -67,6 +71,13 @@ public class SkinnedMeshRendererBones : MonoBehaviour
 
     [SerializeField]
     private GameObject[] wearableButtons;
+
+    [SerializeField]
+    private GameObject[] wearableUI;
+
+
+    [SerializeField]
+    private Slider[] slidersUI;
 
     private Button[] objectButtons;
 
@@ -99,24 +110,35 @@ public class SkinnedMeshRendererBones : MonoBehaviour
 
     private string characterModelsPath = "FIGHTERS2.0Redone";
 
-    private string BeltsModelsPath = "WearableModels/Belts";
-    private string BeltsSpritePath = "DisplaySprites/Wearables/Belts/";
+    private const string BeltsModelsPath = "WearableModels/Belts";
+    private const string BeltsSpritePath = "DisplaySprites/Wearables/Belts/";
 
-    private string GlassesModelsPath = "WearableModels/Glasses";
-    private string GlassesSpritePath = "DisplaySprites/Wearables/Glasses/";
+    private const string GlassesModelsPath = "WearableModels/Glasses";
+    private const string GlassesSpritePath = "DisplaySprites/Wearables/Glasses/";
 
-    private string GlovesModelsPath = "WearableModels/Gloves";
-    private string GlovesSpritePath = "DisplaySprites/Wearables/Gloves/";
+    private const string GlovesModelsPath = "WearableModels/Gloves";
+    private const string GlovesSpritePath = "DisplaySprites/Wearables/Gloves/";
 
-    private string ShoesModelsPath = "WearableModels/Shoes";
-    private string ShoesSpritePath = "DisplaySprites/Wearables/Shoes/";
+    private const string ShoesModelsPath = "WearableModels/Shoes";
+    private const string ShoesSpritePath = "DisplaySprites/Wearables/Shoes/";
 
-    private string ShortsModelsPath = "WearableModels/Shorts";
-    private string ShortsSpritePath = "DisplaySprites/Wearables/Shorts/";
+    private const string ShortsModelsPath = "WearableModels/Shorts";
+    private const string ShortsSpritePath = "DisplaySprites/Wearables/Shorts/";
+
+    private const string MasksModelsPath = "WearableModels/Masks";
+    private const string MasksSpritePath = "DisplaySprites/Wearables/Masks/";
     [SerializeField]
     RuntimeAnimatorController oldConttoller, controller;
     [SerializeField]
     Avatar avatar;
+
+    Account[] myNFT;
+
+    List<Attribute2> characterAttributes;
+
+    private const string CSV_FILE_PATH = "CSV/WearableDatabase";
+
+    private WearableDatabaseReader wearableDatabase;
 
     // Start is called before the first frame update
     void Start()
@@ -138,6 +160,43 @@ public class SkinnedMeshRendererBones : MonoBehaviour
     void Update()
     {
         
+    }
+
+    internal void SetData(Account[] nFTData)
+    {
+        myNFT = nFTData;
+    }
+
+    private void GetCharacterModelArray()
+    {
+        for (int i = 0; i < myNFT.Length; i++)
+        {
+            string charName = NameToSlugConvert(myNFT[i].name);
+
+            models.Add(charName);
+
+            Debug.Log(charName);
+        }
+    }
+
+    private void GetCharacterAttributes(int index)
+    {
+        characterAttributes = myNFT[index].attributes;
+
+        SetAttributeSliders();
+    }
+
+    private void GetWearablesModelArray()
+    {
+
+    }
+
+    private void SetAttributeSliders()
+    {
+        for (int i = 0; i < slidersUI.Length; i++)
+        {
+            slidersUI[i].value = float.Parse(characterAttributes[i].value, CultureInfo.InvariantCulture.NumberFormat);
+        }
     }
 
     private void ActiveModelSwap(string model)
@@ -176,14 +235,16 @@ public class SkinnedMeshRendererBones : MonoBehaviour
 
         currentShort = -1;
 
-        if(!changeAnimatorCoroutine)
+        currentMask = -1;
+
+        if (!changeAnimatorCoroutine)
         {
             StartCoroutine(ChangeAnimator(0.01f, modelToInstantiate));
         }
 
         Destroy(currentActiveModel);
 
-        modelName.text = model;
+        modelName.text = model.ToUpper();
     }
 
     public void ModelRightButton()
@@ -194,6 +255,8 @@ public class SkinnedMeshRendererBones : MonoBehaviour
         {
             currentModel = 0;
         }
+
+        GetCharacterAttributes(currentModel);
 
         ActiveModelSwap(models[currentModel]);
     }
@@ -206,6 +269,8 @@ public class SkinnedMeshRendererBones : MonoBehaviour
         {
             currentModel = models.Count - 1;
         }
+
+        GetCharacterAttributes(currentModel);
 
         ActiveModelSwap(models[currentModel]);
     }
@@ -334,6 +399,10 @@ public class SkinnedMeshRendererBones : MonoBehaviour
             {
                 modelToInstantiate = Resources.Load(Path.Combine(ShortsModelsPath, wearableModel)) as GameObject;
             }
+            else if (wearableButtonSelected[5] == 1)
+            {
+                modelToInstantiate = Resources.Load(Path.Combine(MasksModelsPath, wearableModel)) as GameObject;
+            }
 
         }
 
@@ -364,6 +433,10 @@ public class SkinnedMeshRendererBones : MonoBehaviour
         else if (wearableButtonSelected[4] == 1)
         {
             childIndex = playerModelParentObject.transform.childCount - 1;
+        }
+        else if (wearableButtonSelected[5] == 1)
+        {
+            
         }
 
         if (models.Contains(wearableModel))
@@ -507,7 +580,7 @@ public class SkinnedMeshRendererBones : MonoBehaviour
                 {
                     WearableSwapper(belts[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]);
 
-                    wearableButtons[1].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(BeltsSpritePath,
+                    wearableButtons[4].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(BeltsSpritePath,
                         belts[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]), typeof(Sprite)) as Sprite;
                 }
             }
@@ -517,7 +590,7 @@ public class SkinnedMeshRendererBones : MonoBehaviour
                 {
                     WearableSwapper(glasses[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]);
 
-                    wearableButtons[1].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlassesSpritePath,
+                    wearableButtons[2].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlassesSpritePath,
                         glasses[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]), typeof(Sprite)) as Sprite;
                 }
             }
@@ -537,7 +610,7 @@ public class SkinnedMeshRendererBones : MonoBehaviour
                 {
                     WearableSwapper(shoes[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]);
 
-                    wearableButtons[1].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(ShoesSpritePath,
+                    wearableButtons[3].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(ShoesSpritePath,
                         shoes[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]), typeof(Sprite)) as Sprite;
                 }
             }
@@ -551,7 +624,17 @@ public class SkinnedMeshRendererBones : MonoBehaviour
                         shorts[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]), typeof(Sprite)) as Sprite;
                 }
             }
-            
+            else if (wearableButtonSelected[5] == 1)
+            {
+                if ((wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) < masks.Count)
+                {
+                    WearableSwapper(shorts[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]);
+
+                    wearableButtons[1].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(MasksSpritePath,
+                        masks[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]), typeof(Sprite)) as Sprite;
+                }
+            }
+
         }
     }
 
@@ -686,6 +769,21 @@ public class SkinnedMeshRendererBones : MonoBehaviour
         }
     }
 
+    public void MasksButton()
+    {
+        for (int i = 0; i < wearableButtonSelected.Length; i++)
+        {
+            if (i == 5)
+            {
+                wearableButtonSelected[i] = 1;
+            }
+            else
+            {
+                wearableButtonSelected[i] = 0;
+            }
+        }
+    }
+
     IEnumerator ChangeAnimator(float secs, GameObject model)
     {
         playerAnimator.runtimeAnimatorController = oldConttoller;
@@ -786,6 +884,22 @@ public class SkinnedMeshRendererBones : MonoBehaviour
                     }
                 }
             }
+            else if (wearableButtonSelected[5] == 1)
+            {
+                totalPages = masks.Count / (gridObject.transform.childCount - 1);
+
+                if (masks.Count < (gridObject.transform.childCount - 1))
+                {
+                    totalPages += 1;
+                }
+                else
+                {
+                    if (masks.Count % (gridObject.transform.childCount - 1) != 0)
+                    {
+                        totalPages += 1;
+                    }
+                }
+            }
 
             currentPage = 1;
 
@@ -818,6 +932,22 @@ public class SkinnedMeshRendererBones : MonoBehaviour
 
     private void Intialize()
     {
+        wearableDatabase = new WearableDatabaseReader();
+        wearableDatabase.LoadData(CSV_FILE_PATH);
+
+        if (gameplayView.instance)
+        {
+            Account[] used = gameplayView.instance.currentNFTs;
+
+            SetData(used);
+
+            GetCharacterModelArray();
+
+            GetCharacterAttributes(0);
+
+            GetWearablesModelArray();
+        }
+
         isWearableSelectionScreen = false;
 
         playerBodyRectTransform = playerBody.GetComponent<RectTransform>();
@@ -834,18 +964,21 @@ public class SkinnedMeshRendererBones : MonoBehaviour
 
         canvasGroups = new CanvasGroup[wearableButtons.Length];
 
-        wearableButtonSelected = new int[5];
+        wearableButtonSelected = new int[wearableButtons.Length];
 
-        for (int i = 0; i < wearableButtons.Length; i++)
+        for (int i = 0; i < wearableUI.Length; i++)
         {
-            objectButtons[i] = wearableButtons[i].GetComponent<Button>();
+            objectButtons[i] = wearableUI[i].GetComponent<Button>();
 
-            rectTransforms[i] = wearableButtons[i].GetComponent<RectTransform>();
+            rectTransforms[i] = wearableUI[i].GetComponent<RectTransform>();
 
-            canvasGroups[i] = wearableButtons[i].GetComponent<CanvasGroup>();
+            canvasGroups[i] = wearableUI[i].GetComponent<CanvasGroup>();
         }
 
-        models = ModelNames(characterModelsPath);
+        if (!gameplayView.instance)
+        {
+            models = ModelNames(characterModelsPath);
+        }
 
         belts = ModelNames(BeltsModelsPath);
 
@@ -856,6 +989,8 @@ public class SkinnedMeshRendererBones : MonoBehaviour
         shoes = ModelNames(ShoesModelsPath);
 
         shorts = ModelNames(ShortsModelsPath);
+
+        masks = ModelNames(MasksModelsPath);
     }
 
     private void EnableInteractable()
@@ -1196,21 +1331,83 @@ public class SkinnedMeshRendererBones : MonoBehaviour
                 }
 
             }
+            else if (wearableButtonSelected[5] == 1)
+            {
+                if (currentPage == 1)
+                {
+                    if (i < masks.Count + 1 && i > 0)
+                    {
+                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(MasksSpritePath,
+                            masks[i - 1]), typeof(Sprite)) as Sprite;
+
+                        if (i == 0)
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(2).transform.gameObject.SetActive(false);
+                        }
+                        else
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(1).transform.gameObject.SetActive(false);
+                        }
+                    }
+                    else
+                    {
+                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color = new Color(gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.r,
+                            gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.g, gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.b, 0);
+
+                        if (i != 0)
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(1).transform.gameObject.SetActive(true);
+                        }
+                    }
+                }
+                else
+                {
+                    if (i + ((currentPage - 1) * (gridObject.transform.childCount - 2)) < masks.Count)
+                    {
+                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(MasksSpritePath,
+                            masks[i + ((currentPage - 1) * (gridObject.transform.childCount - 2))]), typeof(Sprite)) as Sprite;
+
+                        if (i == 0)
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(2).transform.gameObject.SetActive(false);
+                        }
+                        else
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(1).transform.gameObject.SetActive(false);
+                        }
+                    }
+                    else
+                    {
+                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color = new Color(gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.r,
+                            gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.g, gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color.b, 0);
+
+                        if (i == 0)
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(2).transform.gameObject.SetActive(true);
+                        }
+                        else
+                        {
+                            gridObject.transform.GetChild(i).transform.GetChild(1).transform.gameObject.SetActive(true);
+                        }
+                    }
+                }
+
+            }
         }
         
     }
 
     private void GoToSelectionScreenAnimation()
     {
-        for (int i = 0; i < wearableButtons.Length; i++)
+        for (int i = 0; i < wearableUI.Length; i++)
         {
             canvasGroups[i].DOFade(0.0f, 0.5f);
 
             rectTransforms[i].DOScale(new Vector3(0, 0, 0), 1);
 
             //playerBodyRectTransform.DOLocalMoveX(50, 0.5f);
-
-            baseObjectRectTransform.DOLocalMoveX(-400, 0.5f);
+            
+            baseObjectRectTransform.DOLocalMoveX(-100, 0.5f);
 
             gridObjectCanvasGroup.DOFade(1.0f, 0.5f);
 
@@ -1220,7 +1417,7 @@ public class SkinnedMeshRendererBones : MonoBehaviour
 
     private void WearableSelectedAnimation()
     {
-        for (int i = 0; i < wearableButtons.Length; i++)
+        for (int i = 0; i < wearableUI.Length; i++)
         {
             canvasGroups[i].DOFade(1.0f, 0.5f);
 
@@ -1255,5 +1452,13 @@ public class SkinnedMeshRendererBones : MonoBehaviour
 
         // Return the array of file names
         return fileNames;
+    }
+
+    string NameToSlugConvert(string name)
+    {
+        string slug;
+        slug = name.ToLower().Replace(".", "").Replace("'", "").Replace(" ", "-");
+        return slug;
+
     }
 }
