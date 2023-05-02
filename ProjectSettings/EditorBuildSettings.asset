@@ -11,6 +11,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Scenes/Game/Game.unity
     guid: 001be86423cd44a4fadc778408341f8f
+  - enabled: 1
+    path: Assets/Scenes/LockerRoomTest.unity
+    guid: efe0cb91dc68f224b9d8b7844f5e6633
+  - enabled: 1
+    path: Assets/Scenes/MysteryBox.unity
+    guid: 76df33084fbbd2442bfb4ba59a3833fd
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 9e7be553448fa2546aea5752021cbcf7,
       type: 2}

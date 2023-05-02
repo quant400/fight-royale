@@ -88,6 +88,7 @@ public class Character_Manager : MonoBehaviour
     public void ChangeCharacter(string name)
     {
         _selectedCharacter = _characters.FirstOrDefault(auxCharacter => auxCharacter.Name.Equals(name));
+
         OnCharacterChanged?.Invoke();
         var test = Data_Manager.Instance.selectedAccount;
     }

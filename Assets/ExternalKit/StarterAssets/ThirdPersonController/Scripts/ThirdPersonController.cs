@@ -100,6 +100,9 @@ namespace StarterAssets
 
         public bool canMove = false;
 
+        //locker room
+        public bool isLockerRoom=false;
+
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
         private PlayerInput _playerInput;
 #endif
@@ -160,7 +163,8 @@ namespace StarterAssets
 
             if (canMove) 
             {
-                JumpAndGravity();
+                if (!isLockerRoom)
+                    JumpAndGravity();
                 GroundedCheck();
                 Move();
             }            
@@ -273,7 +277,8 @@ namespace StarterAssets
             Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
 
             // move the player
-            _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
+            if(!isLockerRoom)
+                _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
                              new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
 
             // update animator if using character

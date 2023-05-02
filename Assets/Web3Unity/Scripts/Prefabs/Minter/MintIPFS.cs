@@ -14,7 +14,7 @@ public class MintIPFS : MonoBehaviour
     public string to = "0x7259E32e35cf880aEACfbD412E7F4Baa8606e04c";
 
     async public void MintButtonIPFS()
-    {
+    {/*
         var data = System.Text.Encoding.UTF8.GetBytes("YOUR_DATA");
         
         IPFS ipfs = new IPFS("YOUR_CHAINSAFE_STORE_API_KEY");
@@ -53,5 +53,6 @@ public class MintIPFS : MonoBehaviour
                 nftResponse.tx.gasPrice, nftResponse.tx.gasLimit, "");
             print("Response: " + responseBroadcast);
         }
+        */
     }
 }
