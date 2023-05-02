@@ -95,11 +95,9 @@ namespace StarterAssets
 		
 		private bool CheckState()
 		{
-			return true;
-			/*
+			
 			return GameManager.Instance.currentMatchState != 1 &&
 			       GameManager.Instance.currentMatchState != 3;
-			*/
 		}
 	}
 	
