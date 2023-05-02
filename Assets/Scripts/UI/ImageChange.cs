@@ -20,7 +20,7 @@ public class ImageChange : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(SkinnedMeshRendererBones.Instance.GetisShorts())
+        if(LockerRoomManager.Instance.GetisShorts())
         {
             objectImage.sprite = pantsSprite;
         }

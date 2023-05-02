@@ -17168,7 +17168,7 @@ PrefabInstance:
     - target: {fileID: 5479180407007317759, guid: dcade7979c3da534db27311c23ab15d5,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -1781929.1
+      value: -1824441.6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dcade7979c3da534db27311c23ab15d5, type: 3}
@@ -21636,18 +21636,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bec47771bd7f64e49a8451cf11b76a2a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1261326184
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1261326152}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d4713e63eb8da64d907735841b5737d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1266958077
@@ -26248,6 +26236,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ea4b0563c9afb44a955d7c8591da1fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lockerRoomApi: {fileID: 1671124841}
   playerModelParentObject: {fileID: 100241770}
   gloveUI: {fileID: 958272471}
   shortUI: {fileID: 352028614}
@@ -26258,14 +26247,17 @@ MonoBehaviour:
   - -c3
   models: []
   belts: []
+  beltsSKU: 
   glasses: []
-  gloves:
-  - 
-  - 
-  - 
+  glassesSKU: 
+  gloves: []
+  glovesSKU: 
   shoes: []
+  shoesSKU: 
   shorts: []
+  shortsSKU: 
   masks: []
+  masksSKU: 
   wearableButtons:
   - {fileID: 213610478}
   - {fileID: 57977499}
@@ -26315,6 +26307,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d4713e63eb8da64d907735841b5737d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lockerRoomManager: {fileID: 0}
 --- !u!4 &1539408343
 Transform:
   m_ObjectHideFlags: 0
@@ -29145,6 +29138,7 @@ GameObject:
   - component: {fileID: 1671124838}
   - component: {fileID: 1671124840}
   - component: {fileID: 1671124839}
+  - component: {fileID: 1671124841}
   m_Layer: 5
   m_Name: LockerRoom
   m_TagString: Untagged
@@ -29227,6 +29221,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1671124837}
   m_CullTransparentMesh: 1
+--- !u!114 &1671124841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1671124837}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d4713e63eb8da64d907735841b5737d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lockerRoomManager: {fileID: 1539408340}
 --- !u!1 &1678041856
 GameObject:
   m_ObjectHideFlags: 0
@@ -34756,7 +34763,7 @@ PrefabInstance:
     - target: {fileID: 1286077923209006574, guid: c1b9d5fb13380894ea00e45fc3d337fa,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 307.47818
       objectReference: {fileID: 0}
     - target: {fileID: 1286077923209006574, guid: c1b9d5fb13380894ea00e45fc3d337fa,
         type: 3}
@@ -34803,7 +34810,7 @@ PrefabInstance:
     - target: {fileID: 1286077924675431207, guid: c1b9d5fb13380894ea00e45fc3d337fa,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 307.47818
       objectReference: {fileID: 0}
     - target: {fileID: 1286077924675431207, guid: c1b9d5fb13380894ea00e45fc3d337fa,
         type: 3}

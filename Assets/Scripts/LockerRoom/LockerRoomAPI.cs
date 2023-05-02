@@ -4,57 +4,61 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 
+public struct MintRequest
+{
+    public string id;
+    public string slot;
+}
+
+public struct MintReply
+{
+    public bool status;
+}
+
+
+
+public struct GetWearable
+{
+    public string id;
+}
+
+[System.Serializable]
+public struct Wearable
+{
+    public int id;
+
+    public int sku;
+
+    public string is_equiped;
+
+    public int health;
+}
+
+
+public struct WearableReply
+{
+    public int num;
+
+    public Wearable[] wearables;
+}
+
+
+
+public struct EquipWearable
+{
+    public string id;
+}
+
+public struct EquipWearableReply
+{
+    public bool status;
+}
+
+
 public class LockerRoomAPI : MonoBehaviour
 {
-    public struct MintRequest
-    {
-        public string id;
-        public string slot;
-    }
-
-    public struct MintReply
-    {
-        public bool status;
-    }
-
-
-
-    public struct GetWearable
-    {
-        public string id;
-    }
-
-    [System.Serializable]
-    public struct Wearable
-    {
-        public int id;
-
-        public int sku;
-
-        public string is_equiped;
-
-        public int health;
-    }
-
-
-    public struct WearableReply
-    {
-        public int num;
-
-        public Wearable[] wearables;
-    }
-
-
-
-    public struct EquipWearable
-    {
-        public string id;
-    }
-
-    public struct EquipWearableReply
-    {
-        public bool status;
-    }
+    [SerializeField]
+    private LockerRoomManager lockerRoomManager;
 
 
     // Start is called before the first frame update
@@ -64,9 +68,9 @@ public class LockerRoomAPI : MonoBehaviour
 
         //MintWearable("175", "SHORTS");
 
-        GetWearables(gameplayView.instance.currentNFTs[0].id);
+        //GetWearables(gameplayView.instance.currentNFTs[0].id);
     }
-
+    
     // Update is called once per frame
     void Update()
     {
@@ -87,6 +91,8 @@ public class LockerRoomAPI : MonoBehaviour
     {
         StartCoroutine(EquipWearableRequest(assetId));
     }
+
+
 
     IEnumerator GetMint(string assetId, string assetSlot)
     {
@@ -112,6 +118,8 @@ public class LockerRoomAPI : MonoBehaviour
             {
                 string result = Encoding.UTF8.GetString(request.downloadHandler.data);
                 MintReply r = JsonUtility.FromJson<MintReply>(request.downloadHandler.text);
+
+                gameplayView.instance.mintReply = r;
 
                 Debug.Log("status: = " + r.status);
 
@@ -156,15 +164,22 @@ public class LockerRoomAPI : MonoBehaviour
                 string result = Encoding.UTF8.GetString(request.downloadHandler.data);
                 WearableReply r = JsonUtility.FromJson<WearableReply>(request.downloadHandler.text);
 
+                gameplayView.instance.wearableReply = r;
+
+
+                /*
                 Debug.Log("num: = " + r.num);
 
                 for (int i = 0; i < r.wearables.Length; i++)
                 {
                     Debug.Log("id: = " + r.wearables[i].id);
-                    Debug.Log("name: = " + r.wearables[i].sku);
+                    Debug.Log("sku: = " + r.wearables[i].sku);
                     Debug.Log("is_equiped: = " + r.wearables[i].is_equiped);
                     Debug.Log("health: = " + r.wearables[i].health);
                 }
+                */
+
+                lockerRoomManager.GetWearablesModelArray();
             }
             else
             {
@@ -196,6 +211,8 @@ public class LockerRoomAPI : MonoBehaviour
             {
                 string result = Encoding.UTF8.GetString(request.downloadHandler.data);
                 EquipWearableReply r = JsonUtility.FromJson<EquipWearableReply>(request.downloadHandler.text);
+
+                gameplayView.instance.equipWearableReply = r;
 
                 Debug.Log("status: = " + r.status);
                 /*

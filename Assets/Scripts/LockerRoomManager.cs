@@ -9,7 +9,7 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using CFC.Serializable;
 
-public class SkinnedMeshRendererBones : MonoBehaviour
+public class LockerRoomManager : MonoBehaviour
 {
     /*
     [SerializeField] private SkinnedMeshRenderer skinnedMeshRendererPrefab;
@@ -17,7 +17,7 @@ public class SkinnedMeshRendererBones : MonoBehaviour
     [SerializeField] private Transform rootBone;
     */
 
-    public static SkinnedMeshRendererBones Instance { get; private set; }
+    public static LockerRoomManager Instance { get; private set; }
 
     private void Awake()
     {
@@ -33,6 +33,9 @@ public class SkinnedMeshRendererBones : MonoBehaviour
         }
     }
 
+    [SerializeField]
+    private LockerRoomAPI lockerRoomApi;
+
     public GameObject playerModelParentObject;
     private Animator playerAnimator;
 
@@ -45,16 +48,22 @@ public class SkinnedMeshRendererBones : MonoBehaviour
     public List<string> models;
     private int currentModel;
     public List<string> belts;
+    public List<int> beltsSKU;
     private int currentBelts;
     public List<string> glasses;
+    public List<int> glassesSKU;
     private int currentGlasses;
     public List<string> gloves;
+    public List<int> glovesSKU;
     private int currentGlove;
     public List<string> shoes;
+    public List<int> shoesSKU;
     private int currentShoes;
     public List<string> shorts;
+    public List<int> shortsSKU;
     private int currentShort;
     public List<string> masks;
+    public List<int> masksSKU;
     private int currentMask;
 
     private Transform rootBone;
@@ -140,6 +149,8 @@ public class SkinnedMeshRendererBones : MonoBehaviour
 
     private WearableDatabaseReader wearableDatabase;
 
+    private string currentNFT;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -186,15 +197,61 @@ public class SkinnedMeshRendererBones : MonoBehaviour
         SetAttributeSliders();
     }
 
-    private void GetWearablesModelArray()
+    private void CaculateTotalAttrbutes()
     {
 
+    }
+
+    public void GetWearablesModelArray()
+    {
+        for(int i = 0; i < gameplayView.instance.wearableReply.wearables.Length; i++)
+        {
+            if (wearableDatabase.GetSlot(gameplayView.instance.wearableReply.wearables[i].sku) == "Belts")
+            {
+                belts.Add(wearableDatabase.GetSlug(gameplayView.instance.wearableReply.wearables[i].sku));
+
+                beltsSKU.Add(gameplayView.instance.wearableReply.wearables[i].sku);
+            }
+            else if (wearableDatabase.GetSlot(gameplayView.instance.wearableReply.wearables[i].sku) == "Glasses")
+            {
+                glasses.Add(wearableDatabase.GetSlug(gameplayView.instance.wearableReply.wearables[i].sku));
+
+                glassesSKU.Add(gameplayView.instance.wearableReply.wearables[i].sku);
+            }
+            else if (wearableDatabase.GetSlot(gameplayView.instance.wearableReply.wearables[i].sku) == "Gloves")
+            {
+                gloves.Add(wearableDatabase.GetSlug(gameplayView.instance.wearableReply.wearables[i].sku));
+
+                glovesSKU.Add(gameplayView.instance.wearableReply.wearables[i].sku);
+            }
+            else if (wearableDatabase.GetSlot(gameplayView.instance.wearableReply.wearables[i].sku) == "Shoes")
+            {
+                shoes.Add(wearableDatabase.GetSlug(gameplayView.instance.wearableReply.wearables[i].sku));
+
+                shoesSKU.Add(gameplayView.instance.wearableReply.wearables[i].sku);
+            }
+            else if (wearableDatabase.GetSlot(gameplayView.instance.wearableReply.wearables[i].sku) == "Shorts")
+            {
+                shorts.Add(wearableDatabase.GetSlug(gameplayView.instance.wearableReply.wearables[i].sku));
+
+                shortsSKU.Add(gameplayView.instance.wearableReply.wearables[i].sku);
+            }
+            else if (wearableDatabase.GetSlot(gameplayView.instance.wearableReply.wearables[i].sku) == "Masks")
+            {
+                masks.Add(wearableDatabase.GetSlug(gameplayView.instance.wearableReply.wearables[i].sku));
+
+                masksSKU.Add(gameplayView.instance.wearableReply.wearables[i].sku);
+            }
+        }
+        
     }
 
     private void SetAttributeSliders()
     {
         for (int i = 0; i < slidersUI.Length; i++)
         {
+            //Debug.Log(characterAttributes[i].trait_type + " = " + characterAttributes[i].value);
+
             slidersUI[i].value = float.Parse(characterAttributes[i].value, CultureInfo.InvariantCulture.NumberFormat);
         }
     }
@@ -256,6 +313,12 @@ public class SkinnedMeshRendererBones : MonoBehaviour
             currentModel = 0;
         }
 
+        EmptyWearablesLists();
+
+        currentNFT = gameplayView.instance.currentNFTs[currentModel].id;
+
+        lockerRoomApi.GetWearables(currentNFT);
+
         GetCharacterAttributes(currentModel);
 
         ActiveModelSwap(models[currentModel]);
@@ -269,6 +332,12 @@ public class SkinnedMeshRendererBones : MonoBehaviour
         {
             currentModel = models.Count - 1;
         }
+
+        EmptyWearablesLists();
+
+        currentNFT = gameplayView.instance.currentNFTs[currentModel].id;
+
+        lockerRoomApi.GetWearables(currentNFT);
 
         GetCharacterAttributes(currentModel);
 
@@ -941,11 +1010,15 @@ public class SkinnedMeshRendererBones : MonoBehaviour
 
             SetData(used);
 
+            EmptyAllLists();
+
             GetCharacterModelArray();
 
             GetCharacterAttributes(0);
 
-            GetWearablesModelArray();
+            currentNFT = gameplayView.instance.currentNFTs[0].id;
+
+            lockerRoomApi.GetWearables(currentNFT);
         }
 
         isWearableSelectionScreen = false;
@@ -978,19 +1051,51 @@ public class SkinnedMeshRendererBones : MonoBehaviour
         if (!gameplayView.instance)
         {
             models = ModelNames(characterModelsPath);
+
+            belts = ModelNames(BeltsModelsPath);
+
+            glasses = ModelNames(GlassesModelsPath);
+
+            gloves = ModelNames(GlovesModelsPath);
+
+            shoes = ModelNames(ShoesModelsPath);
+
+            shorts = ModelNames(ShortsModelsPath);
+
+            masks = ModelNames(MasksModelsPath);
         }
+    }
 
-        belts = ModelNames(BeltsModelsPath);
+    private void EmptyAllLists()
+    {
+        models.Clear();
 
-        glasses = ModelNames(GlassesModelsPath);
+        belts.Clear();
 
-        gloves = ModelNames(GlovesModelsPath);
+        glasses.Clear();
 
-        shoes = ModelNames(ShoesModelsPath);
+        gloves.Clear();
 
-        shorts = ModelNames(ShortsModelsPath);
+        shoes.Clear();
 
-        masks = ModelNames(MasksModelsPath);
+        shorts.Clear();
+
+        masks.Clear();
+    }
+
+    private void EmptyWearablesLists()
+    {
+        belts.Clear();
+
+        glasses.Clear();
+
+        gloves.Clear();
+
+        shoes.Clear();
+
+        shorts.Clear();
+
+        masks.Clear();
     }
 
     private void EnableInteractable()

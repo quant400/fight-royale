@@ -89,4 +89,14 @@ public class gameplayView : MonoBehaviour
 
        
     }
+
+    #region LockerRoom
+
+    public WearableReply wearableReply;
+
+    public MintReply mintReply;
+
+    public EquipWearableReply equipWearableReply;
+
+    #endregion
 }
