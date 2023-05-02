@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: the baron
   m_EditorClassIdentifier: 
   Name: the baron
-  Asset: {fileID: 919132149155446097, guid: 8ef08dc3e442d9a48a0c50d0846b859e, type: 3}
+  Asset: {fileID: 919132149155446097, guid: 63b9bcb5cce356441977ce6844365bf1, type: 3}
   Texture: {fileID: 2800000, guid: 9f6ceb5938dfba94aad8a8342e5acfac, type: 3}
+  isUnlocked: 1

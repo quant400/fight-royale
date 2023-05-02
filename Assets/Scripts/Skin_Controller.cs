@@ -44,9 +44,7 @@ public class Skin_Controller : MonoBehaviour
 
     void Start()
     {
-        wearablesWorn = new string[] { "Shorts_world-champion", "Gloves_mediocre" };
-
-        SetUpSkin("a rod");
+       
 
         if (_isLocalPlayer)
         {
@@ -61,12 +59,9 @@ public class Skin_Controller : MonoBehaviour
     
     public void SetUpSkin(string skinName)
     {
-        /*
         var currentCharacter = Character_Manager.Instance.GetCharacters.FirstOrDefault(
             auxChar => auxChar.Name.ToLower().Equals(skinName.ToLower()));
-        */
-
-        Character currentCharacter = Resources.Load("Characters/a rod") as Character;
+        wearablesWorn = new string[] { "Shorts_world-champion", "Gloves_mediocre" };
 
         if (currentCharacter != null)
         {

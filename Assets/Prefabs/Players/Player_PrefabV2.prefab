@@ -4896,62 +4896,7 @@ Animator:
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
-  m_WarningMessage: '
-
-    Transform ''mixamorig:LeftFoot'' has been deleted
-
-    Transform
-    ''mixamorig:LeftLeg'' has been deleted
-
-    Transform ''mixamorig:LeftUpLeg''
-    has been deleted
-
-    Transform ''mixamorig:RightFoot'' has been deleted
-
-    Transform
-    ''mixamorig:RightLeg'' has been deleted
-
-    Transform ''mixamorig:RightUpLeg''
-    has been deleted
-
-    Transform ''mixamorig:LeftHand'' has been deleted
-
-    Transform
-    ''mixamorig:LeftForeArm'' has been deleted
-
-    Transform ''mixamorig:LeftArm''
-    has been deleted
-
-    Transform ''mixamorig:LeftShoulder'' has been deleted
-
-    Transform
-    ''mixamorig:Head'' has been deleted
-
-    Transform ''mixamorig:Neck'' has been
-    deleted
-
-    Transform ''mixamorig:RightHand'' has been deleted
-
-    Transform
-    ''mixamorig:RightForeArm'' has been deleted
-
-    Transform ''mixamorig:RightArm''
-    has been deleted
-
-    Transform ''mixamorig:RightShoulder'' has been deleted
-
-    Transform
-    ''mixamorig:Spine2'' has been deleted
-
-    Transform ''mixamorig:Spine1'' has
-    been deleted
-
-    Transform ''mixamorig:Spine'' has been deleted
-
-    Transform
-    ''mixamorig:Hips'' has been deleted
-
-    Transform ''Armature'' has been deleted'
+  m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
@@ -5030,10 +4975,10 @@ MonoBehaviour:
     type: 3}
   kickEffect: {fileID: 2955623459812423943, guid: f5507a8c6a22c404ab324980c4e8a11b,
     type: 3}
-  lHand: {fileID: 0}
-  rHand: {fileID: 0}
-  lFoot: {fileID: 0}
-  rFoot: {fileID: 0}
+  lHand: {fileID: 2143171618687029256}
+  rHand: {fileID: 7039386028693027225}
+  lFoot: {fileID: 4146791737071012777}
+  rFoot: {fileID: 8997855245245557463}
   s: {fileID: 4009009680745551755}
   _damageEffect: {fileID: 2134873211399937939}
   isAction: 0
