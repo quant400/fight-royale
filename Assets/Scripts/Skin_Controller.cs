@@ -61,7 +61,15 @@ public class Skin_Controller : MonoBehaviour
     {
         var currentCharacter = Character_Manager.Instance.GetCharacters.FirstOrDefault(
             auxChar => auxChar.Name.ToLower().Equals(skinName.ToLower()));
-        wearablesWorn = new string[] { "Shorts_world-champion", "Gloves_mediocre" };
+        /*if (GetComponent<PlayerBehaviour>().isLocalPlayer)
+            wearablesWorn = gameplayView.instance.equipedWearables;
+        else if(!GetComponent<PlayerBehaviour>().isLocalPlayer)
+            wearablesWorn = GameManager.Instance.wearablesWorn[GetComponent<PlayerBehaviour>().netIdentity];*/
+        if (GetComponent<PlayerBehaviour>().isLocalPlayer)
+            wearablesWorn = gameplayView.instance.equipedWearables.Split(',');
+        else if(!GetComponent<PlayerBehaviour>().isLocalPlayer)
+            wearablesWorn = GetComponent<PlayerBehaviour>().pWearables.Split(',');
+        Debug.Log((wearablesWorn[0], wearablesWorn[1]));
 
         if (currentCharacter != null)
         {
@@ -126,7 +134,6 @@ public class Skin_Controller : MonoBehaviour
             var x = wearableWorn.Split('_');
 
             Debug.Log("WearableModels/" + x[0]);
-
             modelToInstantiate = Resources.Load(Path.Combine("WearableModels/" + x[0], x[1])) as GameObject;
 
             GameObject instantiatedWearable = Instantiate(modelToInstantiate);

@@ -23,6 +23,7 @@ public class gameplayView : MonoBehaviour
     public Account[] currentNFTs;
     public API_PlayfabMatchmaking apiPlayfab;
     public string TempSessionID;
+    public string equipedWearables;
     private void Awake()
     {
         if (instance == null)
@@ -34,6 +35,8 @@ public class gameplayView : MonoBehaviour
         }
         
         DontDestroyOnLoad(this);
+        //for testing
+        SetRandomWearables();
     }
     private void OnEnable()
     {
@@ -100,5 +103,55 @@ public class gameplayView : MonoBehaviour
 
     public EquipWearableReply equipWearableReply;
 
+    #endregion
+
+    #region testFucntion
+    public void SetRandomWearables()
+    { 
+        equipedWearables="Shorts_" + GetQuality()+","+"Gloves_legendary";
+        Debug.Log(equipedWearables);
+    }
+
+    string GetQuality()
+    {
+        string x1 = "";
+        int temp = Random.Range(0, 9);
+        switch (temp)
+        {
+            case 0:
+                x1 = "average";
+                break;
+            case 1:
+                x1 = "common";
+                break;
+            case 2:
+                x1 = "epic";
+                break;
+            case 3:
+                x1 = "exotic";
+                break;
+            case 4:
+                x1 = "legendary";
+                break;
+            case 5:
+                x1 = "mediocre";
+                break;
+            case 6:
+                x1 = "ordinary";
+                break;
+            case 7:
+                x1 = "rare";
+                break;
+            case 8:
+                x1 = "super-rare";
+                break;
+            case 9:
+                x1 = "world-champion";
+                break;
+
+
+        }
+        return x1;
+    }
     #endregion
 }

@@ -1,19 +1,11 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using CFC;
-using Cinemachine;
 using Mirror;
-using Newtonsoft.Json;
-using PlayFab;
 using StarterAssets;
-using TMPro;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 
 public class PlayerBehaviour : NetworkBehaviour
@@ -45,10 +37,7 @@ public class PlayerBehaviour : NetworkBehaviour
 
     [SyncVar(hook = nameof(OnPlayerBlock))] public bool pIsBlocking;
 
-   /* private void OnScoreChanged(int oidScore, int newScore)
-    {
-        IngameUIControler.instance.UpdateScore(newScore);
-    }*/
+    [SyncVar(hook = nameof(OnPlayerWearableChanged))] public string pWearables;
     private void OnPlayerBlock(bool old, bool value)
     {
         Debug.Log(value);
@@ -76,13 +65,19 @@ public class PlayerBehaviour : NetworkBehaviour
         _pStatsController.SetHealth(pHealth);
         if (isLocalPlayer)
         {
+            Debug.Log(1);
+            //CmdAddWearables(netIdentity, gameplayView.instance.equipedWearables);
+            CmdWearablesAssign(gameplayView.instance.equipedWearables);
             _skinController.SetUpSkin(Character_Manager.Instance.GetCurrentCharacter.name);
             pColor = Color_Manager.Instance.pallete.RandomPlayerColor();
-        }
-
-
+        }/*
+       else if (!isLocalPlayer)
+        {
+            Debug.Log(2);
+            _skinController.SetUpSkin(pSkin);
+        }*/
     }
-
+   
     void OnTriggerEnter(Collider other)
     {
         switch (other.gameObject.tag)
@@ -163,9 +158,14 @@ public class PlayerBehaviour : NetworkBehaviour
     {
         _pStatsController.SetName(pName);
     }
-
+     void OnPlayerWearableChanged(string _, string newWearable)
+    {
+        Debug.Log((_, newWearable));
+        _skinController.SetUpSkin(pSkin);
+    }
     private void OnPlayerSkinChanged(string _, string newSkin)
     {
+        
         _skinController.SetUpSkin(newSkin);
     }
 
@@ -515,6 +515,26 @@ public class PlayerBehaviour : NetworkBehaviour
     }
 
     #endregion
-
+    #region wearables
+   /* [Command]
+    void CmdAddWearables(NetworkIdentity net, string[] s)
+    {
+        Debug.Log(100);
+        GameManager.Instance.AddWearable(net, s);
+    }
+    [Command]
+    void CmdGetWormWearables(NetworkIdentity netId)
+    {
+        Debug.Log(150);
+        GameManager.Instance.GetWormWearables(netId);
+    }*/
+    [Command]
+    void CmdWearablesAssign(string w)
+    {
+        Debug.Log(w);
+        pWearables = w;
+        Debug.Log(pWearables);
+    }
+    #endregion
     #endregion
 }

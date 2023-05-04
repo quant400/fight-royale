@@ -5520,7 +5520,7 @@ MonoBehaviour:
   baseURL: https://C5FA3.playfabapi.com/
   SecretKey: 3W4J5SK6W8GWHZKMH89GAP3FS1CN5YF83436XAFMXMKGCMJASW
   Region: NorthEurope
-  _BuildId: a82a973d-d97b-48a8-b6da-f01dbfaad1b4
+  _BuildId: 62ff08f3-7e5f-4708-9684-db8874a08bb6
   EntityToken: 
   EntityTokenResponse:
     code: 0
@@ -16992,7 +16992,7 @@ PrefabInstance:
     - target: {fileID: 5479180407007317759, guid: dcade7979c3da534db27311c23ab15d5,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -1918081
+      value: -1921213.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dcade7979c3da534db27311c23ab15d5, type: 3}
@@ -18350,6 +18350,7 @@ MonoBehaviour:
   currentNFTs: []
   apiPlayfab: {fileID: 328948564}
   TempSessionID: 
+  equipedWearables: []
 --- !u!114 &1127853166
 MonoBehaviour:
   m_ObjectHideFlags: 0

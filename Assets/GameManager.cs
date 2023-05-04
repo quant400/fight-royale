@@ -9,18 +9,18 @@ using UnityEngine.SceneManagement;
 public class GameManager : NetworkBehaviour
 {
     public static GameManager Instance;
-    
+
     [Header("Variables")]
     public int timeOutTime = 60;
     public int preGameTime = 5;
     public int inGameTime = 600;
     public int postGameTime = 5;
-    
+
     public int minPlayersToPlay = 2;
-    
+
     public bool isEndingGameTime = false;
-    
-    [Header("Components")] 
+
+    [Header("Components")]
     public MatchManager match;
     public TimerManager timer;
     public CloseAreaManager closeArea;
@@ -32,12 +32,13 @@ public class GameManager : NetworkBehaviour
 
     [SyncVar] public int currentMatchState;
 
+    public Dictionary<NetworkIdentity, string[]> wearablesWorn = new Dictionary<NetworkIdentity, string[]>();
 
     void Awake()
     {
         if (Instance == null) Instance = this;
         //if (!isServer) return;
-        
+
         Subscribe();
     }
 
@@ -45,16 +46,16 @@ public class GameManager : NetworkBehaviour
     {
         //Base
         match.onChangeState.AddListener((aux) => currentMatchState = aux);
-        
+
         //PreGame
         match.onPreGameState.AddListener(PreGame);
         match.onPreGameState.AddListener(analytics.InitScore);
-        
+
         match.onInGameState.AddListener(StartGameTimeout);
 
         //PostGame
         match.onPostGameState.AddListener(PostGame);
-        match.onPostGameState.AddListener(()=>Invoke("SendScore", 2f));
+        match.onPostGameState.AddListener(() => Invoke("SendScore", 2f));
 
     }
 
@@ -70,7 +71,7 @@ public class GameManager : NetworkBehaviour
             match.OnPlayersChanges();
         }
     }
-    
+
     public void OnClientDisconnect()
     {
         if (isServer)
@@ -79,23 +80,23 @@ public class GameManager : NetworkBehaviour
             {
                 CheckWinner();
             }
-            else 
+            else
             {
                 match.OnPlayersChanges();
             }
 
         }
     }
-    
+
     #region Game
-    
+
     public void PreGame()
     {
         CloseLobby();
     }
-    
 
-    public void UpdateLobbyPlayer(string serverId,int countPlayer)
+
+    public void UpdateLobbyPlayer(string serverId, int countPlayer)
     {
         try
         {
@@ -104,13 +105,13 @@ public class GameManager : NetworkBehaviour
             {
                 Connection_Manager.Instance.Api_PlayfabMatchmaking.SetPlayersOnServer(serverId, countPlayer);
             }
-            
+
         }
         catch (System.Exception e)
         {
             Debug.Log("UpdateLobbyPlayer Error - " + e.Message);
         }
-       
+
     }
 
     public void CloseLobby()
@@ -124,7 +125,7 @@ public class GameManager : NetworkBehaviour
     public void KickDemoPlayers()
     {
         var demoPlayers = FindObjectsOfType<PlayerBehaviour>();
-        foreach (var player in demoPlayers.Where(aux=> aux.isDemo))
+        foreach (var player in demoPlayers.Where(aux => aux.isDemo))
         {
             player.TargetQuitMatch(player.connectionToClient);
         }
@@ -134,7 +135,7 @@ public class GameManager : NetworkBehaviour
     {
         level.ResetPlayers();
         RpcUpdateTimer(time);
-        Debug.Log("Começando em: "+time);
+        Debug.Log("Começando em: " + time);
     }
 
     [ClientRpc]
@@ -142,13 +143,13 @@ public class GameManager : NetworkBehaviour
     {
         timerBehavior.SetupTimer("Game begins in", time);
     }
-    
+
     [ClientRpc]
     public void RpcSetupTimeOutTimer(int time)
     {
         timerBehavior.SetupTimer("Game will start in ", time);
     }
-    
+
     [ClientRpc]
     public void RpcSetupEndingTimer(int time)
     {
@@ -160,7 +161,7 @@ public class GameManager : NetworkBehaviour
     {
         timerBehavior.UpdateTimer(time);
     }
-    
+
     [ClientRpc]
     public void RpcStopTimeOutTimer()
     {
@@ -208,7 +209,7 @@ public class GameManager : NetworkBehaviour
         */
         RpcEndGameTimeout(time);
     }
-    
+
     [ClientRpc]
     public void RpcSetupGameTimeout(int time)
     {
@@ -222,12 +223,62 @@ public class GameManager : NetworkBehaviour
     }
 
     [TargetRpc]
-    public void TargetSendUpdatedScore(NetworkConnection con,int score)
+    public void TargetSendUpdatedScore(NetworkConnection con, int score)
     {
         IngameUIControler.instance.UpdateScore(score);
     }
+
+
+   /* public void AddWearable(NetworkIdentity netId, string[] vals)
+    {
+        Debug.Log(10);
+        wearablesWorn.Add(netId, vals);
+        Debug.Log((netId,wearablesWorn[netId][0]));
+       //RpcGetWearablesWorn(netId, vals);
+        Debug.Log(30);
+    }
+  
+    public void GetWormWearables(NetworkIdentity netId)
+    {
+        Debug.Log(300);
+        RpcSendWearables(netId, wearablesWorn[netId]);
+    }
+    [Command]
+    public void CmdRemoveWearables(NetworkIdentity netId)
+    {
+        wearablesWorn.Remove(netId);
+        RpcRemoveWorn(netId);
+    }
+    [Command]
+    public void CmdClearWearbles()
+    {
+        wearablesWorn.Clear();
+    }
+    [ClientRpc]
+    public void RpcSendWearables(NetworkIdentity con, string[] wearables)
+    {
+        Debug.Log(350);
+        Debug.Log((con, wearables));
+        if(!wearablesWorn.ContainsKey(con))
+            wearablesWorn.Add(con, wearables);
+
+    }
+  [ClientRpc]
+    public void RpcGetWearablesWorn(NetworkIdentity netId,string[]vals)
+    {
+        Debug.Log(20);
+        wearablesWorn.Add(netId, vals);
+        Debug.Log(wearablesWorn[netId][0]);
+    }
+    [ClientRpc]
+    public void RpcRemoveWorn(NetworkIdentity netId)
+    {
+        wearablesWorn.Remove(netId);
+        Debug.Log(wearablesWorn[netId]);
+    }*/
+   
     #endregion
-    
+
     #region Ending
 
     public void CheckWinner()

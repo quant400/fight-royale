@@ -78,6 +78,7 @@ public class CFCNetworkManager : NetworkManager
 
             PlayerBehaviour.playerNames.Remove(((CFCAuth.AuthRequestMessage)conn.authenticationData).authUsername);
             _gameManager.analytics.RemovePlayer(conn.identity);
+            //_gameManager.RpcRemoveWorn(conn.identity);
             //_gameManager.CheckWinner();
                 
             base.OnServerDisconnect(conn);
@@ -92,7 +93,8 @@ public class CFCNetworkManager : NetworkManager
 
             if (//_gameManager.match.currentState != MatchManager.MatchState.Lobby &&
                 NetworkServer.connections.Count <= 0)
-            {   
+            {
+                //_gameManager.CmdClearWearbles();
                 Connection_Manager.Instance.SendOpenLobby();
             
                 //singleton.ServerChangeScene(SceneManager.GetActiveScene().name);
