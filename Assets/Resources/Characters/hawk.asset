@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: hawk
   m_EditorClassIdentifier: 
   Name: hawk
-  Asset: {fileID: 919132149155446097, guid: 5f9eec15b28aa9245ac9dba6d42fadd1, type: 3}
+  Asset: {fileID: 919132149155446097, guid: 49f8c5d5165219547b8d13a7e5dd525d, type: 3}
   Texture: {fileID: 2800000, guid: ecb0548a100ec9b439a4d28da84dba01, type: 3}
+  isUnlocked: 0

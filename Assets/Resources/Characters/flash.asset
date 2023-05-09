@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: flash
   m_EditorClassIdentifier: 
   Name: flash
-  Asset: {fileID: 919132149155446097, guid: 69729e2e4ac48dc42b79d91587597175, type: 3}
+  Asset: {fileID: 919132149155446097, guid: 9cd4db8137609da449cd59131773bd67, type: 3}
   Texture: {fileID: 2800000, guid: bd8f07a96c710f347bd78abdabace73f, type: 3}
+  isUnlocked: 0

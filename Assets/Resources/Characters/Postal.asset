@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Postal
   m_EditorClassIdentifier: 
   Name: postal
-  Asset: {fileID: 919132149155446097, guid: 0020884a95c047849b97063d4c058f04, type: 3}
+  Asset: {fileID: 919132149155446097, guid: a194020594e5f7a4ca8f5f260686dbd3, type: 3}
   Texture: {fileID: 2800000, guid: b50364f64ad94e146967e9558ffede1b, type: 3}
+  isUnlocked: 0

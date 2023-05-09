@@ -113,7 +113,11 @@ public class Skin_Controller : MonoBehaviour
 
             _meshRenderer[i].gameObject.name = newMeshRenderers[i].gameObject.name;
         }
-
+        UpdateWearables();
+       
+    }
+    public void UpdateWearables()
+    {
         GameObject modelToInstantiate = null;
 
         int childIndex;
@@ -121,7 +125,7 @@ public class Skin_Controller : MonoBehaviour
         GameObject wearable;
 
         SkinnedMeshRenderer spawnedSkinnedMeshRenderer;
-        
+
         foreach (string wearableWorn in wearablesWorn)
         {
             var x = wearableWorn.Split('_');
@@ -139,17 +143,27 @@ public class Skin_Controller : MonoBehaviour
 
                 spawnedSkinnedMeshRenderer = wearable.GetComponent<SkinnedMeshRenderer>();
 
-                spawnedSkinnedMeshRenderer.bones = gameObject.transform.GetChild(childIndex).GetComponent<SkinnedMeshRenderer>().bones;
-                spawnedSkinnedMeshRenderer.rootBone = rootBone;
-                wearable.transform.parent = gameObject.transform;
-                Destroy(gameObject.transform.GetChild(childIndex).transform.gameObject);
-                Destroy(instantiatedWearable);
-                wearable.transform.SetSiblingIndex(childIndex);
-                _meshRenderer[GetIndex(x[0])-4] = spawnedSkinnedMeshRenderer;
-            }
-        }
-    }
+                _meshRenderer[GetIndex(x[0]) - 4].sharedMaterial = spawnedSkinnedMeshRenderer.sharedMaterial;
 
+                if (spawnedSkinnedMeshRenderer.sharedMaterials.Length > 1)
+                {
+
+                    _meshRenderer[GetIndex(x[0]) - 4].sharedMaterials = spawnedSkinnedMeshRenderer.sharedMaterials;
+
+                }
+                else
+                {
+                    _meshRenderer[GetIndex(x[0]) - 4].material.mainTexture = spawnedSkinnedMeshRenderer.sharedMaterial.mainTexture;
+                }
+
+
+                _meshRenderer[GetIndex(x[0]) - 4].sharedMesh = spawnedSkinnedMeshRenderer.sharedMesh;
+            }
+
+            Destroy(instantiatedWearable);
+        }
+
+    }
     private int GetIndex(string wearableType)
     {
         switch (wearableType)

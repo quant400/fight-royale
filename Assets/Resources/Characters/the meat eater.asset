@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: the meat eater
   m_EditorClassIdentifier: 
   Name: the meat eater
-  Asset: {fileID: 919132149155446097, guid: 1921ced5611823e4ab1282d1e7711aff, type: 3}
+  Asset: {fileID: 919132149155446097, guid: 97ab8b1933801d5408dc47b12e0d0470, type: 3}
   Texture: {fileID: 2800000, guid: a54359f1dc1d5e745967794b4fdea514, type: 3}
+  isUnlocked: 0

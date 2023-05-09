@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: mighty mouse
   m_EditorClassIdentifier: 
   Name: mighty mouse
-  Asset: {fileID: 919132149155446097, guid: 94be5c2380cfba94791b641b9f0f2037, type: 3}
+  Asset: {fileID: 919132149155446097, guid: be07ca2aaf4173240b677d51c8ee7eef, type: 3}
   Texture: {fileID: 2800000, guid: d1e4213a18a4426438c3059a2e0b226d, type: 3}
+  isUnlocked: 0

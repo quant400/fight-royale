@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: the.cook
   m_EditorClassIdentifier: 
   Name: the cook
-  Asset: {fileID: 919132149155446097, guid: aba6174d9fabe86418feb96602b7e1f0, type: 3}
+  Asset: {fileID: 919132149155446097, guid: 285cb748136fe6e47bf511c9b8ae405a, type: 3}
   Texture: {fileID: 2800000, guid: 49a8d27eb13a0c342a38a2b69c18b5fe, type: 3}
   isUnlocked: 0

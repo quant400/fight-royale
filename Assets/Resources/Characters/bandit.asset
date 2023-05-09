@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: bandit
   m_EditorClassIdentifier: 
   Name: bandit
-  Asset: {fileID: 919132149155446097, guid: 516d022b23848ee478a7418daf988c79, type: 3}
+  Asset: {fileID: 919132149155446097, guid: b75f93b8e3d205340bdefee23ca37878, type: 3}
   Texture: {fileID: 2800000, guid: 287bdca580b358446870c41d402d73e8, type: 3}
+  isUnlocked: 0

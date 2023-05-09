@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: the mexican bee
   m_EditorClassIdentifier: 
   Name: the mexican bee
-  Asset: {fileID: 919132149155446097, guid: 578c46c6755744640a42263c778cd6a1, type: 3}
+  Asset: {fileID: 919132149155446097, guid: eafcce41676e686448ad66615c939476, type: 3}
   Texture: {fileID: 2800000, guid: 44bee82d67c82024d894067f273f61b1, type: 3}
+  isUnlocked: 0

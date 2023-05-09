@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: the vault
   m_EditorClassIdentifier: 
   Name: the vault
-  Asset: {fileID: 919132149155446097, guid: 77f6b32bb15f9aa46968a1a3169b7519, type: 3}
+  Asset: {fileID: 919132149155446097, guid: 6fea76ee01c3c3f4a999f7ae7c40245d, type: 3}
   Texture: {fileID: 2800000, guid: 640d574324ce15242a77518a17f7ca0c, type: 3}
+  isUnlocked: 0

@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: gladiator
   m_EditorClassIdentifier: 
   Name: gladiator
-  Asset: {fileID: 919132149155446097, guid: 170af0b471071e94d95ec8bb53408aaf, type: 3}
+  Asset: {fileID: 919132149155446097, guid: c495dd7b12ef30448aaa50d61c09f012, type: 3}
   Texture: {fileID: 2800000, guid: 37e6b57de927eff4ab9f460257a8e122, type: 3}
+  isUnlocked: 0

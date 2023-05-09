@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: howtizer
   m_EditorClassIdentifier: 
   Name: howitzer
-  Asset: {fileID: 919132149155446097, guid: 59b2e471b3687b245a84e64e89951c56, type: 3}
+  Asset: {fileID: 919132149155446097, guid: 6520beff7dadf6f4ea06ce1a439ed629, type: 3}
   Texture: {fileID: 2800000, guid: 37c1698ac7491244294b4f345289923d, type: 3}
   isUnlocked: 0

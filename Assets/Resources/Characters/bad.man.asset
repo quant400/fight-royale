@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: bad.man
   m_EditorClassIdentifier: 
   Name: bad man
-  Asset: {fileID: 919132149155446097, guid: f9603b3f5fceb544f8bf1ac39579543e, type: 3}
+  Asset: {fileID: 919132149155446097, guid: 4e658b6c80a51004d922147f61dee97f, type: 3}
   Texture: {fileID: 2800000, guid: dc50bc012cfc18d4cbf8ef9305e4faaa, type: 3}
   isUnlocked: 0

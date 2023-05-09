@@ -66,21 +66,11 @@ public class PlayerBehaviour : NetworkBehaviour
         if (isLocalPlayer)
         {
             Debug.Log(1);
-            //CmdAddWearables(netIdentity, gameplayView.instance.equipedWearables);
             CmdWearablesAssign(gameplayView.instance.equipedWearables);
-            //_skinController.SetUpSkin(Character_Manager.Instance.GetCurrentCharacter.name);
             pColor = Color_Manager.Instance.pallete.RandomPlayerColor();
             CmdGetWearableData();
         }
-        /*else if (!isLocalPlayer)
-        {
-            CmdGetWearables();
-            Debug.Log(2);
-            Debug.Log(pWearables);
-            Debug.Log(pSkin);
-
-            _skinController.SetUpSkin(pSkin);
-        }*/
+        
     }
    
     void OnTriggerEnter(Collider other)
@@ -167,7 +157,7 @@ public class PlayerBehaviour : NetworkBehaviour
     {
         Debug.Log((_, newWearable));
         pWearables = newWearable;
-        _skinController.SetUpSkin(pSkin);
+        _skinController.UpdateWearables();
     }
     private void OnPlayerSkinChanged(string _, string newSkin)
     {
