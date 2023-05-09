@@ -108,7 +108,7 @@ public class gameplayView : MonoBehaviour
     #region testFucntion
     public void SetRandomWearables()
     { 
-        equipedWearables="Shorts_" + GetQuality()+","+"Gloves_legendary";
+        equipedWearables="Shorts_" + GetQuality()+","+ "Gloves_mediocre";
         Debug.Log(equipedWearables);
     }
 

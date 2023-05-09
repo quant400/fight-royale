@@ -61,16 +61,10 @@ public class Skin_Controller : MonoBehaviour
     {
         var currentCharacter = Character_Manager.Instance.GetCharacters.FirstOrDefault(
             auxChar => auxChar.Name.ToLower().Equals(skinName.ToLower()));
-        /*if (GetComponent<PlayerBehaviour>().isLocalPlayer)
-            wearablesWorn = gameplayView.instance.equipedWearables;
-        else if(!GetComponent<PlayerBehaviour>().isLocalPlayer)
-            wearablesWorn = GameManager.Instance.wearablesWorn[GetComponent<PlayerBehaviour>().netIdentity];*/
         if (GetComponent<PlayerBehaviour>().isLocalPlayer)
             wearablesWorn = gameplayView.instance.equipedWearables.Split(',');
-        else if(!GetComponent<PlayerBehaviour>().isLocalPlayer)
+        else if(!GetComponent<PlayerBehaviour>().isLocalPlayer && !GetComponent<PlayerBehaviour>().isServer)
             wearablesWorn = GetComponent<PlayerBehaviour>().pWearables.Split(',');
-        Debug.Log((wearablesWorn[0], wearablesWorn[1]));
-
         if (currentCharacter != null)
         {
             _player.pSkin = currentCharacter.Name;
@@ -87,6 +81,7 @@ public class Skin_Controller : MonoBehaviour
 
     public void UpdateMeshRenderer (SkinnedMeshRenderer[] newMeshRenderers)
     {
+        Debug.LogError("updateMeshRun");
         for (int i = 0; i < newMeshRenderers.Length; i++)
         {
             // update mesh
@@ -103,7 +98,7 @@ public class Skin_Controller : MonoBehaviour
 
 
             _meshRenderer[i].sharedMesh = newMeshRenderers[i].sharedMesh;
-
+            
             Transform[] childrens = transform.GetComponentsInChildren<Transform>(true);
 
             // sort bones.
@@ -126,11 +121,9 @@ public class Skin_Controller : MonoBehaviour
         GameObject wearable;
 
         SkinnedMeshRenderer spawnedSkinnedMeshRenderer;
-
+        
         foreach (string wearableWorn in wearablesWorn)
         {
-            Debug.Log("Wearables Worn");
-
             var x = wearableWorn.Split('_');
 
             Debug.Log("WearableModels/" + x[0]);
@@ -148,11 +141,11 @@ public class Skin_Controller : MonoBehaviour
 
                 spawnedSkinnedMeshRenderer.bones = gameObject.transform.GetChild(childIndex).GetComponent<SkinnedMeshRenderer>().bones;
                 spawnedSkinnedMeshRenderer.rootBone = rootBone;
-
                 wearable.transform.parent = gameObject.transform;
                 Destroy(gameObject.transform.GetChild(childIndex).transform.gameObject);
                 Destroy(instantiatedWearable);
                 wearable.transform.SetSiblingIndex(childIndex);
+                _meshRenderer[GetIndex(x[0])-4] = spawnedSkinnedMeshRenderer;
             }
         }
     }
@@ -169,5 +162,4 @@ public class Skin_Controller : MonoBehaviour
 
         return -1;
     }
-
 }

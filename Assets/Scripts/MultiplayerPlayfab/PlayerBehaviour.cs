@@ -68,12 +68,17 @@ public class PlayerBehaviour : NetworkBehaviour
             Debug.Log(1);
             //CmdAddWearables(netIdentity, gameplayView.instance.equipedWearables);
             CmdWearablesAssign(gameplayView.instance.equipedWearables);
-            _skinController.SetUpSkin(Character_Manager.Instance.GetCurrentCharacter.name);
+            //_skinController.SetUpSkin(Character_Manager.Instance.GetCurrentCharacter.name);
             pColor = Color_Manager.Instance.pallete.RandomPlayerColor();
-        }/*
-       else if (!isLocalPlayer)
+            CmdGetWearableData();
+        }
+        /*else if (!isLocalPlayer)
         {
+            CmdGetWearables();
             Debug.Log(2);
+            Debug.Log(pWearables);
+            Debug.Log(pSkin);
+
             _skinController.SetUpSkin(pSkin);
         }*/
     }
@@ -161,6 +166,7 @@ public class PlayerBehaviour : NetworkBehaviour
      void OnPlayerWearableChanged(string _, string newWearable)
     {
         Debug.Log((_, newWearable));
+        pWearables = newWearable;
         _skinController.SetUpSkin(pSkin);
     }
     private void OnPlayerSkinChanged(string _, string newSkin)
@@ -260,6 +266,7 @@ public class PlayerBehaviour : NetworkBehaviour
             isDemo = true;
         }
     }
+    
 
     #region Commands
 
@@ -516,24 +523,50 @@ public class PlayerBehaviour : NetworkBehaviour
 
     #endregion
     #region wearables
-   /* [Command]
-    void CmdAddWearables(NetworkIdentity net, string[] s)
-    {
-        Debug.Log(100);
-        GameManager.Instance.AddWearable(net, s);
-    }
-    [Command]
-    void CmdGetWormWearables(NetworkIdentity netId)
-    {
-        Debug.Log(150);
-        GameManager.Instance.GetWormWearables(netId);
-    }*/
+  
     [Command]
     void CmdWearablesAssign(string w)
     {
         Debug.Log(w);
         pWearables = w;
         Debug.Log(pWearables);
+    }
+    [Command]
+    void CmdGetWearableData()
+    {
+        //Debug.Log("Command run");
+        string res = "";
+        GameObject[] players= GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject p in players)
+        {
+            var temp= p.GetComponent<PlayerBehaviour>();
+            Targetrecieve(this.connectionToClient,temp.netIdentity,temp.pWearables);
+        }
+        
+
+    }
+    [ClientRpc]
+    public void Rpcrecieve(string x)
+    {
+        //Debug.Log("rcp run");
+        Debug.Log(x);
+    }
+    [TargetRpc]
+    void Targetrecieve(NetworkConnection con,NetworkIdentity ni,string x)
+    {
+        //Debug.Log("Targetrcp run");
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        foreach(GameObject p in players)
+        {
+            var temp = p.GetComponent<PlayerBehaviour>();
+            if (temp.netIdentity==ni)
+            {
+                //Debug.Log(x);
+                //temp.pWearables = x;
+                temp.OnPlayerWearableChanged("", x);
+                return;
+            }
+        }
     }
     #endregion
     #endregion

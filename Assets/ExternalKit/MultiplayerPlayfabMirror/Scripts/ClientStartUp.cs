@@ -111,7 +111,7 @@ public class ClientStartUp : MonoBehaviour
 			webTransport.port = (ushort)response.Ports[0].Num;
 		}
 		if(gameplayView.instance.apiPlayfab.CurrentMultiplayerServerSummary.SessionId == null)
-			PlayerPrefs.SetString("ConnectInfo", configuration.buildId + "/" + gameplayView.instance.TempSessionID + "/" + "NorthEurope");
+			PlayerPrefs.SetString("ConnectInfo", configuration.buildId + "/" + gameplayView.instance.TempSessionID+ "/" + "NorthEurope");
 		else
 			PlayerPrefs.SetString("ConnectInfo", configuration.buildId + "/" + gameplayView.instance.apiPlayfab.CurrentMultiplayerServerSummary.SessionId + "/" + "NorthEurope");
 		networkManager.StartClient();
