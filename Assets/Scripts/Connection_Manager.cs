@@ -84,7 +84,7 @@ public class Connection_Manager : MonoBehaviour
                 Debug.Log("GetTitleData OnSuccess");
                 CreateListLobby();
                 found = VerifyAvailableLobby();
-
+                //found = true;
                 if (found)
                 {
                     Debug.Log("Found Lobby");

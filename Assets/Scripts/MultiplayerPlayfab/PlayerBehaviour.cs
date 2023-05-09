@@ -155,7 +155,7 @@ public class PlayerBehaviour : NetworkBehaviour
     }
      void OnPlayerWearableChanged(string _, string newWearable)
     {
-        Debug.Log((_, newWearable));
+        //Debug.Log((_, newWearable));
         pWearables = newWearable;
         _skinController.UpdateWearables();
     }
@@ -525,7 +525,7 @@ public class PlayerBehaviour : NetworkBehaviour
     void CmdGetWearableData()
     {
         //Debug.Log("Command run");
-        string res = "";
+        //string res = "";
         GameObject[] players= GameObject.FindGameObjectsWithTag("Player");
         foreach (GameObject p in players)
         {
@@ -544,7 +544,7 @@ public class PlayerBehaviour : NetworkBehaviour
     [TargetRpc]
     void Targetrecieve(NetworkConnection con,NetworkIdentity ni,string x)
     {
-        //Debug.Log("Targetrcp run");
+        //Debug.Log("Targetrcp run: "+x);
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
         foreach(GameObject p in players)
         {
