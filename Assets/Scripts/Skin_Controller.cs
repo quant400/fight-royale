@@ -132,9 +132,9 @@ public class Skin_Controller : MonoBehaviour
             var x = wearableWorn.Split('_');
 
             Debug.Log("WearableModels/" + x[0]);
-            modelToInstantiate = Resources.Load(Path.Combine("WearableModels/" + x[0], x[1])) as GameObject;
+            GameObject instantiatedWearable = Resources.Load(Path.Combine("WearableModels/" + x[0], x[1])) as GameObject;
 
-            GameObject instantiatedWearable = Instantiate(modelToInstantiate);
+           // GameObject  = Instantiate(modelToInstantiate);
 
             childIndex = GetIndex(x[0]);
 
@@ -161,7 +161,7 @@ public class Skin_Controller : MonoBehaviour
                 _meshRenderer[GetIndex(x[0]) - 4].sharedMesh = spawnedSkinnedMeshRenderer.sharedMesh;
             }
 
-            Destroy(instantiatedWearable);
+            //Destroy(instantiatedWearable);
         }
 
     }
