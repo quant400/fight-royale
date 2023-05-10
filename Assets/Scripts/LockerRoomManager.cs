@@ -8,6 +8,7 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine.SceneManagement;
 using CFC.Serializable;
+using System;
 
 public class LockerRoomManager : MonoBehaviour
 {
@@ -231,14 +232,14 @@ public class LockerRoomManager : MonoBehaviour
             }
         }
 
-        /*
+        
         Debug.Log("baseAttributes");
 
         foreach (KeyValuePair<string, int> attributes in currentCharacter.baseAttributes)
         {
             Debug.Log(attributes.Key + " = " + attributes.Value);
         }
-        */
+        
 
         SetAttributeSliders(currentCharacter.baseAttributes);
     }
@@ -295,14 +296,14 @@ public class LockerRoomManager : MonoBehaviour
             }
         }
 
-        /*
+        
         Debug.Log("wearableAttributes");
 
         foreach (KeyValuePair<string, int> attributes in currentCharacter.wearableAttributes)
         {
             Debug.Log(attributes.Key + " = " + attributes.Value);
         }
-        */
+        
     }
 
     public void CaculateTotalAttrbutes()
@@ -326,14 +327,14 @@ public class LockerRoomManager : MonoBehaviour
             }
         }
 
-        /*
+        
         Debug.Log("totalAttributes");
 
         foreach (KeyValuePair<string, int> attributes in totalAttributes)
         {
             Debug.Log(attributes.Key + " = " + attributes.Value);
         }
-        */
+        
 
         SetAttributeSliders(totalAttributes);
     }
@@ -525,6 +526,7 @@ public class LockerRoomManager : MonoBehaviour
 
     private void ActiveModelSwap(string model)
     {
+        /*
         if(playerModelParentObject.transform.childCount != 0)
         {
             foreach (Transform child in playerModelParentObject.transform) 
@@ -554,6 +556,54 @@ public class LockerRoomManager : MonoBehaviour
         }
 
         Destroy(currentActiveModel);
+        */
+
+        SkinnedMeshRenderer[] _meshRenderer;
+
+        SkinnedMeshRenderer[] newMeshRenderers;
+
+        _meshRenderer = playerModelParentObject.GetComponentsInChildren<SkinnedMeshRenderer>();
+
+        GameObject modelToInstantiate = Resources.Load(Path.Combine((characterModelsPath), model)) as GameObject;
+
+        newMeshRenderers = modelToInstantiate.GetComponentsInChildren<SkinnedMeshRenderer>();
+
+        for (int i = 0; i < newMeshRenderers.Length; i++)
+        {
+            // update mesh
+            //_meshRenderer.sharedMesh = newMeshRenderer.sharedMesh;
+            if (newMeshRenderers[i].sharedMaterials.Length > 1)
+            {
+                _meshRenderer[i].sharedMaterials = newMeshRenderers[i].sharedMaterials;
+
+            }
+            else
+            {
+                _meshRenderer[i].material.mainTexture = newMeshRenderers[i].sharedMaterial.mainTexture;
+            }
+
+
+            _meshRenderer[i].sharedMesh = newMeshRenderers[i].sharedMesh;
+
+            Transform[] childrens = playerModelParentObject.transform.GetComponentsInChildren<Transform>(true);
+
+            // sort bones.
+            Transform[] bones = new Transform[newMeshRenderers[i].bones.Length];
+            for (int boneOrder = 0; boneOrder < newMeshRenderers[i].bones.Length; boneOrder++)
+            {
+                bones[boneOrder] = Array.Find<Transform>(childrens, c => c.name == newMeshRenderers[i].bones[boneOrder].name);
+            }
+            _meshRenderer[i].bones = bones;
+
+            rootBone = _meshRenderer[i].rootBone;
+
+            _meshRenderer[i].gameObject.name = newMeshRenderers[i].gameObject.name;
+        }
+
+        if (!changeAnimatorCoroutine)
+        {
+            StartCoroutine(ChangeAnimator(0.01f, modelToInstantiate));
+        }
 
         modelName.text = model.ToUpper();
     }
@@ -567,7 +617,7 @@ public class LockerRoomManager : MonoBehaviour
             currentModel = 0;
         }
 
-        /*
+        
         EmptyWearablesLists();
 
         //currentNFT = gameplayView.instance.currentNFTs[currentModel].id;
@@ -581,7 +631,7 @@ public class LockerRoomManager : MonoBehaviour
         lockerRoomApi.GetWearables(currentCharacter.nftID.ToString(), true);
 
         GetCharacterAttributes(currentModel);
-         */
+         
         ActiveModelSwap(models[currentModel]);
        
     }
@@ -595,7 +645,7 @@ public class LockerRoomManager : MonoBehaviour
             currentModel = models.Count - 1;
         }
 
-        /*
+        
         EmptyWearablesLists();
 
         //currentNFT = gameplayView.instance.currentNFTs[currentModel].id;
@@ -609,7 +659,7 @@ public class LockerRoomManager : MonoBehaviour
         lockerRoomApi.GetWearables(currentCharacter.nftID.ToString(), true);
 
         GetCharacterAttributes(currentModel);
-        */
+        
         ActiveModelSwap(models[currentModel]);
         
     }
@@ -1718,11 +1768,10 @@ public class LockerRoomManager : MonoBehaviour
             canvasGroups[i] = wearableUI[i].GetComponent<CanvasGroup>();
         }
 
-        models = ModelNames(characterModelsPath);
 
         if (!gameplayView.instance)
         {
-            //models = ModelNames(characterModelsPath);
+            models = ModelNames(characterModelsPath);
 
             belts = ModelNames(BeltsModelsPath);
 
@@ -2210,8 +2259,9 @@ public class LockerRoomManager : MonoBehaviour
 
     private List<string> ModelNames(string folderPath)
     {
+
         // Load all assets in the folder and store them in an array
-        Object[] assets = Resources.LoadAll<GameObject>(folderPath);
+        UnityEngine.Object[] assets = Resources.LoadAll<GameObject>(folderPath);
 
         // Create a string array to store the file names
         List<string> fileNames = new List<string>();
