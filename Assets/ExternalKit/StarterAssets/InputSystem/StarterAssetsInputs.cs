@@ -20,6 +20,10 @@ namespace StarterAssets
 		public bool cursorLocked = true;
 		public bool cursorInputForLook = true;
 
+		[Header("Locker Room")]
+		//locker room
+		public bool isLockerRoom = false;
+
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 		public void OnMove(InputValue value)
 		{
@@ -95,9 +99,16 @@ namespace StarterAssets
 		
 		private bool CheckState()
 		{
-			
-			return GameManager.Instance.currentMatchState != 1 &&
-			       GameManager.Instance.currentMatchState != 3;
+			if(isLockerRoom)
+            {
+				return true;
+            }
+            else
+            {
+				return GameManager.Instance.currentMatchState != 1 &&
+					   GameManager.Instance.currentMatchState != 3;
+			}
+
 		}
 	}
 	

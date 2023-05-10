@@ -98,49 +98,49 @@ public class WearableDatabaseReader
         return _data[sku]["SLUG"];
     }
 
-    public string GetRarityLevel(int sku)
+    public int GetRarityLevel(int sku)
     {
-        return _data[sku]["RARITY LEVEL"];
+        return int.Parse(_data[sku]["RARITY LEVEL"]);
     }
 
-    public string GetCostToRepair(int sku)
+    public int GetCostToRepair(int sku)
     {
-        return _data[sku]["COST TO REPAIR"];
+        return int.Parse(_data[sku]["COST TO REPAIR"]);
     }
 
-    public string GetCostToMerge(int sku)
+    public int GetCostToMerge(int sku)
     {
-        return _data[sku]["COST TO MERGE"];
+        return int.Parse(_data[sku]["COST TO MERGE"]);
     }
 
-    public string GetTotalHealth(int sku)
+    public int GetTotalHealth(int sku)
     {
-        return _data[sku]["OBJECT HEALTH"];
+        return int.Parse(_data[sku]["OBJECT HEALTH"]);
     }
 
-    public string GetExtraPoints(int sku)
+    public int GetExtraPoints(int sku)
     {
-        return _data[sku]["EXTRA POINTS"];
+        return int.Parse(_data[sku]["EXTRA POINTS"]);
     }
 
-    public string GetAtk(int sku)
+    public int GetAtk(int sku)
     {
-        return _data[sku]["ATK"];
+        return int.Parse(_data[sku]["ATK"]);
     }
 
-    public string GetDef(int sku)
+    public int GetDef(int sku)
     {
-        return _data[sku]["DEF"];
+        return int.Parse(_data[sku]["DEF"]);
     }
 
-    public string GetSpd(int sku)
+    public int GetSpd(int sku)
     {
-        return _data[sku]["SPD"];
+        return int.Parse(_data[sku]["SPD"]);
     }
 
-    public string GetTek(int sku)
+    public int GetTek(int sku)
     {
-        return _data[sku]["TEK"];
+        return int.Parse(_data[sku]["TEK"]);
     }
 
 }

@@ -21,6 +21,9 @@ public class Character_Manager : MonoBehaviour
 
     public UnityEvent OnCharacterChanged;
 
+    [SerializeField]
+    private LockerRoomAPI lockerRoomApi;
+
     void Awake()
     {
         if (Instance == null)
@@ -90,7 +93,10 @@ public class Character_Manager : MonoBehaviour
         _selectedCharacter = _characters.FirstOrDefault(auxCharacter => auxCharacter.Name.Equals(name));
 
         OnCharacterChanged?.Invoke();
+
         var test = Data_Manager.Instance.selectedAccount;
+
+        lockerRoomApi.GetWearables(test.id, false);
     }
 
 }

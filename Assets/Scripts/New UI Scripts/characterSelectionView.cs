@@ -49,7 +49,10 @@ public class characterSelectionView : MonoBehaviour
 
         }
         else
+        {
             Invoke("SetUpCharactersLogin", 1f);
+        }
+            
     }
 
     public void Display(Account[] NFTData)
@@ -105,7 +108,9 @@ public class characterSelectionView : MonoBehaviour
         {
 
             if (i + startingindex >= info.Length)
+            {
                 charButtons[i].GetComponent<ButtonInfoHolder>().SetChar("null");
+            } 
             else
             {
                 string name = info[i + startingindex].name;

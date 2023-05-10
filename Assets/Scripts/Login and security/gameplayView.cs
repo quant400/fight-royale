@@ -100,5 +100,37 @@ public class gameplayView : MonoBehaviour
 
     public EquipWearableReply equipWearableReply;
 
+    public string wearablesEqipped = "";
+
+    [SerializeField]
+    private LockerRoomAPI lockerRoomApi;
+
+    public void GetEqippedWearables()
+    {
+        bool isFirst = true;
+
+        wearablesEqipped = "";
+
+        foreach (Wearable wearable in wearableReply.wearables)
+        {
+            if (wearable.is_equiped == "True" || wearable.is_equiped == "true")
+            {
+                if(isFirst)
+                {
+                    wearablesEqipped += lockerRoomApi.wearableDatabase.GetSlot(wearable.sku) + "_" + lockerRoomApi.wearableDatabase.GetSlug(wearable.sku);
+
+                    isFirst = false;
+                }
+                else
+                {
+                    wearablesEqipped += "," + lockerRoomApi.wearableDatabase.GetSlot(wearable.sku) + "_" + lockerRoomApi.wearableDatabase.GetSlug(wearable.sku);
+                }
+                
+            }
+        }
+
+        Debug.Log(wearablesEqipped);
+    }
+
     #endregion
 }
