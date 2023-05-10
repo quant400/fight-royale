@@ -60,6 +60,9 @@ public class LockerRoomAPI : MonoBehaviour
     [SerializeField]
     private LockerRoomManager lockerRoomManager;
 
+    private const string CSV_FILE_PATH = "CSV/WearableDatabase";
+
+    public WearableDatabaseReader wearableDatabase;
 
     // Start is called before the first frame update
     void Start()
@@ -69,6 +72,9 @@ public class LockerRoomAPI : MonoBehaviour
         //MintWearable("175", "SHORTS");
 
         //GetWearables(gameplayView.instance.currentNFTs[0].id);
+
+        wearableDatabase = new WearableDatabaseReader();
+        wearableDatabase.LoadData(CSV_FILE_PATH);
     }
     
     // Update is called once per frame
@@ -82,9 +88,9 @@ public class LockerRoomAPI : MonoBehaviour
         StartCoroutine(GetMint(assetId, assetSlot));
     }
 
-    public void GetWearables(string assetId)
+    public void GetWearables(string assetId, bool isLockerRoomManager)
     {
-        StartCoroutine(GetWearablesRequest(assetId));
+        StartCoroutine(GetWearablesRequest(assetId, isLockerRoomManager));
     }
 
     public void EquipWearables(string assetId)
@@ -140,7 +146,7 @@ public class LockerRoomAPI : MonoBehaviour
     }
 
 
-    IEnumerator GetWearablesRequest(string assetId)
+    IEnumerator GetWearablesRequest(string assetId, bool isLockerRoomManager)
     {
         string url = "";
         GetWearable getWearable = new GetWearable();
@@ -166,7 +172,6 @@ public class LockerRoomAPI : MonoBehaviour
 
                 gameplayView.instance.wearableReply = r;
 
-
                 /*
                 Debug.Log("num: = " + r.num);
 
@@ -179,7 +184,17 @@ public class LockerRoomAPI : MonoBehaviour
                 }
                 */
 
-                lockerRoomManager.GetWearablesModelArray();
+                if(isLockerRoomManager)
+                {
+                    lockerRoomManager.currentCharacter.wearablesData = r;
+
+                    lockerRoomManager.GetWearablesModelArray();
+
+                    lockerRoomManager.CaculateTotalAttrbutes();
+                }
+
+                gameplayView.instance.GetEqippedWearables();
+
             }
             else
             {
