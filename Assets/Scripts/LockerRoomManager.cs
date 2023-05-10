@@ -1520,8 +1520,9 @@ public class LockerRoomManager : MonoBehaviour
 
     IEnumerator ChangeAnimator(float secs, GameObject model)
     {
-        playerAnimator.runtimeAnimatorController = oldConttoller;
         changeAnimatorCoroutine = true;
+        playerAnimator.runtimeAnimatorController = oldConttoller;
+        
 
         yield return new WaitForSeconds(secs);
         playerAnimator.avatar = avatar;
