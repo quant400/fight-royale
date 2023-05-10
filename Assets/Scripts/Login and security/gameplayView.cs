@@ -105,20 +105,26 @@ public class gameplayView : MonoBehaviour
 
     public string wearablesEqipped = "";
 
+    public int bonusAtt;
+    public int bonusDef;
+    public int bonusTek;
+
     [SerializeField]
     private LockerRoomAPI lockerRoomApi;
 
     public void GetEqippedWearables()
     {
         bool isFirst = true;
-
+        bonusAtt = 0;
+        bonusDef = 0;
+        bonusTek = 0;
         wearablesEqipped = "";
 
         foreach (Wearable wearable in wearableReply.wearables)
         {
             if (wearable.is_equiped == "True" || wearable.is_equiped == "true")
             {
-                if(isFirst)
+                if (isFirst)
                 {
                     wearablesEqipped += lockerRoomApi.wearableDatabase.GetSlot(wearable.sku) + "_" + lockerRoomApi.wearableDatabase.GetSlug(wearable.sku);
 
@@ -128,10 +134,12 @@ public class gameplayView : MonoBehaviour
                 {
                     wearablesEqipped += "," + lockerRoomApi.wearableDatabase.GetSlot(wearable.sku) + "_" + lockerRoomApi.wearableDatabase.GetSlug(wearable.sku);
                 }
-                
+                bonusAtt += lockerRoomApi.wearableDatabase.GetAtk(wearable.sku);
+                bonusAtt += lockerRoomApi.wearableDatabase.GetDef(wearable.sku);
+                bonusAtt += lockerRoomApi.wearableDatabase.GetTek(wearable.sku);
             }
         }
-
+        equipedWearables = wearablesEqipped;
         Debug.Log(wearablesEqipped);
     }
 

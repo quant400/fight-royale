@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657755, g: 0.4964127, b: 0.57481825, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657642, g: 0.49641156, b: 0.5748181, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3326,7 +3326,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -3897,7 +3897,7 @@ MonoBehaviour:
   baseURL: https://C5FA3.playfabapi.com/
   SecretKey: 3W4J5SK6W8GWHZKMH89GAP3FS1CN5YF83436XAFMXMKGCMJASW
   Region: NorthEurope
-  _BuildId: a82a973d-d97b-48a8-b6da-f01dbfaad1b4
+  _BuildId: 4e6a0369-d0aa-450e-ba70-b7001d1e2602
   EntityToken: 
   EntityTokenResponse:
     code: 0
@@ -9636,7 +9636,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -11509,7 +11509,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -12298,7 +12298,7 @@ PrefabInstance:
     - target: {fileID: 5479180407007317759, guid: dcade7979c3da534db27311c23ab15d5,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -2546316
+      value: -2606661
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dcade7979c3da534db27311c23ab15d5, type: 3}
@@ -13153,6 +13153,7 @@ MonoBehaviour:
   currentNFTs: []
   apiPlayfab: {fileID: 328948564}
   TempSessionID: 
+  equipedWearables: 
   wearablesEqipped: 
   lockerRoomApi: {fileID: 1261326184}
 --- !u!114 &1127853166
@@ -17975,7 +17976,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1539408343}
   - component: {fileID: 1539408340}
-  - component: {fileID: 1539408341}
   m_Layer: 0
   m_Name: ModelSwap
   m_TagString: Untagged
@@ -18034,20 +18034,6 @@ MonoBehaviour:
   oldConttoller: {fileID: 9100000, guid: 40db3173a05ae3242b1c182a09b0a183, type: 2}
   controller: {fileID: 9100000, guid: 8eb97857a112b0c42a3c9faeca9b01db, type: 2}
   avatar: {fileID: 9000000, guid: d26dc38ccd1359144a9cd219c1600811, type: 2}
---- !u!114 &1539408341
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1539408339}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61f280b4748a2f0498082effcc194f71, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  buildType: 0
-  game: warrior
 --- !u!4 &1539408343
 Transform:
   m_ObjectHideFlags: 0
@@ -19302,7 +19288,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1671124838
 RectTransform:
   m_ObjectHideFlags: 0
@@ -23560,27 +23546,27 @@ PrefabInstance:
     - target: {fileID: 1286077923209006574, guid: c1b9d5fb13380894ea00e45fc3d337fa,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1286077923209006574, guid: c1b9d5fb13380894ea00e45fc3d337fa,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1286077923209006574, guid: c1b9d5fb13380894ea00e45fc3d337fa,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 19.6
       objectReference: {fileID: 0}
     - target: {fileID: 1286077923209006574, guid: c1b9d5fb13380894ea00e45fc3d337fa,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 307.47818
       objectReference: {fileID: 0}
     - target: {fileID: 1286077923209006574, guid: c1b9d5fb13380894ea00e45fc3d337fa,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -42
       objectReference: {fileID: 0}
     - target: {fileID: 1286077923209006575, guid: c1b9d5fb13380894ea00e45fc3d337fa,
         type: 3}
@@ -23607,27 +23593,27 @@ PrefabInstance:
     - target: {fileID: 1286077924675431207, guid: c1b9d5fb13380894ea00e45fc3d337fa,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1286077924675431207, guid: c1b9d5fb13380894ea00e45fc3d337fa,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1286077924675431207, guid: c1b9d5fb13380894ea00e45fc3d337fa,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 19.6
       objectReference: {fileID: 0}
     - target: {fileID: 1286077924675431207, guid: c1b9d5fb13380894ea00e45fc3d337fa,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 307.47818
       objectReference: {fileID: 0}
     - target: {fileID: 1286077924675431207, guid: c1b9d5fb13380894ea00e45fc3d337fa,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -92.5
       objectReference: {fileID: 0}
     - target: {fileID: 1286077924699420640, guid: c1b9d5fb13380894ea00e45fc3d337fa,
         type: 3}
@@ -28326,6 +28312,7 @@ MonoBehaviour:
   _meshRenderer:
   - {fileID: 0}
   _player: {fileID: 0}
+  colors: []
 --- !u!4 &2905299306634227646
 Transform:
   m_ObjectHideFlags: 0

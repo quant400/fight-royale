@@ -25,7 +25,7 @@ public class Skin_Controller : MonoBehaviour
     private bool _isLocalPlayer;
 
     private Transform rootBone;
-    
+    public string[] colors;
     void Awake()
     {
         _player = GetComponent<PlayerBehaviour>();
@@ -141,38 +141,55 @@ public class Skin_Controller : MonoBehaviour
             if (childIndex != -1)
             {
                 wearable = instantiatedWearable.transform.GetChild(1).gameObject;
+                foreach (string color in colors)
+                {
+                    if (transform.GetChild(childIndex).name.Contains(color))
+                    {
+                        foreach (Transform child in instantiatedWearable.transform)
+                        {
+                            if (child.name.Contains(color))
+                            {
+                                wearable = child.gameObject;
+                            }
+                        }
+                    }
+                }
 
                 spawnedSkinnedMeshRenderer = wearable.GetComponent<SkinnedMeshRenderer>();
 
-                _meshRenderer[GetIndex(x[0]) - 4].sharedMaterial = spawnedSkinnedMeshRenderer.sharedMaterial;
+                _meshRenderer[GetIndex(x[0]) - 3].sharedMaterial = spawnedSkinnedMeshRenderer.sharedMaterial;
 
                 if (spawnedSkinnedMeshRenderer.sharedMaterials.Length > 1)
                 {
 
-                    _meshRenderer[GetIndex(x[0]) - 4].sharedMaterials = spawnedSkinnedMeshRenderer.sharedMaterials;
+                    _meshRenderer[GetIndex(x[0]) - 3].sharedMaterials = spawnedSkinnedMeshRenderer.sharedMaterials;
 
                 }
                 else
                 {
-                    _meshRenderer[GetIndex(x[0]) - 4].material.mainTexture = spawnedSkinnedMeshRenderer.sharedMaterial.mainTexture;
+                    _meshRenderer[GetIndex(x[0]) - 3].material.mainTexture = spawnedSkinnedMeshRenderer.sharedMaterial.mainTexture;
                 }
 
 
-                _meshRenderer[GetIndex(x[0]) - 4].sharedMesh = spawnedSkinnedMeshRenderer.sharedMesh;
+                _meshRenderer[GetIndex(x[0]) - 3].sharedMesh = spawnedSkinnedMeshRenderer.sharedMesh;
             }
 
             //Destroy(instantiatedWearable);
         }
 
     }
+
+
     private int GetIndex(string wearableType)
     {
         switch (wearableType)
         {
             case "Gloves":
-                return 8;
+                return 3;
             case "Shorts":
-                return 12;
+                return 5;
+            case "Shoes":
+                return 6;
         }
 
         return -1;
