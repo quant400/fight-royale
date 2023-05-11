@@ -630,6 +630,8 @@ public class LockerRoomManager : MonoBehaviour
 
         lockerRoomApi.GetWearables(currentCharacter.nftID.ToString(), true);
 
+        KeyMaker.instance.getJuiceFromRestApi(currentCharacter.nftID);
+
         GetCharacterAttributes(currentModel);
          
         ActiveModelSwap(models[currentModel]);
@@ -657,6 +659,8 @@ public class LockerRoomManager : MonoBehaviour
         gridSelectionNum = 0;
 
         lockerRoomApi.GetWearables(currentCharacter.nftID.ToString(), true);
+
+        KeyMaker.instance.getJuiceFromRestApi(currentCharacter.nftID);
 
         GetCharacterAttributes(currentModel);
         

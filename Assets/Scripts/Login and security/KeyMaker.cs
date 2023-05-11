@@ -222,7 +222,8 @@ public class KeyMaker : MonoBehaviour
                         gameplayView.instance.csv.Display(JsonHelper.FromJson<Account>(gameplayView.instance.csv.GetFreeMintList()));
                     else
                             gameplayView.instance.csv.Display(temp.nfts);
-
+                    if (gameplayView.instance.usingMeta)
+                        getFightFromRestApi(gameplayView.instance.GetLoggedPlayerString());
                     break;
             }
         }
@@ -328,13 +329,6 @@ public class KeyMaker : MonoBehaviour
             {
 
                 Debug.Log("posted Score in function");
-                //Debug.Log(idJsonData);
-                //Enable try again button once server responds with new score update.
-               /* gameplayView.instance.gameObject.GetComponent<uiView>().SetTryAgain(true);
-                if (gameplayView.instance.usingFreemint)
-                    DatabaseManagerRestApi._instance.getDataFromRestApi(gameplayView.instance.GetLoggedPlayerString());
-                else
-                    DatabaseManagerRestApi._instance.getDataFromRestApi(gameplayView.instance.chosenNFT.id.ToString());*/
 
 
             }
@@ -396,6 +390,109 @@ public class KeyMaker : MonoBehaviour
         }
     }
 
+
+    #region juice requests
+    public void getJuiceFromRestApi(string assetId)
+    {
+        StartCoroutine(getJuiceRestApi(assetId));
+    }
+    public void getFightFromRestApi(string assetId)
+    {
+        StartCoroutine(getFightRestApi(assetId));
+    }
+    struct reply
+    {
+        public string id;
+        public string available;
+        public string freeze;
+        public string total;
+        public string status;
+    }
+    struct fightReply
+    {
+        public string balance;
+    }
+    struct JuiceID
+    {
+        public string id;
+    }
+    struct FightID
+    {
+        public string address;
+    }
+    IEnumerator getJuiceRestApi(string assetId)
+    {
+        string url = "";
+        JuiceID jId = new JuiceID();
+        jId.id = assetId;
+        if (KeyMaker.instance.buildType == BuildTypeGame.staging)
+            url = "https://staging-api.cryptofightclub.io/game/sdk/juice/balance";
+        else if (KeyMaker.instance.buildType == BuildTypeGame.production)
+            url = "https://api.cryptofightclub.io/game/sdk/juice/balance";
+        string idJsonData = JsonUtility.ToJson(jId);
+        using (UnityWebRequest request = UnityWebRequest.Put(url, idJsonData))
+        {
+            byte[] bodyRaw = Encoding.UTF8.GetBytes(idJsonData);
+            request.method = "POST";
+            request.SetRequestHeader("Accept", "application/json");
+            request.SetRequestHeader("Content-Type", "application/json");
+            yield return request.SendWebRequest();
+            if (request.error == null)
+            {
+                string result = Encoding.UTF8.GetString(request.downloadHandler.data);
+                reply r = JsonUtility.FromJson<reply>(request.downloadHandler.text);
+                if (KeyMaker.instance.buildType == BuildTypeGame.staging)
+                    Debug.Log(request.downloadHandler.text);
+                if (r.status == "false")
+                    gameplayView.instance.juiceDisplay.SetJuiceBal("0");
+                else
+                    gameplayView.instance.juiceDisplay.SetJuiceBal(r.total);
+
+            }
+            else
+            {
+                Debug.Log(request.error);
+            }
+
+
+        }
+    }
+    IEnumerator getFightRestApi(string aaddress)
+    {
+        string url = "";
+        FightID fId = new FightID();
+        fId.address = aaddress;
+        if (KeyMaker.instance.buildType == BuildTypeGame.staging)
+            url = "https://staging-api.cryptofightclub.io/game/sdk/fight-balance";
+        else if (KeyMaker.instance.buildType == BuildTypeGame.production)
+            url = "https://api.cryptofightclub.io/game/sdk/fight-balance";
+        string idJsonData = JsonUtility.ToJson(fId);
+        using (UnityWebRequest request = UnityWebRequest.Put(url, idJsonData))
+        {
+            byte[] bodyRaw = Encoding.UTF8.GetBytes(idJsonData);
+            request.method = "POST";
+            request.SetRequestHeader("Accept", "application/json");
+            request.SetRequestHeader("Content-Type", "application/json");
+            yield return request.SendWebRequest();
+            if (request.error == null)
+            {
+                string result = Encoding.UTF8.GetString(request.downloadHandler.data);
+                fightReply r = JsonUtility.FromJson<fightReply>(request.downloadHandler.text);
+                if (KeyMaker.instance.buildType == BuildTypeGame.staging)
+                    Debug.Log(request.downloadHandler.text);
+
+                gameplayView.instance.juiceDisplay.SetCoinBal(r.balance);
+
+            }
+            else
+            {
+                Debug.Log(request.error);
+            }
+
+
+        }
+    }
+    #endregion
 
     #endregion Requests
 }

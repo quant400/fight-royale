@@ -35,6 +35,9 @@ public class characterSelectionView : MonoBehaviour
         backButton.onClick.AddListener(BackButtonOnClick);
         //charButtons[0].GetComponent<ButtonInfoHolder>().SetChar("a-rod");
         //StartCoroutine(GetRequest("https://api.cryptofightclub.io/game/sdk/0xbecd7b5cfab483d65662769ad4fecf05be4d4d05"));
+        gameplayView.instance.juiceDisplay.ActivateJuiceDisplay();
+        DisablePlay();
+        leftButton.gameObject.SetActive(false);
     }
 
     
@@ -146,7 +149,6 @@ public class characterSelectionView : MonoBehaviour
                 leftButton.gameObject.SetActive(true);
             DisplayChar(currentStartIndex);
         }
-
 
     }
 
@@ -335,7 +337,14 @@ public class characterSelectionView : MonoBehaviour
         return ret;
     }
 
+    public void EnablePlay()
+    {
+        select.interactable = true;
+    }
+    public void DisablePlay()
+    {
+        select.interactable = false;
+    }
 
-   
 }
 

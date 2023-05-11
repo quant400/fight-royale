@@ -95,7 +95,8 @@ public class Character_Manager : MonoBehaviour
         OnCharacterChanged?.Invoke();
 
         var test = Data_Manager.Instance.selectedAccount;
-
+        KeyMaker.instance.getJuiceFromRestApi(test.id);
+        gameplayView.instance.csv.EnablePlay();
         lockerRoomApi.GetWearables(test.id, false);
     }
 

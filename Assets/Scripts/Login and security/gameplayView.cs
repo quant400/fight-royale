@@ -18,7 +18,8 @@ public class gameplayView : MonoBehaviour
     public CustomWebLogin cWL;
     public FireBaseWebGLAuth webGLAuth;
     public GameObject buttonsToEnableAftrLogin, buttonsToDisableAftrLogin;
-
+    
+    public JuiceDisplayScript juiceDisplay;
     public bool logedin=false;
     public Account[] currentNFTs;
     public API_PlayfabMatchmaking apiPlayfab;
