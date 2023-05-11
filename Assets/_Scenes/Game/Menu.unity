@@ -3897,7 +3897,7 @@ MonoBehaviour:
   baseURL: https://C5FA3.playfabapi.com/
   SecretKey: 3W4J5SK6W8GWHZKMH89GAP3FS1CN5YF83436XAFMXMKGCMJASW
   Region: NorthEurope
-  _BuildId: 4e6a0369-d0aa-450e-ba70-b7001d1e2602
+  _BuildId: 0e677b4b-dd81-46b7-9852-ede621a8f5b8
   EntityToken: 
   EntityTokenResponse:
     code: 0
@@ -12298,7 +12298,7 @@ PrefabInstance:
     - target: {fileID: 5479180407007317759, guid: dcade7979c3da534db27311c23ab15d5,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -2606661
+      value: -2609790
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dcade7979c3da534db27311c23ab15d5, type: 3}
@@ -13155,6 +13155,9 @@ MonoBehaviour:
   TempSessionID: 
   equipedWearables: 
   wearablesEqipped: 
+  bonusAtt: 0
+  bonusDef: 0
+  bonusTek: 0
   lockerRoomApi: {fileID: 1261326184}
 --- !u!114 &1127853166
 MonoBehaviour:
@@ -15154,7 +15157,7 @@ PrefabInstance:
     - target: {fileID: 7174127213563622015, guid: 6729c163af2ca3b4ca895947a301f316,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Skip
+      value: OpenMethodSelect
       objectReference: {fileID: 0}
     - target: {fileID: 7174127213563622015, guid: 6729c163af2ca3b4ca895947a301f316,
         type: 3}

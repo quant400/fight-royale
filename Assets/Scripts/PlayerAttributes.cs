@@ -62,7 +62,7 @@ public class PlayerAttributes : MonoBehaviour
 
     private float CriticalChangeDamage(float damage)
     {
-        if (Random.Range(0, 100) < (_baseTechnique + 1.0f))
+        if (Random.Range(0, 100) < ((_baseTechnique+gameplayView.instance.bonusTek) + 1.0f))
         {
             return ImproveAttackPower(damage);
         }
@@ -89,17 +89,17 @@ public class PlayerAttributes : MonoBehaviour
 
     public float PunchDamage()
     {
-        return CriticalChangeDamage(Mathf.Clamp((_basePunchAtk / 10), 0, _basePunchAtk) + (((_basePunchAtk / 10) * (category.Punch) / 100)));
+        return CriticalChangeDamage(Mathf.Clamp(((_basePunchAtk+gameplayView.instance.bonusAtt) / 10), 0, (_basePunchAtk + gameplayView.instance.bonusAtt)) + ((((_basePunchAtk + gameplayView.instance.bonusAtt) / 10) * (category.Punch) / 100)));
     }
 
     public float KickDamage()
     {
-        return CriticalChangeDamage(Mathf.Clamp((_baseKickAtk / 10), 0, _baseKickAtk) + (((_baseKickAtk / 10) * (category.Kick) / 100)));
+        return CriticalChangeDamage(Mathf.Clamp(((_baseKickAtk + gameplayView.instance.bonusAtt) / 10), 0, (_baseKickAtk + gameplayView.instance.bonusAtt)) + ((((_baseKickAtk + gameplayView.instance.bonusAtt) / 10) * (category.Kick) / 100)));
     }
 
     public float Block(float damage)
     {
-        float percenteDamage = 1.0f - (_baseBlockDef/ 100);
+        float percenteDamage = 1.0f - ((_baseBlockDef+gameplayView.instance.bonusDef)/ 100);
         float trueDamage = damage * percenteDamage;
         return trueDamage;
     }

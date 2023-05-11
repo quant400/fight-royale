@@ -139,7 +139,7 @@ public class gameplayView : MonoBehaviour
                 bonusAtt += lockerRoomApi.wearableDatabase.GetTek(wearable.sku);
             }
         }
-        equipedWearables = wearablesEqipped;
+        //equipedWearables = wearablesEqipped;
         Debug.Log(wearablesEqipped);
     }
 
