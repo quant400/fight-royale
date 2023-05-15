@@ -150,6 +150,8 @@ public class LockerRoomManager : MonoBehaviour
 
     Dictionary<string, int> totalAttributes;
 
+    [SerializeField]
+    Button right, left;
     //private const string CSV_FILE_PATH = "CSV/WearableDatabase";
 
     //private WearableDatabaseReader wearableDatabase;
@@ -534,6 +536,7 @@ public class LockerRoomManager : MonoBehaviour
         {
             foreach (KeyValuePair<string, int> attributes in listToSet)
             {
+
                 slidersUI[count].DOValue(attributes.Value, 1.0f, true);
 
                 slidersGreenUI[count].value = 0;
@@ -595,6 +598,7 @@ public class LockerRoomManager : MonoBehaviour
         {
             // update mesh
             //_meshRenderer.sharedMesh = newMeshRenderer.sharedMesh;
+            _meshRenderer[i].sharedMaterials = new Material[] { };
             if (newMeshRenderers[i].sharedMaterials.Length > 1)
             {
                 _meshRenderer[i].sharedMaterials = newMeshRenderers[i].sharedMaterials;
@@ -653,14 +657,19 @@ public class LockerRoomManager : MonoBehaviour
 
         foreach (Slider slider in slidersUI)
         {
+            slider.DOKill();
             slider.value = 0;
+            
         }
 
         foreach (Slider slider in slidersGreenUI)
         {
+            slider.DOKill();
             slider.value = 0;
+            
         }
 
+        DisableLeftRight();
         lockerRoomApi.GetWearables(currentCharacter.nftID.ToString(), true);
 
         KeyMaker.instance.getJuiceFromRestApi(currentCharacter.nftID);
@@ -701,7 +710,7 @@ public class LockerRoomManager : MonoBehaviour
         {
             slider.value = 0;
         }
-
+        DisableLeftRight();
         lockerRoomApi.GetWearables(currentCharacter.nftID.ToString(), true);
 
         KeyMaker.instance.getJuiceFromRestApi(currentCharacter.nftID);
@@ -732,6 +741,12 @@ public class LockerRoomManager : MonoBehaviour
 
         currentMask[1] = -1;
         currentMask[1] = -1;
+        beltsSKUandID.Clear();
+        glassesSKUandID.Clear();
+        glovesSKUandID.Clear();
+        shoesSKUandID.Clear();
+        shortsSKUandID.Clear();
+        masksSKUandID.Clear();
     }
 
     private void WearableSwapper(string wearableModel)
@@ -857,19 +872,34 @@ public class LockerRoomManager : MonoBehaviour
 
         }
 
-        spawnedSkinnedMeshRenderer = wearable.GetComponent<SkinnedMeshRenderer>();
-        
-        spawnedSkinnedMeshRenderer.bones = playerModelParentObject.transform.GetChild(childIndex).GetComponent<SkinnedMeshRenderer>().bones;
-        
-        spawnedSkinnedMeshRenderer.rootBone = rootBone;
+        /* spawnedSkinnedMeshRenderer = wearable.GetComponent<SkinnedMeshRenderer>();
 
-        wearable.transform.parent = playerModelParentObject.transform;
-        
-        Destroy(playerModelParentObject.transform.GetChild(childIndex).transform.gameObject);
-        
-        Destroy(instantiatedWearable);
-        
-        wearable.transform.SetSiblingIndex(childIndex);
+         spawnedSkinnedMeshRenderer.bones = playerModelParentObject.transform.GetChild(childIndex).GetComponent<SkinnedMeshRenderer>().bones;
+
+         spawnedSkinnedMeshRenderer.rootBone = rootBone;
+
+         wearable.transform.parent = playerModelParentObject.transform;
+
+         Destroy(playerModelParentObject.transform.GetChild(childIndex).transform.gameObject);
+
+         Destroy(instantiatedWearable);
+
+         wearable.transform.SetSiblingIndex(childIndex);*/
+        spawnedSkinnedMeshRenderer = wearable.GetComponent<SkinnedMeshRenderer>();
+        SkinnedMeshRenderer original = playerModelParentObject.transform.GetChild(childIndex).GetComponent<SkinnedMeshRenderer>();
+        original.sharedMaterials = new Material[] { };
+        if (spawnedSkinnedMeshRenderer.sharedMaterials.Length > 1)
+        {
+            original.sharedMaterials = spawnedSkinnedMeshRenderer.sharedMaterials;
+
+        }
+        else
+        {
+            original.material.mainTexture = spawnedSkinnedMeshRenderer.sharedMaterial.mainTexture;
+        }
+
+
+       original.sharedMesh = spawnedSkinnedMeshRenderer.sharedMesh;
 
     }
 
@@ -2356,5 +2386,24 @@ public class LockerRoomManager : MonoBehaviour
         slug = name.ToLower().Replace(".", "").Replace("'", "").Replace(" ", "-");
         return slug;
 
+    }
+
+    public void EnableLeftRight()
+    {
+        left.interactable = true;
+        right.interactable = true;
+        foreach(GameObject b in wearableButtons)
+        {
+            b.GetComponent<Button>().interactable = true;
+        }
+    }
+    public void DisableLeftRight()
+    {
+        left.interactable = false;
+        right.interactable = false;
+        foreach (GameObject b in wearableButtons)
+        {
+            b.GetComponent<Button>().interactable = false;
+        }
     }
 }

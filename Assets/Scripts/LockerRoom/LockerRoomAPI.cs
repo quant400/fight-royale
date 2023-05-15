@@ -219,7 +219,7 @@ public class LockerRoomAPI : MonoBehaviour
                 WearableReply r = JsonUtility.FromJson<WearableReply>(request.downloadHandler.text);
 
                 gameplayView.instance.wearableReply = r;
-
+                lockerRoomManager.EnableLeftRight();
                 /*
                 Debug.Log("num: = " + r.num);
 
