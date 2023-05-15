@@ -10,6 +10,8 @@ public class SliderText : MonoBehaviour
 
     public Slider slider;
 
+    public Slider sliderGreen;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,6 +21,22 @@ public class SliderText : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        tMP_Text.text = slider.value.ToString();
+        if(sliderGreen.value == 0)
+        {
+            tMP_Text.text = slider.value.ToString();
+        }
+        else
+        {
+            if(sliderGreen.value - slider.value > 0)
+            {
+                tMP_Text.text = slider.value.ToString() + " + " + (sliderGreen.value - slider.value).ToString();
+            }
+            else
+            {
+                tMP_Text.text = slider.value.ToString();
+            }
+        }
+
+        
     }
 }

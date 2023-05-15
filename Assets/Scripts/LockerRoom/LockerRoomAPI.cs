@@ -85,7 +85,9 @@ public class LockerRoomAPI : MonoBehaviour
 
     public void MintWearable(string assetId, string assetSlot)
     {
-        StartCoroutine(GetMint(assetId, assetSlot));
+        //StartCoroutine(GetMint(assetId, assetSlot));
+
+        StartCoroutine(GetMint(assetId, RandomSlug()));
     }
 
     public void GetWearables(string assetId, bool isLockerRoomManager)
@@ -98,6 +100,38 @@ public class LockerRoomAPI : MonoBehaviour
         StartCoroutine(EquipWearableRequest(assetId));
     }
 
+    private string RandomSlug()
+    {
+        string slug = "Shoes";
+
+        int temp = Random.Range(0, 3);
+        switch (temp)
+        {
+            case 0:
+                slug = "Belts";
+                break;
+            case 1:
+                slug = "Gloves";
+                break;
+            case 2:
+                slug = "Shoes";
+                break;
+            case 3:
+                slug = "Shorts";
+                break;
+            case 4:
+                slug = "Masks";
+                break;
+            case 5:
+                slug = "Glasses";
+                break;
+            case 6:
+                slug = "Trainers";
+                break;
+        }
+
+        return slug;
+    }
 
 
     IEnumerator GetMint(string assetId, string assetSlot)
