@@ -220,7 +220,7 @@ public class LockerRoomAPI : MonoBehaviour
 
                 gameplayView.instance.wearableReply = r;
 
-                
+                /*
                 Debug.Log("num: = " + r.num);
 
                 for (int i = 0; i < r.wearables.Length; i++)
@@ -230,7 +230,7 @@ public class LockerRoomAPI : MonoBehaviour
                     Debug.Log("is_equiped: = " + r.wearables[i].is_equiped);
                     Debug.Log("health: = " + r.wearables[i].health);
                 }
-                
+                */
 
                 if(isLockerRoomManager)
                 {
