@@ -424,11 +424,11 @@ public class LockerRoomManager : MonoBehaviour
 
                     wearableButtonSelected[2] = 1;
 
-                    wearableButtons[4].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlovesSpritePath,
+                    wearableButtons[0].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlovesSpritePath,
                         gloves[gloves.Count - 1]), typeof(Sprite)) as Sprite;
 
-                    wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color.r,
-                        wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color.b, 1);
+                    wearableButtons[0].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[0].transform.GetChild(0).GetComponent<Image>().color.r,
+                        wearableButtons[0].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[0].transform.GetChild(0).GetComponent<Image>().color.b, 1);
 
                     WearableSwapper(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
                 }
@@ -514,6 +514,8 @@ public class LockerRoomManager : MonoBehaviour
         {
             wearableButtonSelected[i] = tempWearableButtonSelected[i];
         }
+
+        UpdateUI();
 
     }
 
@@ -1444,6 +1446,70 @@ public class LockerRoomManager : MonoBehaviour
         }
     }
 
+    private void UpdateUI()
+    {
+        Debug.Log("currentShoes[0] = " + currentShoes[0]);
+
+        Debug.Log((currentShoes[0] == -1));
+
+        if(currentBelt[0] == -1)
+        {
+            wearableButtons[4].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(BeltsSpritePath,
+                "none"), typeof(Sprite)) as Sprite;
+
+            wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color.r,
+                wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color.b, 0.5f);
+        }
+
+        if (currentGlasses[0] == -1)
+        {
+            wearableButtons[2].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlassesSpritePath,
+                "none"), typeof(Sprite)) as Sprite;
+
+            wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.r,
+                wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.b, 0.5f);
+        }
+
+        if (currentGloves[0] == -1)
+        {
+            wearableButtons[0].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlovesSpritePath,
+                "none"), typeof(Sprite)) as Sprite;
+
+            wearableButtons[0].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[0].transform.GetChild(0).GetComponent<Image>().color.r,
+                wearableButtons[0].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[0].transform.GetChild(0).GetComponent<Image>().color.b, 0.5f);
+        }
+
+        if (currentShoes[0] == -1)
+        {
+            Debug.Log("None");
+
+            wearableButtons[3].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(ShoesSpritePath,
+                "none"), typeof(Sprite)) as Sprite;
+
+            wearableButtons[3].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[3].transform.GetChild(0).GetComponent<Image>().color.r,
+                wearableButtons[3].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[3].transform.GetChild(0).GetComponent<Image>().color.b, 0.5f);
+        }
+
+        if (currentShort[0] == -1)
+        {
+            wearableButtons[1].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(ShortsSpritePath,
+                "none"), typeof(Sprite)) as Sprite;
+
+            wearableButtons[1].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[1].transform.GetChild(0).GetComponent<Image>().color.r,
+                wearableButtons[1].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[1].transform.GetChild(0).GetComponent<Image>().color.b, 0.5f);
+        }
+
+        if (currentMask[0] == -1)
+        {
+            wearableButtons[5].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(MasksSpritePath,
+                "none"), typeof(Sprite)) as Sprite;
+
+            wearableButtons[5].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[5].transform.GetChild(0).GetComponent<Image>().color.r,
+                wearableButtons[5].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[5].transform.GetChild(0).GetComponent<Image>().color.b, 0.5f);
+        }
+    }
+
+
     public void GridSelection(int wearableNum)
     {
         if(currentPage == 1)
@@ -1464,9 +1530,10 @@ public class LockerRoomManager : MonoBehaviour
                 if ((wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) < belts.Count)
                 {
                     WearableSwapper(belts[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]);
-
+                    /*
                     wearableButtons[4].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(BeltsSpritePath,
                         belts[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]), typeof(Sprite)) as Sprite;
+                    */
                 }
             }
             else if (wearableButtonSelected[1] == 1)
@@ -1474,9 +1541,10 @@ public class LockerRoomManager : MonoBehaviour
                 if ((wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) < glasses.Count)
                 {
                     WearableSwapper(glasses[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]);
-
+                    /*
                     wearableButtons[2].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlassesSpritePath,
                         glasses[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]), typeof(Sprite)) as Sprite;
+                    */
                 }
             }
             else if (wearableButtonSelected[2] == 1)
@@ -1484,9 +1552,10 @@ public class LockerRoomManager : MonoBehaviour
                 if ((wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) < gloves.Count)
                 {
                     WearableSwapper(gloves[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]);
-
+                    /*
                     wearableButtons[0].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlovesSpritePath,
                         gloves[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]), typeof(Sprite)) as Sprite;
+                    */
                 }
             }
             else if (wearableButtonSelected[3] == 1)
@@ -1494,9 +1563,10 @@ public class LockerRoomManager : MonoBehaviour
                 if ((wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) < shoes.Count)
                 {
                     WearableSwapper(shoes[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]);
-
+                    /*
                     wearableButtons[3].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(ShoesSpritePath,
                         shoes[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]), typeof(Sprite)) as Sprite;
+                    */
                 }
             }
             else if (wearableButtonSelected[4] == 1)
@@ -1504,9 +1574,10 @@ public class LockerRoomManager : MonoBehaviour
                 if ((wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) < shorts.Count)
                 {
                     WearableSwapper(shorts[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]);
-
+                    /*
                     wearableButtons[1].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(ShortsSpritePath,
                         shorts[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]), typeof(Sprite)) as Sprite;
+                    */
                 }
             }
             else if (wearableButtonSelected[5] == 1)
@@ -1514,9 +1585,10 @@ public class LockerRoomManager : MonoBehaviour
                 if ((wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) < masks.Count)
                 {
                     WearableSwapper(shorts[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]);
-
+                    /*
                     wearableButtons[1].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(MasksSpritePath,
                         masks[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]), typeof(Sprite)) as Sprite;
+                    */
                 }
             }
 
