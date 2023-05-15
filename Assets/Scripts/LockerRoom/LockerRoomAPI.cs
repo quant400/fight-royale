@@ -13,9 +13,16 @@ public struct MintRequest
 public struct MintReply
 {
     public bool status;
+    public DataWearable data;
 }
-
-
+[System.Serializable]
+public struct DataWearable
+{
+    public int id;
+    public int sku;
+    public int health;
+    public bool is_equiped;
+}
 
 public struct GetWearable
 {
@@ -75,6 +82,7 @@ public class LockerRoomAPI : MonoBehaviour
 
         wearableDatabase = new WearableDatabaseReader();
         wearableDatabase.LoadData(CSV_FILE_PATH);
+        //MintWearable("175", "asd");
     }
     
     // Update is called once per frame
@@ -102,9 +110,9 @@ public class LockerRoomAPI : MonoBehaviour
 
     private string RandomSlug()
     {
-        string slug = "Shoes";
+        string slug = "";
 
-        int temp = Random.Range(0, 3);
+        int temp = Random.Range(0, 4);
         switch (temp)
         {
             case 0:
@@ -130,7 +138,7 @@ public class LockerRoomAPI : MonoBehaviour
                 break;
         }
 
-        return slug;
+        return slug.ToUpper();
     }
 
 
@@ -140,6 +148,7 @@ public class LockerRoomAPI : MonoBehaviour
         MintRequest mintRequest = new MintRequest();
         mintRequest.id = assetId;
         mintRequest.slot = assetSlot;
+        Debug.Log(mintRequest.slot);
         if (KeyMaker.instance.buildType == BuildTypeGame.staging)
             url = "https://staging-api.cryptofightclub.io/game/sdk/wearable/mint";
         else if (KeyMaker.instance.buildType == BuildTypeGame.production)
@@ -163,6 +172,11 @@ public class LockerRoomAPI : MonoBehaviour
 
                 Debug.Log("status: = " + r.status);
 
+
+                Debug.Log("id: = " + r.data.id);
+                Debug.Log("sku: = " + r.data.sku);
+                Debug.Log("is_equiped: = " + r.data.is_equiped);
+                Debug.Log("health: = " + r.data.health);
                 /*
                 if (KeyMaker.instance.buildType == BuildType.staging)
                     Debug.Log(request.downloadHandler.text);
@@ -195,7 +209,7 @@ public class LockerRoomAPI : MonoBehaviour
         using (UnityWebRequest request = UnityWebRequest.Put(url, idJsonData))
         {
             byte[] bodyRaw = Encoding.UTF8.GetBytes(idJsonData);
-            request.method = "GET";
+            request.method = "PUT";
             request.SetRequestHeader("Accept", "application/json");
             request.SetRequestHeader("Content-Type", "application/json");
             yield return request.SendWebRequest();
@@ -206,7 +220,7 @@ public class LockerRoomAPI : MonoBehaviour
 
                 gameplayView.instance.wearableReply = r;
 
-                /*
+                
                 Debug.Log("num: = " + r.num);
 
                 for (int i = 0; i < r.wearables.Length; i++)
@@ -216,7 +230,7 @@ public class LockerRoomAPI : MonoBehaviour
                     Debug.Log("is_equiped: = " + r.wearables[i].is_equiped);
                     Debug.Log("health: = " + r.wearables[i].health);
                 }
-                */
+                
 
                 if(isLockerRoomManager)
                 {

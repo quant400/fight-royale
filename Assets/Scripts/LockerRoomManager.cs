@@ -89,9 +89,6 @@ public class LockerRoomManager : MonoBehaviour
     [SerializeField]
     private Slider[] slidersUI;
 
-    [SerializeField]
-    private Slider[] slidersGreenUI;
-
     private Button[] objectButtons;
 
     private RectTransform[] rectTransforms;
@@ -244,7 +241,7 @@ public class LockerRoomManager : MonoBehaviour
         }
         
 
-        SetAttributeSliders(currentCharacter.baseAttributes, false);
+        SetAttributeSliders(currentCharacter.baseAttributes);
     }
 
     private void GetWearablesAttributes()
@@ -339,7 +336,7 @@ public class LockerRoomManager : MonoBehaviour
         }
         
 
-        SetAttributeSliders(totalAttributes, true);
+        SetAttributeSliders(totalAttributes);
     }
 
     public void GetWearablesModelArray()
@@ -378,7 +375,7 @@ public class LockerRoomManager : MonoBehaviour
                     wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color.r,
                         wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color.b, 1);
 
-                    WearableSwapper(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
+                    //WearableSwapper(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
                 }
             }
             else if (lockerRoomApi.wearableDatabase.GetSlot(currentCharacter.wearablesData.wearables[i].sku) == "Glasses")
@@ -403,7 +400,7 @@ public class LockerRoomManager : MonoBehaviour
                     wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.r,
                         wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.b, 1);
 
-                    WearableSwapper(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
+                    //WearableSwapper(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
                 }
             }
             else if (lockerRoomApi.wearableDatabase.GetSlot(currentCharacter.wearablesData.wearables[i].sku) == "Gloves")
@@ -453,7 +450,7 @@ public class LockerRoomManager : MonoBehaviour
                     wearableButtons[3].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[3].transform.GetChild(0).GetComponent<Image>().color.r,
                         wearableButtons[3].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[3].transform.GetChild(0).GetComponent<Image>().color.b, 1);
 
-                    WearableSwapper(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
+                    //WearableSwapper(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
                 }
             }
             else if (lockerRoomApi.wearableDatabase.GetSlot(currentCharacter.wearablesData.wearables[i].sku) == "Shorts")
@@ -503,7 +500,7 @@ public class LockerRoomManager : MonoBehaviour
                     wearableButtons[5].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[5].transform.GetChild(0).GetComponent<Image>().color.r,
                         wearableButtons[5].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[5].transform.GetChild(0).GetComponent<Image>().color.b, 1);
 
-                    WearableSwapper(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
+                    //WearableSwapper(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
                 }
             }
         }
@@ -515,35 +512,15 @@ public class LockerRoomManager : MonoBehaviour
 
     }
 
-    private void SetAttributeSliders(Dictionary<string, int> listToSet, bool isGreen)
+    private void SetAttributeSliders(Dictionary<string, int> listToSet)
     {
         int count = 0;
 
-        if(isGreen)
+        foreach (KeyValuePair<string, int> attributes in listToSet)
         {
-            foreach (KeyValuePair<string, int> attributes in listToSet)
-            {
-                slidersGreenUI[count].DOValue(attributes.Value, 1.0f, true);
+            slidersUI[count].value = attributes.Value;
 
-                //slidersGreenUI[count].value = attributes.Value;
-
-                count++;
-            }
-        }
-        else
-        {
-            foreach (KeyValuePair<string, int> attributes in listToSet)
-            {
-                slidersUI[count].DOValue(attributes.Value, 1.0f, true);
-
-                slidersGreenUI[count].value = 0;
-
-                //slidersUI[count].value = attributes.Value;
-
-                //slidersGreenUI[count].value = attributes.Value;
-
-                count++;
-            }
+            count++;
         }
     }
 
@@ -651,23 +628,12 @@ public class LockerRoomManager : MonoBehaviour
 
         gridSelectionNum = 0;
 
-        foreach (Slider slider in slidersUI)
-        {
-            slider.value = 0;
-        }
-
-        foreach (Slider slider in slidersGreenUI)
-        {
-            slider.value = 0;
-        }
-
         lockerRoomApi.GetWearables(currentCharacter.nftID.ToString(), true);
 
         KeyMaker.instance.getJuiceFromRestApi(currentCharacter.nftID);
 
         GetCharacterAttributes(currentModel);
-        
-
+         
         ActiveModelSwap(models[currentModel]);
        
     }
@@ -692,23 +658,12 @@ public class LockerRoomManager : MonoBehaviour
 
         gridSelectionNum = 0;
 
-        foreach (Slider slider in slidersUI)
-        {
-            slider.value = 0;
-        }
-
-        foreach (Slider slider in slidersGreenUI)
-        {
-            slider.value = 0;
-        }
-
         lockerRoomApi.GetWearables(currentCharacter.nftID.ToString(), true);
 
         KeyMaker.instance.getJuiceFromRestApi(currentCharacter.nftID);
 
         GetCharacterAttributes(currentModel);
         
-
         ActiveModelSwap(models[currentModel]);
         
     }
@@ -771,12 +726,17 @@ public class LockerRoomManager : MonoBehaviour
 
         }
 
+        GameObject instantiatedWearable = Instantiate(modelToInstantiate);
+
+        GameObject wearable;
+        
+        SkinnedMeshRenderer spawnedSkinnedMeshRenderer;
 
         int childIndex = 1;
 
         if (wearableButtonSelected[0] == 1)
         {
-            childIndex = 6;
+            childIndex = -1;
         }
         else if (wearableButtonSelected[1] == 1)
         {
@@ -799,38 +759,16 @@ public class LockerRoomManager : MonoBehaviour
             childIndex = -1;
         }
 
-        GameObject instantiatedWearable;
-
-        GameObject wearable;
-
-        SkinnedMeshRenderer spawnedSkinnedMeshRenderer;
-
-
         if (models.Contains(wearableModel))
         {
-            if(childIndex < 6)
-            {
-                instantiatedWearable = Instantiate(modelToInstantiate);
-
-                wearable = instantiatedWearable.transform.GetChild(childIndex).gameObject;
-            }
-            else
-            {
-                playerModelParentObject.transform.GetChild(childIndex).transform.gameObject.SetActive(false);
-
-                return;
-            }
-            
+            wearable = instantiatedWearable.transform.GetChild(childIndex).gameObject;
         }
         else
         {
-            instantiatedWearable = Instantiate(modelToInstantiate);
-
             wearable = instantiatedWearable.transform.GetChild(1).gameObject;
 
             foreach (string color in colors)
             {
-
                 if (playerModelParentObject.transform.GetChild(childIndex).name.Contains(color))
                 {
                     foreach (Transform child in instantiatedWearable.transform)
@@ -858,19 +796,14 @@ public class LockerRoomManager : MonoBehaviour
         }
 
         spawnedSkinnedMeshRenderer = wearable.GetComponent<SkinnedMeshRenderer>();
-        
+
         spawnedSkinnedMeshRenderer.bones = playerModelParentObject.transform.GetChild(childIndex).GetComponent<SkinnedMeshRenderer>().bones;
-        
         spawnedSkinnedMeshRenderer.rootBone = rootBone;
 
         wearable.transform.parent = playerModelParentObject.transform;
-        
         Destroy(playerModelParentObject.transform.GetChild(childIndex).transform.gameObject);
-        
         Destroy(instantiatedWearable);
-        
         wearable.transform.SetSiblingIndex(childIndex);
-
     }
 
     private void SpawnModel(GameObject objectToSpawn, int childIndex, bool isGlove, bool isCharModel)
@@ -1498,7 +1431,7 @@ public class LockerRoomManager : MonoBehaviour
         if(currentPage < totalPages)
         {
             currentPage++;
-
+            pageNumbersText.text = currentPage.ToString() + "/" + totalPages.ToString();
             SelectionScreenImages();
         }
 
@@ -1521,7 +1454,7 @@ public class LockerRoomManager : MonoBehaviour
         if (currentPage > 1)
         {
             currentPage--;
-
+            pageNumbersText.text = currentPage.ToString() + "/" + totalPages.ToString();
             SelectionScreenImages();
         }
 
@@ -1710,15 +1643,15 @@ public class LockerRoomManager : MonoBehaviour
             }
             else if (wearableButtonSelected[3] == 1)
             {
-                totalPages = shoes.Count / (gridObject.transform.childCount - 1);
+                totalPages = shoes.Count / (gridObject.transform.childCount - 2);
 
-                if (shoes.Count < (gridObject.transform.childCount - 1))
+                if (shoes.Count < (gridObject.transform.childCount - 2))
                 {
                     totalPages += 1;
                 }
                 else
                 {
-                    if (shoes.Count % (gridObject.transform.childCount - 1) != 0)
+                    if (shoes.Count % (gridObject.transform.childCount - 2) != 0)
                     {
                         totalPages += 1;
                     }
@@ -1839,6 +1772,7 @@ public class LockerRoomManager : MonoBehaviour
             canvasGroups[i] = wearableUI[i].GetComponent<CanvasGroup>();
         }
 
+
         if (!gameplayView.instance)
         {
             models = ModelNames(characterModelsPath);
@@ -1855,7 +1789,6 @@ public class LockerRoomManager : MonoBehaviour
 
             masks = ModelNames(MasksModelsPath);
         }
-        
     }
 
     private void EmptyAllLists()
