@@ -174,6 +174,11 @@ public class Skin_Controller : MonoBehaviour
                 _meshRenderer[GetIndex(x[0]) - 3].sharedMesh = spawnedSkinnedMeshRenderer.sharedMesh;
             }
 
+            if(childIndex == 8)
+            {
+                transform.GetChild(childIndex).gameObject.SetActive(true);
+            }
+
             //Destroy(instantiatedWearable);
         }
 
@@ -190,6 +195,8 @@ public class Skin_Controller : MonoBehaviour
                 return 5;
             case "Shoes":
                 return 6;
+            case "Belts":
+                return 8;
         }
 
         return -1;

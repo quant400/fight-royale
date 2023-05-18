@@ -53,19 +53,25 @@ public class LockerRoomManager : MonoBehaviour
     private int[] currentBelt = {-1, -1};
     public List<string> glasses;
     public List<int[]> glassesSKUandID;
-    private int[] currentGlasses = { -1, -1 };
+    //private int[] currentGlasses = { -1, -1 };
     public List<string> gloves;
     public List<int[]> glovesSKUandID;
     private int[] currentGloves = { -1, -1 };
+    public List<string> skills;
+    public List<int[]> skillsSKUandID;
     public List<string> shoes;
     public List<int[]> shoesSKUandID;
+    private int[] currentExtras = { -1, -1 };
     private int[] currentShoes = { -1, -1 };
     public List<string> shorts;
     public List<int[]> shortsSKUandID;
     private int[] currentShort = { -1, -1 };
     public List<string> masks;
     public List<int[]> masksSKUandID;
-    private int[] currentMask = { -1, -1 };
+    //private int[] currentMask = { -1, -1 };
+    public List<string> trainers;
+    public List<int[]> trainersSKUandID;
+    private int[] trainersMask = { -1, -1 };
 
     private Transform rootBone;
 
@@ -133,6 +139,9 @@ public class LockerRoomManager : MonoBehaviour
     private const string GlovesModelsPath = "WearableModels/Gloves";
     private const string GlovesSpritePath = "DisplaySprites/Wearables/Gloves/";
 
+    private const string SkillsModelsPath = "WearableModels/Skills";
+    private const string SkillsSpritePath = "DisplaySprites/Wearables/Skills/";
+
     private const string ShoesModelsPath = "WearableModels/Shoes";
     private const string ShoesSpritePath = "DisplaySprites/Wearables/Shoes/";
 
@@ -141,6 +150,10 @@ public class LockerRoomManager : MonoBehaviour
 
     private const string MasksModelsPath = "WearableModels/Masks";
     private const string MasksSpritePath = "DisplaySprites/Wearables/Masks/";
+
+    private const string TrainersModelsPath = "WearableModels/Trainers";
+    private const string TrainersSpritePath = "DisplaySprites/Wearables/Trainers/";
+
     [SerializeField]
     RuntimeAnimatorController oldConttoller, controller;
     [SerializeField]
@@ -192,11 +205,15 @@ public class LockerRoomManager : MonoBehaviour
 
         glovesSKUandID = new List<int[]>();
 
+        skillsSKUandID = new List<int[]>();
+
         shoesSKUandID = new List<int[]>();
 
         shortsSKUandID = new List<int[]>();
 
         masksSKUandID = new List<int[]>();
+
+        trainersSKUandID = new List<int[]>();
 
 
         Intialize();
@@ -313,21 +330,45 @@ public class LockerRoomManager : MonoBehaviour
 
     public void CaculateTotalAttrbutes()
     {
-        GetWearablesAttributes();
+        if (currentCharacter.wearablesData.num != 0)
+        {
+            GetWearablesAttributes();
+        }
+            
 
         totalAttributes.Clear();
 
-        foreach (KeyValuePair<string, int> attributes in currentCharacter.baseAttributes)
+        if (currentCharacter.wearablesData.num != 0)
         {
-            if (totalAttributes.ContainsKey(attributes.Key))
+            foreach (KeyValuePair<string, int> attributes in currentCharacter.baseAttributes)
             {
-                totalAttributes[attributes.Key] += attributes.Value + currentCharacter.wearableAttributes[attributes.Key];
-            }
-            else
-            {
-                if (currentCharacter.wearableAttributes.ContainsKey(attributes.Key))
+                if (totalAttributes.ContainsKey(attributes.Key))
                 {
-                    totalAttributes.Add(attributes.Key, attributes.Value + currentCharacter.wearableAttributes[attributes.Key]);
+                    totalAttributes[attributes.Key] += attributes.Value + currentCharacter.wearableAttributes[attributes.Key];
+                }
+                else
+                {
+                    if (currentCharacter.wearableAttributes.ContainsKey(attributes.Key))
+                    {
+                        totalAttributes.Add(attributes.Key, attributes.Value + currentCharacter.wearableAttributes[attributes.Key]);
+                    }
+                }
+            }
+        }
+        else
+        {
+            foreach (KeyValuePair<string, int> attributes in currentCharacter.baseAttributes)
+            {
+                if (totalAttributes.ContainsKey(attributes.Key))
+                {
+                    totalAttributes[attributes.Key] += attributes.Value;
+                }
+                else
+                {
+                    if (currentCharacter.wearableAttributes.ContainsKey(attributes.Key))
+                    {
+                        totalAttributes.Add(attributes.Key, attributes.Value);
+                    }
                 }
             }
         }
@@ -354,158 +395,160 @@ public class LockerRoomManager : MonoBehaviour
 
             wearableButtonSelected[i] = 0;
         }
-
-        for (int i = 0; i < currentCharacter.wearablesData.wearables.Length; i++)
+        if (currentCharacter.wearablesData.num != 0)
         {
-            if (lockerRoomApi.wearableDatabase.GetSlot(currentCharacter.wearablesData.wearables[i].sku) == "Belts")
+            for (int i = 0; i < currentCharacter.wearablesData.wearables.Length; i++)
             {
-                belts.Add(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
-
-                int[] newItem = { currentCharacter.wearablesData.wearables[i].sku, currentCharacter.wearablesData.wearables[i].id };
-
-                beltsSKUandID.Add(newItem);
-                
-
-                if (currentCharacter.wearablesData.wearables[i].is_equiped == "True" || currentCharacter.wearablesData.wearables[i].is_equiped == "true")
+                if (lockerRoomApi.wearableDatabase.GetSlot(currentCharacter.wearablesData.wearables[i].sku) == "Belts")
                 {
-                    currentBelt[0] = currentCharacter.wearablesData.wearables[i].sku;
+                    belts.Add(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
 
-                    currentBelt[1] = currentCharacter.wearablesData.wearables[i].id;
+                    int[] newItem = { currentCharacter.wearablesData.wearables[i].sku, currentCharacter.wearablesData.wearables[i].id };
 
-                    wearableButtonSelected[0] = 1;
+                    beltsSKUandID.Add(newItem);
 
-                    wearableButtons[4].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(BeltsSpritePath,
-                        belts[belts.Count - 1]), typeof(Sprite)) as Sprite;
 
-                    wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color.r,
-                        wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color.b, 1);
+                    if (currentCharacter.wearablesData.wearables[i].is_equiped == "True" || currentCharacter.wearablesData.wearables[i].is_equiped == "true")
+                    {
+                        currentBelt[0] = currentCharacter.wearablesData.wearables[i].sku;
 
-                    WearableSwapper(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
+                        currentBelt[1] = currentCharacter.wearablesData.wearables[i].id;
+
+                        wearableButtonSelected[0] = 1;
+
+                        wearableButtons[4].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(BeltsSpritePath,
+                            belts[belts.Count - 1]), typeof(Sprite)) as Sprite;
+
+                        wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color.r,
+                            wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color.b, 1);
+
+                        WearableSwapper(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
+                    }
                 }
-            }
-            else if (lockerRoomApi.wearableDatabase.GetSlot(currentCharacter.wearablesData.wearables[i].sku) == "Glasses")
-            {
-                glasses.Add(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
-
-                int[] newItem = { currentCharacter.wearablesData.wearables[i].sku, currentCharacter.wearablesData.wearables[i].id };
-
-                glassesSKUandID.Add(newItem);
-
-                if (currentCharacter.wearablesData.wearables[i].is_equiped == "True" || currentCharacter.wearablesData.wearables[i].is_equiped == "true")
+                else if (lockerRoomApi.wearableDatabase.GetSlot(currentCharacter.wearablesData.wearables[i].sku) == "Glasses")
                 {
-                    currentGlasses[0] = currentCharacter.wearablesData.wearables[i].sku;
+                    glasses.Add(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
 
-                    currentGlasses[1] = currentCharacter.wearablesData.wearables[i].id;
+                    int[] newItem = { currentCharacter.wearablesData.wearables[i].sku, currentCharacter.wearablesData.wearables[i].id };
 
-                    wearableButtonSelected[1] = 1;
+                    glassesSKUandID.Add(newItem);
 
-                    wearableButtons[2].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlassesSpritePath,
-                        glasses[glasses.Count - 1]), typeof(Sprite)) as Sprite;
+                    if (currentCharacter.wearablesData.wearables[i].is_equiped == "True" || currentCharacter.wearablesData.wearables[i].is_equiped == "true")
+                    {
+                        currentExtras[0] = currentCharacter.wearablesData.wearables[i].sku;
 
-                    wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.r,
-                        wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.b, 1);
+                        currentExtras[1] = currentCharacter.wearablesData.wearables[i].id;
 
-                    WearableSwapper(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
+                        wearableButtonSelected[1] = 1;
+
+                        wearableButtons[2].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlassesSpritePath,
+                            glasses[glasses.Count - 1]), typeof(Sprite)) as Sprite;
+
+                        wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.r,
+                            wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.b, 1);
+
+                        WearableSwapper(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
+                    }
                 }
-            }
-            else if (lockerRoomApi.wearableDatabase.GetSlot(currentCharacter.wearablesData.wearables[i].sku) == "Gloves")
-            {
-                gloves.Add(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
-
-                int[] newItem = { currentCharacter.wearablesData.wearables[i].sku, currentCharacter.wearablesData.wearables[i].id };
-
-                glovesSKUandID.Add(newItem);
-
-                if (currentCharacter.wearablesData.wearables[i].is_equiped == "True" || currentCharacter.wearablesData.wearables[i].is_equiped == "true")
+                else if (lockerRoomApi.wearableDatabase.GetSlot(currentCharacter.wearablesData.wearables[i].sku) == "Gloves")
                 {
-                    currentGloves[0] = currentCharacter.wearablesData.wearables[i].sku;
+                    gloves.Add(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
 
-                    currentGloves[1] = currentCharacter.wearablesData.wearables[i].id;
+                    int[] newItem = { currentCharacter.wearablesData.wearables[i].sku, currentCharacter.wearablesData.wearables[i].id };
 
-                    wearableButtonSelected[2] = 1;
+                    glovesSKUandID.Add(newItem);
 
-                    wearableButtons[0].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlovesSpritePath,
-                        gloves[gloves.Count - 1]), typeof(Sprite)) as Sprite;
+                    if (currentCharacter.wearablesData.wearables[i].is_equiped == "True" || currentCharacter.wearablesData.wearables[i].is_equiped == "true")
+                    {
+                        currentGloves[0] = currentCharacter.wearablesData.wearables[i].sku;
 
-                    wearableButtons[0].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[0].transform.GetChild(0).GetComponent<Image>().color.r,
-                        wearableButtons[0].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[0].transform.GetChild(0).GetComponent<Image>().color.b, 1);
+                        currentGloves[1] = currentCharacter.wearablesData.wearables[i].id;
 
-                    WearableSwapper(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
+                        wearableButtonSelected[2] = 1;
+
+                        wearableButtons[0].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlovesSpritePath,
+                            gloves[gloves.Count - 1]), typeof(Sprite)) as Sprite;
+
+                        wearableButtons[0].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[0].transform.GetChild(0).GetComponent<Image>().color.r,
+                            wearableButtons[0].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[0].transform.GetChild(0).GetComponent<Image>().color.b, 1);
+
+                        WearableSwapper(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
+                    }
                 }
-            }
-            else if (lockerRoomApi.wearableDatabase.GetSlot(currentCharacter.wearablesData.wearables[i].sku) == "Shoes")
-            {
-                shoes.Add(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
-
-                int[] newItem = { currentCharacter.wearablesData.wearables[i].sku, currentCharacter.wearablesData.wearables[i].id };
-
-                shoesSKUandID.Add(newItem);
-
-                if (currentCharacter.wearablesData.wearables[i].is_equiped == "True" || currentCharacter.wearablesData.wearables[i].is_equiped == "true")
+                else if (lockerRoomApi.wearableDatabase.GetSlot(currentCharacter.wearablesData.wearables[i].sku) == "Shoes")
                 {
-                    currentShoes[0] = currentCharacter.wearablesData.wearables[i].sku;
+                    shoes.Add(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
 
-                    currentShoes[1] = currentCharacter.wearablesData.wearables[i].id;
+                    int[] newItem = { currentCharacter.wearablesData.wearables[i].sku, currentCharacter.wearablesData.wearables[i].id };
 
-                    wearableButtonSelected[3] = 1;
+                    shoesSKUandID.Add(newItem);
 
-                    wearableButtons[3].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(ShoesSpritePath,
-                        shoes[shoes.Count - 1]), typeof(Sprite)) as Sprite;
+                    if (currentCharacter.wearablesData.wearables[i].is_equiped == "True" || currentCharacter.wearablesData.wearables[i].is_equiped == "true")
+                    {
+                        currentShoes[0] = currentCharacter.wearablesData.wearables[i].sku;
 
-                    wearableButtons[3].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[3].transform.GetChild(0).GetComponent<Image>().color.r,
-                        wearableButtons[3].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[3].transform.GetChild(0).GetComponent<Image>().color.b, 1);
+                        currentShoes[1] = currentCharacter.wearablesData.wearables[i].id;
 
-                    WearableSwapper(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
+                        wearableButtonSelected[3] = 1;
+
+                        wearableButtons[3].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(ShoesSpritePath,
+                            shoes[shoes.Count - 1]), typeof(Sprite)) as Sprite;
+
+                        wearableButtons[3].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[3].transform.GetChild(0).GetComponent<Image>().color.r,
+                            wearableButtons[3].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[3].transform.GetChild(0).GetComponent<Image>().color.b, 1);
+
+                        WearableSwapper(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
+                    }
                 }
-            }
-            else if (lockerRoomApi.wearableDatabase.GetSlot(currentCharacter.wearablesData.wearables[i].sku) == "Shorts")
-            {
-                shorts.Add(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
-                
-                int[] newItem = { currentCharacter.wearablesData.wearables[i].sku, currentCharacter.wearablesData.wearables[i].id };
-
-                shortsSKUandID.Add(newItem);
-
-                if (currentCharacter.wearablesData.wearables[i].is_equiped == "True" || currentCharacter.wearablesData.wearables[i].is_equiped == "true")
+                else if (lockerRoomApi.wearableDatabase.GetSlot(currentCharacter.wearablesData.wearables[i].sku) == "Shorts")
                 {
-                    currentShort[0] = currentCharacter.wearablesData.wearables[i].sku;
+                    shorts.Add(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
 
-                    currentShort[1] = currentCharacter.wearablesData.wearables[i].id;
+                    int[] newItem = { currentCharacter.wearablesData.wearables[i].sku, currentCharacter.wearablesData.wearables[i].id };
 
-                    wearableButtonSelected[4] = 1;
+                    shortsSKUandID.Add(newItem);
 
-                    wearableButtons[1].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(ShortsSpritePath,
-                        shorts[shorts.Count - 1]), typeof(Sprite)) as Sprite;
+                    if (currentCharacter.wearablesData.wearables[i].is_equiped == "True" || currentCharacter.wearablesData.wearables[i].is_equiped == "true")
+                    {
+                        currentShort[0] = currentCharacter.wearablesData.wearables[i].sku;
 
-                    wearableButtons[1].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[1].transform.GetChild(0).GetComponent<Image>().color.r,
-                        wearableButtons[1].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[1].transform.GetChild(0).GetComponent<Image>().color.b, 1);
+                        currentShort[1] = currentCharacter.wearablesData.wearables[i].id;
 
-                    WearableSwapper(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
+                        wearableButtonSelected[4] = 1;
+
+                        wearableButtons[1].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(ShortsSpritePath,
+                            shorts[shorts.Count - 1]), typeof(Sprite)) as Sprite;
+
+                        wearableButtons[1].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[1].transform.GetChild(0).GetComponent<Image>().color.r,
+                            wearableButtons[1].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[1].transform.GetChild(0).GetComponent<Image>().color.b, 1);
+
+                        WearableSwapper(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
+                    }
                 }
-            }
-            else if (lockerRoomApi.wearableDatabase.GetSlot(currentCharacter.wearablesData.wearables[i].sku) == "Masks")
-            {
-                masks.Add(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
-                
-                int[] newItem = { currentCharacter.wearablesData.wearables[i].sku, currentCharacter.wearablesData.wearables[i].id };
-
-                masksSKUandID.Add(newItem);
-
-                if (currentCharacter.wearablesData.wearables[i].is_equiped == "True" || currentCharacter.wearablesData.wearables[i].is_equiped == "true")
+                else if (lockerRoomApi.wearableDatabase.GetSlot(currentCharacter.wearablesData.wearables[i].sku) == "Masks")
                 {
-                    currentMask[0] = currentCharacter.wearablesData.wearables[i].sku;
+                    masks.Add(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
 
-                    currentMask[1] = currentCharacter.wearablesData.wearables[i].id;
+                    int[] newItem = { currentCharacter.wearablesData.wearables[i].sku, currentCharacter.wearablesData.wearables[i].id };
 
-                    wearableButtonSelected[5] = 1;
+                    masksSKUandID.Add(newItem);
 
-                    wearableButtons[5].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(MasksSpritePath,
-                        masks[masks.Count - 1]), typeof(Sprite)) as Sprite;
+                    if (currentCharacter.wearablesData.wearables[i].is_equiped == "True" || currentCharacter.wearablesData.wearables[i].is_equiped == "true")
+                    {
+                        currentExtras[0] = currentCharacter.wearablesData.wearables[i].sku;
 
-                    wearableButtons[5].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[5].transform.GetChild(0).GetComponent<Image>().color.r,
-                        wearableButtons[5].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[5].transform.GetChild(0).GetComponent<Image>().color.b, 1);
+                        currentExtras[1] = currentCharacter.wearablesData.wearables[i].id;
 
-                    WearableSwapper(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
+                        wearableButtonSelected[5] = 1;
+
+                        wearableButtons[2].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(MasksSpritePath,
+                            masks[masks.Count - 1]), typeof(Sprite)) as Sprite;
+
+                        wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.r,
+                            wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.b, 1);
+
+                        WearableSwapper(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
+                    }
                 }
             }
         }
@@ -646,7 +689,6 @@ public class LockerRoomManager : MonoBehaviour
             currentModel = 0;
         }
 
-        
         EmptyWearablesLists();
 
         //currentNFT = gameplayView.instance.currentNFTs[currentModel].id;
@@ -729,8 +771,8 @@ public class LockerRoomManager : MonoBehaviour
         currentBelt[0] = -1;
         currentBelt[1] = -1;
 
-        currentGlasses[0] = -1;
-        currentGlasses[1] = -1;
+        currentExtras[0] = -1;
+        currentExtras[1] = -1;
 
         currentGloves[0] = -1;
         currentGloves[1] = -1;
@@ -741,14 +783,16 @@ public class LockerRoomManager : MonoBehaviour
         currentShort[0] = -1;
         currentShort[1] = -1;
 
-        currentMask[1] = -1;
-        currentMask[1] = -1;
         beltsSKUandID.Clear();
         glassesSKUandID.Clear();
         glovesSKUandID.Clear();
+        skillsSKUandID.Clear();
         shoesSKUandID.Clear();
         shortsSKUandID.Clear();
         masksSKUandID.Clear();
+        trainersSKUandID.Clear();
+
+        playerModelParentObject.transform.GetChild(6).transform.gameObject.SetActive(false);
     }
 
     private void WearableSwapper(string wearableModel)
@@ -841,16 +885,16 @@ public class LockerRoomManager : MonoBehaviour
         }
         else
         {
-            instantiatedWearable = Instantiate(modelToInstantiate);
+            //instantiatedWearable = Instantiate(modelToInstantiate);
 
-            wearable = instantiatedWearable.transform.GetChild(1).gameObject;
+            wearable = modelToInstantiate.transform.GetChild(1).gameObject;
 
             foreach (string color in colors)
             {
 
                 if (playerModelParentObject.transform.GetChild(childIndex).name.Contains(color))
                 {
-                    foreach (Transform child in instantiatedWearable.transform)
+                    foreach (Transform child in modelToInstantiate.transform)
                     {
                         /*
                         string wearableColor = "COLOR 1";
@@ -887,6 +931,7 @@ public class LockerRoomManager : MonoBehaviour
          Destroy(instantiatedWearable);
 
          wearable.transform.SetSiblingIndex(childIndex);*/
+
         spawnedSkinnedMeshRenderer = wearable.GetComponent<SkinnedMeshRenderer>();
         SkinnedMeshRenderer original = playerModelParentObject.transform.GetChild(childIndex).GetComponent<SkinnedMeshRenderer>();
         original.sharedMaterials = new Material[] { };
@@ -903,6 +948,10 @@ public class LockerRoomManager : MonoBehaviour
 
        original.sharedMesh = spawnedSkinnedMeshRenderer.sharedMesh;
 
+        if (childIndex >= 6)
+        {
+            playerModelParentObject.transform.GetChild(childIndex).transform.gameObject.SetActive(true);
+        }
     }
 
     private void SpawnModel(GameObject objectToSpawn, int childIndex, bool isGlove, bool isCharModel)
@@ -1050,7 +1099,7 @@ public class LockerRoomManager : MonoBehaviour
 
     private void EquipGlasses()
     {
-        int previousGlasses = currentGlasses[1];
+        int previousGlasses = currentExtras[1];
 
         if ((gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) < glasses.Count)
         {
@@ -1061,13 +1110,13 @@ public class LockerRoomManager : MonoBehaviour
                 wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.b, 1);
 
 
-            currentGlasses[0] = glassesSKUandID[(gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))][0];
-            currentGlasses[1] = glassesSKUandID[(gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))][1];
+            currentExtras[0] = glassesSKUandID[(gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))][0];
+            currentExtras[1] = glassesSKUandID[(gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))][1];
 
 
             for (int i = 0; i < currentCharacter.wearablesData.wearables.Length; i++)
             {
-                if (currentCharacter.wearablesData.wearables[i].id == currentGlasses[1] && (currentCharacter.wearablesData.wearables[i].is_equiped == "False" || currentCharacter.wearablesData.wearables[i].is_equiped == "false"))
+                if (currentCharacter.wearablesData.wearables[i].id == currentExtras[1] && (currentCharacter.wearablesData.wearables[i].is_equiped == "False" || currentCharacter.wearablesData.wearables[i].is_equiped == "false"))
                 {
                     lockerRoomApi.EquipWearables(currentCharacter.wearablesData.wearables[i].id.ToString());
 
@@ -1100,15 +1149,15 @@ public class LockerRoomManager : MonoBehaviour
 
             for (int i = 0; i < currentCharacter.wearablesData.wearables.Length; i++)
             {
-                if (currentCharacter.wearablesData.wearables[i].id == currentGlasses[1] && (currentCharacter.wearablesData.wearables[i].is_equiped == "True" || currentCharacter.wearablesData.wearables[i].is_equiped == "true"))
+                if (currentCharacter.wearablesData.wearables[i].id == currentExtras[1] && (currentCharacter.wearablesData.wearables[i].is_equiped == "True" || currentCharacter.wearablesData.wearables[i].is_equiped == "true"))
                 {
                     lockerRoomApi.EquipWearables(currentCharacter.wearablesData.wearables[i].id.ToString());
 
                     currentCharacter.wearablesData.wearables[i].is_equiped = "False";
 
-                    currentGlasses[0] = -1;
+                    currentExtras[0] = -1;
 
-                    currentGlasses[1] = -1;
+                    currentExtras[1] = -1;
 
                     i = currentCharacter.wearablesData.wearables.Length;
                 }
@@ -1319,22 +1368,22 @@ public class LockerRoomManager : MonoBehaviour
 
     private void EquipMask()
     {
-        int previousMask = currentMask[1];
+        int previousMask = currentExtras[1];
 
         if ((gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) < masks.Count)
         {
-            wearableButtons[5].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(MasksSpritePath,
+            wearableButtons[2].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(MasksSpritePath,
                 masks[(gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]), typeof(Sprite)) as Sprite;
 
-            wearableButtons[5].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[5].transform.GetChild(0).GetComponent<Image>().color.r,
-                wearableButtons[5].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[5].transform.GetChild(0).GetComponent<Image>().color.b, 1);
+            wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.r,
+                wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.b, 1);
 
-            currentMask[0] = masksSKUandID[(gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))][0];
-            currentMask[1] = masksSKUandID[(gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))][1];
+            currentExtras[0] = masksSKUandID[(gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))][0];
+            currentExtras[1] = masksSKUandID[(gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))][1];
 
             for (int i = 0; i < currentCharacter.wearablesData.wearables.Length; i++)
             {
-                if (currentCharacter.wearablesData.wearables[i].id == currentMask[1] && (currentCharacter.wearablesData.wearables[i].is_equiped == "False" || currentCharacter.wearablesData.wearables[i].is_equiped == "false"))
+                if (currentCharacter.wearablesData.wearables[i].id == currentExtras[1] && (currentCharacter.wearablesData.wearables[i].is_equiped == "False" || currentCharacter.wearablesData.wearables[i].is_equiped == "false"))
                 {
                     lockerRoomApi.EquipWearables(currentCharacter.wearablesData.wearables[i].id.ToString());
 
@@ -1358,22 +1407,22 @@ public class LockerRoomManager : MonoBehaviour
     {
         if ((gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) < belts.Count)
         {
-            wearableButtons[5].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(MasksSpritePath,
+            wearableButtons[2].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(MasksSpritePath,
                 "none"), typeof(Sprite)) as Sprite;
 
-            wearableButtons[5].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[5].transform.GetChild(0).GetComponent<Image>().color.r,
-                wearableButtons[5].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[5].transform.GetChild(0).GetComponent<Image>().color.b, 0.5f);
+            wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.r,
+                wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.b, 0.5f);
 
             for (int i = 0; i < currentCharacter.wearablesData.wearables.Length; i++)
             {
-                if (currentCharacter.wearablesData.wearables[i].id == currentMask[1] && (currentCharacter.wearablesData.wearables[i].is_equiped == "True" || currentCharacter.wearablesData.wearables[i].is_equiped == "true"))
+                if (currentCharacter.wearablesData.wearables[i].id == currentExtras[1] && (currentCharacter.wearablesData.wearables[i].is_equiped == "True" || currentCharacter.wearablesData.wearables[i].is_equiped == "true"))
                 {
                     lockerRoomApi.EquipWearables(currentCharacter.wearablesData.wearables[i].id.ToString());
 
                     currentCharacter.wearablesData.wearables[i].is_equiped = "False";
 
-                    currentMask[0] = -1;
-                    currentMask[1] = -1;
+                    currentExtras[0] = -1;
+                    currentExtras[1] = -1;
 
                     i = currentCharacter.wearablesData.wearables.Length;
                 }
@@ -1461,7 +1510,7 @@ public class LockerRoomManager : MonoBehaviour
                 wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color.b, 0.5f);
         }
 
-        if (currentGlasses[0] == -1)
+        if (currentExtras[0] == -1)
         {
             wearableButtons[2].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlassesSpritePath,
                 "none"), typeof(Sprite)) as Sprite;
@@ -1499,7 +1548,7 @@ public class LockerRoomManager : MonoBehaviour
                 wearableButtons[1].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[1].transform.GetChild(0).GetComponent<Image>().color.b, 0.5f);
         }
 
-        if (currentMask[0] == -1)
+        if (currentExtras[0] == -1)
         {
             wearableButtons[5].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(MasksSpritePath,
                 "none"), typeof(Sprite)) as Sprite;
@@ -1952,11 +2001,15 @@ public class LockerRoomManager : MonoBehaviour
 
             gloves = ModelNames(GlovesModelsPath);
 
+            skills = ModelNames(SkillsModelsPath);
+
             shoes = ModelNames(ShoesModelsPath);
 
             shorts = ModelNames(ShortsModelsPath);
 
             masks = ModelNames(MasksModelsPath);
+
+            trainers = ModelNames(TrainersModelsPath);
         }
     }
 

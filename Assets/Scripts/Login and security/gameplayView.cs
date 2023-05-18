@@ -121,25 +121,29 @@ public class gameplayView : MonoBehaviour
         bonusTek = 0;
         wearablesEqipped = "";
 
-        foreach (Wearable wearable in wearableReply.wearables)
+        if(wearableReply.num != 0)
         {
-            if (wearable.is_equiped == "True" || wearable.is_equiped == "true")
+            foreach (Wearable wearable in wearableReply.wearables)
             {
-                if (isFirst)
+                if (wearable.is_equiped == "True" || wearable.is_equiped == "true")
                 {
-                    wearablesEqipped += lockerRoomApi.wearableDatabase.GetSlot(wearable.sku) + "_" + lockerRoomApi.wearableDatabase.GetSlug(wearable.sku);
+                    if (isFirst)
+                    {
+                        wearablesEqipped += lockerRoomApi.wearableDatabase.GetSlot(wearable.sku) + "_" + lockerRoomApi.wearableDatabase.GetSlug(wearable.sku);
 
-                    isFirst = false;
+                        isFirst = false;
+                    }
+                    else
+                    {
+                        wearablesEqipped += "," + lockerRoomApi.wearableDatabase.GetSlot(wearable.sku) + "_" + lockerRoomApi.wearableDatabase.GetSlug(wearable.sku);
+                    }
+                    bonusAtt += lockerRoomApi.wearableDatabase.GetAtk(wearable.sku);
+                    bonusAtt += lockerRoomApi.wearableDatabase.GetDef(wearable.sku);
+                    bonusAtt += lockerRoomApi.wearableDatabase.GetTek(wearable.sku);
                 }
-                else
-                {
-                    wearablesEqipped += "," + lockerRoomApi.wearableDatabase.GetSlot(wearable.sku) + "_" + lockerRoomApi.wearableDatabase.GetSlug(wearable.sku);
-                }
-                bonusAtt += lockerRoomApi.wearableDatabase.GetAtk(wearable.sku);
-                bonusAtt += lockerRoomApi.wearableDatabase.GetDef(wearable.sku);
-                bonusAtt += lockerRoomApi.wearableDatabase.GetTek(wearable.sku);
             }
         }
+
         //equipedWearables = wearablesEqipped;
         Debug.Log(wearablesEqipped);
     }

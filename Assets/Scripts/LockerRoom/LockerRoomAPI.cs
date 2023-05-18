@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public struct MintRequest
 {
@@ -70,6 +71,11 @@ public class LockerRoomAPI : MonoBehaviour
     private const string CSV_FILE_PATH = "CSV/WearableDatabase";
 
     public WearableDatabaseReader wearableDatabase;
+
+    [SerializeField]
+    private GameObject lockerRoomObject;
+    [SerializeField]
+    private Button playButton;
 
     // Start is called before the first frame update
     void Start()
@@ -170,6 +176,8 @@ public class LockerRoomAPI : MonoBehaviour
 
                 gameplayView.instance.mintReply = r;
 
+                Debug.Log("MINT");
+
                 Debug.Log("status: = " + r.status);
 
 
@@ -177,6 +185,8 @@ public class LockerRoomAPI : MonoBehaviour
                 Debug.Log("sku: = " + r.data.sku);
                 Debug.Log("is_equiped: = " + r.data.is_equiped);
                 Debug.Log("health: = " + r.data.health);
+
+                Debug.Log("MINT END");
                 /*
                 if (KeyMaker.instance.buildType == BuildType.staging)
                     Debug.Log(request.downloadHandler.text);
@@ -221,6 +231,7 @@ public class LockerRoomAPI : MonoBehaviour
                 gameplayView.instance.wearableReply = r;
                 lockerRoomManager.EnableLeftRight();
                 /*
+                Debug.Log("GET WEARABLES");
                 Debug.Log("num: = " + r.num);
 
                 for (int i = 0; i < r.wearables.Length; i++)
@@ -230,9 +241,9 @@ public class LockerRoomAPI : MonoBehaviour
                     Debug.Log("is_equiped: = " + r.wearables[i].is_equiped);
                     Debug.Log("health: = " + r.wearables[i].health);
                 }
+                Debug.Log("END GET WEARABLES");
                 */
-
-                if(isLockerRoomManager)
+                if (isLockerRoomManager)
                 {
                     lockerRoomManager.currentCharacter.wearablesData = r;
 
@@ -292,5 +303,12 @@ public class LockerRoomAPI : MonoBehaviour
                 Debug.Log(request.error);
             }
         }
+    }
+
+    public void BackToCharacterScreen()
+    {
+        lockerRoomObject.SetActive(false);
+
+        playButton.interactable = false;
     }
 }
