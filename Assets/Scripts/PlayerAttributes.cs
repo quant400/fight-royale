@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using CFC.Serializable;
+using Photon.Pun;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -13,7 +14,8 @@ public class PlayerAttributes : MonoBehaviour
     [SerializeField] private FighterCategory _category;
     public FighterCategory category => GetCategory();
     private float currentHealth => _player.pHealth;
-    private bool isBlocking => _player.pIsBlocking;
+    //TODO Suleman: Uncomment Later
+    //private bool isBlocking => _player.pIsBlocking;
 
     private const int _baseHealth = 100;
     private const float _baseCriticalDamage = 20.0f;
@@ -44,7 +46,7 @@ public class PlayerAttributes : MonoBehaviour
 
     private void SetAtkSpeed(float speed)
     {
-        if (!_player.isLocalPlayer) return;
+        if (!_player.GetComponent<PhotonView>().IsMine/*isLocalPlayer*/) return;
         //Debug.Log(speed);
         _player.anim.SetFloat("AtkSpeed", speed);
     }

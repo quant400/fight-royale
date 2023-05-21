@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ public class Skin_Controller : MonoBehaviour
     void Awake()
     {
         _player = GetComponent<PlayerBehaviour>();
-        _isLocalPlayer = _player == null || _player.isLocalPlayer;
+        _isLocalPlayer = _player == null || _player.GetComponent<PhotonView>().IsMine/*isLocalPlayer*/;
     }
 
     void OnDisable()
@@ -49,6 +50,8 @@ public class Skin_Controller : MonoBehaviour
         if (currentCharacter != null)
         {
             _player.pSkin = currentCharacter.Name;
+            //TODO Suleman: Uncomment Later, causing stack overflow
+            //_player.ChangePlayerSkin(currentCharacter.Name);
             ChangeSkin(currentCharacter);
         }
     }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Mirror;
+using Photon.Pun;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -41,13 +42,14 @@ public class LevelManager : NetworkBehaviour
 
     void ResetProps()
     {
-        foreach (var item in _throwables.Where(x=> x.HasCarrier))
-        {
-            Debug.Log(item.netId);
-            var target = item.carrierNetIdentity.GetComponent<PlayerBehaviour>();
-            target._tpFightingControler.StolenObject();
-            target.RpcStealObject(target.netIdentity);
-        }
+        //TODO Suleman: Uncomment Later
+        //foreach (var item in _throwables.Where(x=> x.HasCarrier))
+        //{
+        //    Debug.Log(item.netId);
+        //    var target = item.carrierNetIdentity.GetComponent<PlayerBehaviour>();
+        //    target._tpFightingControler.StolenObject();
+        //    target.RpcStealObject(target.netIdentity);
+        //}
 
         foreach (var item in _throwables)
         {
@@ -71,7 +73,7 @@ public class LevelManager : NetworkBehaviour
         foreach (var player in GameManager.Instance.analytics.players.Where(aux=> aux.isConnected))
         {
             player.netIdentity.transform.position = spawnPoints[cont].transform.position;
-            player.netIdentity.gameObject.GetComponent<PlayerBehaviour>().RpcChangePlayerPosition(spawnPoints[cont].transform.position);
+            player.netIdentity.gameObject.GetComponent<PlayerBehaviour>().photonView.RPC("RpcChangePlayerPosition", RpcTarget.All, spawnPoints[cont].transform.position); //RpcChangePlayerPosition(spawnPoints[cont].transform.position);
 
             cont++;
 

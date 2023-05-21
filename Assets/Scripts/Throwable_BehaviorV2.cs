@@ -108,18 +108,19 @@ public class Throwable_BehaviorV2 : NetworkBehaviour
         var player = other.gameObject.GetComponent<PlayerBehaviour>();
         var carrier = carrierNetIdentity.GetComponent<PlayerBehaviour>();
 
-        if (player != null) 
-        {
-            if (player.netId == carrierNetIdentity.netId)
-            {
-                return;
-            }
-            else 
-            {
-                carrier.OnDamage(carrier.netIdentity, player.netIdentity, 15);
+        //TODO Suleman: Uncomment Later
+        //if (player != null) 
+        //{
+        //    if (player.netId == carrierNetIdentity.netId)
+        //    {
+        //        return;
+        //    }
+        //    else 
+        //    {
+        //        carrier.OnDamage(carrier.netIdentity, player.netIdentity, 15);
 
-            }
-        }
+        //    }
+        //}
 
         Physics.IgnoreCollision(collider, carrier.GetComponent<CharacterController>(), false);
         RpcResetCollision(carrierNetIdentity);

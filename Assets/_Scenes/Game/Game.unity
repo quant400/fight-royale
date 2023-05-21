@@ -12956,7 +12956,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 924065246}
-  - component: {fileID: 924065245}
   - component: {fileID: 924065247}
   - component: {fileID: 924065248}
   m_Layer: 0
@@ -12966,21 +12965,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &924065245
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 924065244}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21d3daac9c88b244ba5dce7913c56366, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneId: 4052493949
-  serverOnly: 0
-  m_AssetId: 
 --- !u!4 &924065246
 Transform:
   m_ObjectHideFlags: 0
@@ -13014,8 +12998,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ba1f88f9ce64ac40ab32b2807e677ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
   timeOutTime: 60
   preGameTime: 5
   inGameTime: 600
@@ -13031,6 +13013,7 @@ MonoBehaviour:
   level: {fileID: 1366308604}
   powerUp: {fileID: 2135465577}
   currentMatchState: 0
+  player: {fileID: 0}
 --- !u!114 &924065248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31295,7 +31278,7 @@ PrefabInstance:
     - target: {fileID: 5479180407007317759, guid: dcade7979c3da534db27311c23ab15d5,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -15618741
+      value: -15655477
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dcade7979c3da534db27311c23ab15d5, type: 3}
@@ -31485,6 +31468,12 @@ PrefabInstance:
       objectReference: {fileID: 1583760485}
     - target: {fileID: 4484863247083206831, guid: da9ba81f4c6991a4e923dfcce979f729,
         type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 9071112424790293541, guid: abe043045b6823f48b142fd702dff499,
+        type: 3}
+    - target: {fileID: 4484863247083206831, guid: da9ba81f4c6991a4e923dfcce979f729,
+        type: 3}
       propertyPath: dollyCam
       value: 
       objectReference: {fileID: 428650865}
@@ -31555,7 +31544,7 @@ PrefabInstance:
     - target: {fileID: 9035479014350175203, guid: da9ba81f4c6991a4e923dfcce979f729,
         type: 3}
       propertyPath: Secure
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9035479014350175203, guid: da9ba81f4c6991a4e923dfcce979f729,
         type: 3}
@@ -31637,6 +31626,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9035479015001779383, guid: da9ba81f4c6991a4e923dfcce979f729,
+        type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 9071112424790293541, guid: abe043045b6823f48b142fd702dff499,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da9ba81f4c6991a4e923dfcce979f729, type: 3}
 --- !u!114 &1571247204 stripped

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Linq;
 using Cinemachine;
 using Mirror;
+using Photon.Pun;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -162,19 +163,21 @@ public class MenuManager : MonoBehaviour
     private void OnReset()
     {
         ShowKO(false);
-        CFCNetworkManager.singleton.StopClient();
+        //TODO Suleman: Uncomment Later
+        //CFCNetworkManager.singleton.StopClient();
         SceneManager.LoadScene("Game");
     }
     private void OnQuit()
     {
         ShowWinner(false);
-        CFCNetworkManager.singleton.StopClient();
+        //TODO Suleman: Uncomment Later
+        //CFCNetworkManager.singleton.StopClient();
         SceneManager.LoadScene("Menu");
     }
     
     private void OnResetServer()
     {
-        var localPlayer = FindObjectsOfType<PlayerBehaviour>().First(aux=> aux.isLocalPlayer);
+        var localPlayer = FindObjectsOfType<PlayerBehaviour>().First(aux=> aux.GetComponent<PhotonView>().IsMine/*isLocalPlayer*/);
         localPlayer.ResetServer();
     }
     private void OpenLink(string url)

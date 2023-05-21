@@ -41,8 +41,9 @@ public class ChatGlobal_Manager : MonoBehaviour
 
         var text = _inputField.text;
         text = text.Replace("\n", " ");
-    
-        player.SendMessage(player.netIdentity, player.pColor, text);
+
+        //TODO Suleman: Uncomment Later
+        //player.SendMessage(player.netIdentity, player.pColor, text);
 
         _inputField.text = "";
     }
@@ -52,6 +53,8 @@ public class ChatGlobal_Manager : MonoBehaviour
         /* Message_Component messageComponent = Instantiate(_prefabGlobalMessage, _contentGlobalChat);
          _messages.Add(messageComponent);
          messageComponent.SetUp(playerIdentity, message, color);*/
-        IngameUIControler.instance.AddChat(playerIdentity, message);
+
+        //TODO Suleman: Uncomment Later
+        //IngameUIControler.instance.AddChat(playerIdentity, message);
     }
 }
