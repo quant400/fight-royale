@@ -49,7 +49,9 @@ public class PlayerBehaviour : /*NetworkBehaviour*/MonoBehaviourPunCallbacks
     //[SyncVar(hook = nameof(OnPlayerBlock))] public bool pIsBlocking;
     public bool pIsBlocking;
 
-    [SyncVar(hook = nameof(OnPlayerWearableChanged))] public string pWearables;
+    //TODO Suleman: Uncomment Later
+    //[SyncVar(hook = nameof(OnPlayerWearableChanged))] public string pWearables;
+
     /* private void OnScoreChanged(int oidScore, int newScore)
      {
          IngameUIControler.instance.UpdateScore(newScore);
@@ -250,12 +252,13 @@ public class PlayerBehaviour : /*NetworkBehaviour*/MonoBehaviourPunCallbacks
     //    _pStatsController.SetHealth(newHealth);
     //}
 
-    void OnPlayerWearableChanged(string _, string newWearable)
-    {
-        //Debug.Log((_, newWearable));
-        pWearables = newWearable;
-        _skinController.UpdateWearables();
-    }
+    //TODO Suleman: Uncomment Later
+    //void OnPlayerWearableChanged(string _, string newWearable)
+    //{
+    //    //Debug.Log((_, newWearable));
+    //    pWearables = newWearable;
+    //    _skinController.UpdateWearables();
+    //}
 
     [PunRPC]
     private void SetPlayerName(string newName)
@@ -740,51 +743,52 @@ public class PlayerBehaviour : /*NetworkBehaviour*/MonoBehaviourPunCallbacks
 
     #endregion
     #region wearables
-  
-    [Command]
-    void CmdWearablesAssign(string w)
-    {
-        Debug.Log(w);
-        pWearables = w;
-        Debug.Log(pWearables);
-    }
-    [Command]
-    void CmdGetWearableData()
-    {
-        //Debug.Log("Command run");
-        //string res = "";
-        GameObject[] players= GameObject.FindGameObjectsWithTag("Player");
-        foreach (GameObject p in players)
-        {
-            var temp= p.GetComponent<PlayerBehaviour>();
-            Targetrecieve(this.connectionToClient,temp.netIdentity,temp.pWearables);
-        }
-        
 
-    }
-    [ClientRpc]
-    public void Rpcrecieve(string x)
-    {
-        //Debug.Log("rcp run");
-        Debug.Log(x);
-    }
-    [TargetRpc]
-    void Targetrecieve(NetworkConnection con,NetworkIdentity ni,string x)
-    {
-        //Debug.Log("Targetrcp run: "+x);
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        foreach(GameObject p in players)
-        {
-            var temp = p.GetComponent<PlayerBehaviour>();
-            if (temp.netIdentity==ni)
-            {
-                //Debug.Log(x);
-                //temp.pWearables = x;
-                temp.OnPlayerWearableChanged("", x);
-                return;
-            }
-        }
-    }
+    //TODO Suleman: Uncomment Later
+    //[Command]
+    //void CmdWearablesAssign(string w)
+    //{
+    //    Debug.Log(w);
+    //    pWearables = w;
+    //    Debug.Log(pWearables);
+    //}
+    //[Command]
+    //void CmdGetWearableData()
+    //{
+    //    //Debug.Log("Command run");
+    //    //string res = "";
+    //    GameObject[] players= GameObject.FindGameObjectsWithTag("Player");
+    //    foreach (GameObject p in players)
+    //    {
+    //        var temp= p.GetComponent<PlayerBehaviour>();
+    //        Targetrecieve(this.connectionToClient,temp.netIdentity,temp.pWearables);
+    //    }
+
+
+    //}
+    //[ClientRpc]
+    //public void Rpcrecieve(string x)
+    //{
+    //    //Debug.Log("rcp run");
+    //    Debug.Log(x);
+    //}
+    //[TargetRpc]
+    //void Targetrecieve(NetworkConnection con,NetworkIdentity ni,string x)
+    //{
+    //    //Debug.Log("Targetrcp run: "+x);
+    //    GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+    //    foreach(GameObject p in players)
+    //    {
+    //        var temp = p.GetComponent<PlayerBehaviour>();
+    //        if (temp.netIdentity==ni)
+    //        {
+    //            //Debug.Log(x);
+    //            //temp.pWearables = x;
+    //            temp.OnPlayerWearableChanged("", x);
+    //            return;
+    //        }
+    //    }
+    //}
     #endregion
     #endregion
 

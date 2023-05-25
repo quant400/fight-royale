@@ -105,6 +105,7 @@ public class GameManager : MonoBehaviourPun
         //    match.OnPlayersChanges();
         //}
         match.OnPlayersChanges();
+        Debug.Log("OnClientConnect()");
     }
     
     public void OnClientDisconnect()
