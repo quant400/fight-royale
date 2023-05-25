@@ -106,17 +106,25 @@ public class MatchManager : NetworkBehaviour
             _timer.StopTimer();
             
             ChangeState(MatchState.PreGame);
+            GameManager.Instance.SetMatchState(1);
+            _gameManager.player.RPC("RpcPreGameState", Photon.Pun.RpcTarget.AllBuffered);
 
             isEnoughPlayerTime = false;
         }
-        else if (CFCNetworkManager.Instance._gameManager.analytics.GetNumberOfPlayers >= _gameManager.minPlayersToPlay && !isEnoughPlayerTime) //Quantidade minima atingida para começar a contar o tempo
+        //TODO Suleman: Changed the following condition from >= to == to solve the timer issue
+        else if (CFCNetworkManager.Instance._gameManager.analytics.GetNumberOfPlayers == _gameManager.minPlayersToPlay && !isEnoughPlayerTime) //Quantidade minima atingida para começar a contar o tempo
         {
             Debug.Log("Inicio por tempo");
             //TODO Suleman: Uncomment Later
-            _gameManager.player.RPC("RpcSetupTimeOutTimer", Photon.Pun.RpcTarget.All, _gameManager.timeOutTime);
+            _gameManager.player.RPC("RpcSetupTimeOutTimer", Photon.Pun.RpcTarget.AllBuffered, _gameManager.timeOutTime);
             _timer.SetTimer(_gameManager.timeOutTime,
                 UpdateTimer,
-                () => ChangeState(MatchState.PreGame));
+                () =>
+                {
+                    ChangeState(MatchState.PreGame);
+                    GameManager.Instance.SetMatchState(1);
+                    _gameManager.player.RPC("RpcPreGameState", Photon.Pun.RpcTarget.AllBuffered);
+                });
             isEnoughPlayerTime = true;
         }
         else if(CFCNetworkManager.Instance._gameManager.analytics.GetNumberOfPlayers < _gameManager.minPlayersToPlay) //Quantidade insuficiente
@@ -125,7 +133,7 @@ public class MatchManager : NetworkBehaviour
 
             _timer.StopTimer();
             //TODO Suleman: Uncomment Later
-            _gameManager.player.RPC("RpcStopTimeOutTimer", Photon.Pun.RpcTarget.All);
+            _gameManager.player.RPC("RpcStopTimeOutTimer", Photon.Pun.RpcTarget.AllBuffered);
 
             ChangeState(MatchState.Lobby);
             
@@ -136,7 +144,7 @@ public class MatchManager : NetworkBehaviour
     private void UpdateTimer(int time)
     {
         //TODO Suleman: Uncomment Later
-        _gameManager.player.RPC("RpcUpdateTimer", Photon.Pun.RpcTarget.All, time);
+        _gameManager.player.RPC("RpcUpdateTimer", Photon.Pun.RpcTarget.AllBuffered, time);
         Debug.Log("Esperando: "+time);
     }
 

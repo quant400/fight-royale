@@ -23,18 +23,15 @@ public class CFCNetworkManager : MonoBehaviourPunCallbacks
     public TimerManager timer;
 
     public int connectedPlayersCount => PhotonNetwork.CurrentRoom.PlayerCount;//NetworkServer.connections.Count;
-    public int maxConnections = 4;
+    public int maxConnections = 5;
 
     [SerializeField] private GameObject player;
 
 
     public /*override*/ void Awake()
     {
-        Debug.Log("CFCNetworkManager - Awake()");
-
         //base.Awake();
         if (Instance == null) Instance = this;
-        
     }
 
     // TODO Suleman: Added for Photon
@@ -174,14 +171,8 @@ public class CFCNetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom() //OnClientConnect(NetworkConnection conn)
     {
-        Debug.Log("CFCNetworkManager - OnJoinedRoom()");
         //base.OnClientConnect(conn);
         base.OnJoinedRoom();
-
-        //TODO Suleman: Uncomment Later
-        //GameObject playerObject = PhotonNetwork.Instantiate(player.name, Vector3.zero, Quaternion.identity);
-        //Camera_Manager.Instance.railCam.gameObject.SetActive(false);
-        //_gameManager.OnClientConnect(playerObject.GetPhotonView());
 
         // you can send the message here, or wherever else you want
         CharacterCustomizationMsg characterMessage = new CharacterCustomizationMsg()
@@ -207,6 +198,7 @@ public class CFCNetworkManager : MonoBehaviourPunCallbacks
         Debug.Log("Disconnected: " + cause.ToString());
         dollyCam.Priority = 0;
         followCam.Priority = 10;
+        Debug.Log("Disconnect -> OnDisconnected()");
 
         ModalWarning.Instance.Show("Client disconnected, retry?", MenuManager.Instance.Reset);
     }

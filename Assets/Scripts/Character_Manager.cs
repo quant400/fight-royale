@@ -51,17 +51,17 @@ public class Character_Manager : MonoBehaviour
             var loaderCharacter = Resources.LoadAll<Character>("Characters");
             
             List<string> names = new List<string>();
-            
+
             foreach (Character character in loaderCharacter)
             {
                 var containCharacter = accCharacter.Any(auxAccC => auxAccC.name.ToLower().Equals(character.Name.ToLower()));
                 _characters.Add(character);
                 
                 names.Add(character.Name);
-
                 if (containCharacter)
                 {
                     character.isUnlocked = true;
+
                 }
                 else
                 {

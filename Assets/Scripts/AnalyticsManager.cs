@@ -77,6 +77,7 @@ public class AnalyticsManager : MonoBehaviour
                 playerIdentity = auxPlayer.netIdentity;
                 //TODO Suleman: Uncomment Later
                 //GameManager.Instance.TargetRequestEndtSession(auxPlayer.score, auxPlayer.kills);
+                GameManager.Instance.player.RPC("TargetRequestEndtSession", RpcTarget.All, auxPlayer.score, auxPlayer.kills);
             }
 
         }
@@ -135,7 +136,8 @@ public class AnalyticsManager : MonoBehaviour
         dead.killerId = killer.id;
         SetPlayerDead(deadIdentity);
         //TODO Suleman: Uncomment Later
-        //GameManager.Instance.TargetRequestEndtSession(dead.score,dead.kills);
+        //GameManager.Instance.TargetRequestEndtSession(dead.score, dead.kills);
+        GameManager.Instance.player.RPC("TargetRequestEndtSession", RpcTarget.All, dead.score, dead.kills);
         _Debug($"AddKill: killer={killer.id}, dead={dead.id}");
 
         UpdateSpectatorCamera(dead.netIdentity, killer.netIdentity);
@@ -147,6 +149,7 @@ public class AnalyticsManager : MonoBehaviour
         {
             //TODO Suleman: Uncomment Later
             //player.TargetChangeSpectatorCamera(dead, killer);
+            player.photonView.RPC("TargetChangeSpectatorCamera", RpcTarget.All, dead.ViewID, killer.ViewID);
         }
     }
 
@@ -157,8 +160,13 @@ public class AnalyticsManager : MonoBehaviour
 
         //UpdateScore
         var playerBehaviour = netId.GetComponent<PlayerBehaviour>();
-        //TODO Suleman: Uncomment Later
+        //TODO Suleman: Uncomment Later, done
         //GameManager.Instance.TargetSendUpdatedScore(player.score);
+
+        if (playerBehaviour.photonView.IsMine)
+        {
+            playerBehaviour.photonView.RPC("TargetSendUpdatedScore", RpcTarget.All, player.score);
+        }
 
         _Debug($"AddScore: player={player.id}, score={score}");
     }

@@ -99,7 +99,8 @@ public class TPFightingController : MonoBehaviour
             _inputs.toggleAttack = false;
         }
 
-        if (_inputs.action && _player._tpControler.Grounded && !isBlocking && !isHitted && _anim.GetLayerWeight(_anim.GetLayerIndex("UpperBody"))==0)
+        // TODO Suleman: Commented isHitted to resolve issue in which the player was not attacking once it had been attacked and isHitted was set to True, Need to check how to set isHitted to False
+        if (_inputs.action && _player._tpControler.Grounded && !isBlocking /*&& !isHitted*/ && _anim.GetLayerWeight(_anim.GetLayerIndex("UpperBody"))==0)
         {
             isAction = true;
 
@@ -246,8 +247,12 @@ public class TPFightingController : MonoBehaviour
         Debug.Log("TakeDamage");
 
         if (_player.GetComponent<PhotonView>().IsMine/*isLocalPlayer*/)
+        {
             //TODO Suleman: Uncomment Later
             //_player.CmdAnimationPickUp(true);
+            _player.photonView.RPC("CmdAnimationPickUp", RpcTarget.AllBuffered, true);
+        }
+            
 
         if (!_isCarrying) 
         {
@@ -267,8 +272,11 @@ public class TPFightingController : MonoBehaviour
     public void ReturnFromHit() 
     {
         if(_player.GetComponent<PhotonView>().IsMine/*isLocalPlayer*/)
+        {
             //TODO Suleman: Uncomment Later
             //_player.CmdAnimationPickUp(false);
+            _player.photonView.RPC("CmdAnimationPickUp", RpcTarget.AllBuffered, false);
+        }
 
         isHitted = false;
     }
@@ -363,46 +371,65 @@ public class TPFightingController : MonoBehaviour
     
     public void CheckAction()
     {
-        // TODO Suleman: Uncomment later
-        //if (!_player.isLocalPlayer ||_player.isServer) return;
-        
-        //var colliders = Physics.OverlapBox(hitCollider.transform.position, hitCollider.size/2, hitCollider.transform.rotation, _throwableMask);
+        // TODO Suleman: Uncomment later, modified for photon
+        if (!_player.photonView.IsMine /*|| _player.isServer*/) return;
 
-        //var item = colliders.Select(aux => aux.GetComponent<Throwable_BehaviorV2>()).FirstOrDefault();
+        var colliders = Physics.OverlapBox(hitCollider.transform.position, hitCollider.size / 2, hitCollider.transform.rotation, _throwableMask);
 
-        //if (item != null)
-        //{
-        //    if (item.HasCarrier)
-        //    {
-        //        _player.CmdStealObject(item.carrierNetIdentity);
-        //        //item.carrierNetIdentity.GetComponent<PlayerBehaviour>()._tpFightingControler.StolenObject();
-        //    }
-        //    PrePickUp(item);
-        //}
+        var item = colliders.Select(aux => aux.GetComponent<Throwable_BehaviorV2>()).FirstOrDefault();
+
+        if (item != null)
+        {
+            if (item.HasCarrier)
+            {
+                _player.photonView.RPC("CmdStealObject", RpcTarget.AllBuffered, item.carrierNetIdentity.ViewID);
+                //item.carrierNetIdentity.GetComponent<PlayerBehaviour>()._tpFightingControler.StolenObject();
+            }
+            PrePickUp(item);
+        }
     }
 
     public void PrePickUp(Throwable_BehaviorV2 item)
     {
-        _anim.Play("PickUp");
+        // Commented for Photon
+        //_anim.Play("PickUp");
+        GetComponent<PhotonView>().RPC("RPCPickUpAnimation", RpcTarget.All);
+
         //_anim.SetLayerWeight(_anim.GetLayerIndex("UpperBody"), 1);
 
         //TODO Suleman: Uncomment Later
         //_player.CmdAnimationPickUp(true);
+        _player.photonView.RPC("CmdAnimationPickUp", RpcTarget.AllBuffered, true);
         _carryingObject = item;
+    }
+
+    [PunRPC]
+    private void RPCPickUpAnimation()
+    {
+        _anim.Play("PickUp");
     }
 
     public void PickUp() 
     {
         //TODO Suleman: Uncomment Later
-        //if (!_player.isLocalPlayer || _player.isServer) return;
+        if (!_player.photonView.IsMine/*isLocalPlayer || _player.isServer*/) return;
 
-        //_player.CmdPickUp(_carryingObject.netIdentity);
-        //_carryingObject.PickUp(_player.netIdentity, _throwTargetTransform);
+        _player.photonView.RPC("CmdPickUp", RpcTarget.AllBuffered, _carryingObject.photonView.ViewID);
+        _carryingObject.PickUp(_player.photonView, _throwTargetTransform);
 
-        //isAction = false;
+        isAction = false;
     }
 
     public void PreThrow()
+    {
+        // Commented for Photon
+        //_anim.Play("Throw");
+
+        GetComponent<PhotonView>().RPC("RPCThrowAnimation", RpcTarget.All);
+    }
+
+    [PunRPC]
+    private void RPCThrowAnimation()
     {
         _anim.Play("Throw");
     }
@@ -410,23 +437,28 @@ public class TPFightingController : MonoBehaviour
     private void Throw()
     {
         //TODO Suleman: Uncomment Later
-        //if (!_player.isLocalPlayer || _player.isServer) return;
+        if (!_player.photonView.IsMine/* || _player.isServer*/) return;
 
-        //_carryingObject.Throw();
-        //_player.CmdThrow(_carryingObject.netIdentity);
-        ////_anim.SetLayerWeight(_anim.GetLayerIndex("UpperBody"), 0);
+        _carryingObject.Throw();
+        //_player.CmdThrow(_carryingObject.photonView);
+        _player.photonView.RPC("CmdThrow", RpcTarget.AllBuffered, _carryingObject.photonView.ViewID);
+        //_anim.SetLayerWeight(_anim.GetLayerIndex("UpperBody"), 0);
+
         //_player.CmdAnimationPickUp(false);
+        _player.photonView.RPC("CmdAnimationPickUp", RpcTarget.AllBuffered, false);
 
-        //_carryingObject = null;
+        _carryingObject = null;
 
-        //isAction = false;
+        isAction = false;
     }
 
     public void StolenObject() 
     {
         if (_carryingObject == null) return;
         //TODO Suleman: Uncomment Later
-        //if(!_player.isServer) _player.CmdAnimationPickUp(false);
+        /*if (!_player.isServer)*/
+        //_player.CmdAnimationPickUp(false);
+        _player.photonView.RPC("CmdAnimationPickUp", RpcTarget.AllBuffered, false);
         _carryingObject.ResetChair();
         _carryingObject.ResetCollision(_player);
 

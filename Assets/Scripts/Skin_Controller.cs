@@ -46,12 +46,10 @@ public class Skin_Controller : MonoBehaviour
     {
         var currentCharacter = Character_Manager.Instance.GetCharacters.FirstOrDefault(
             auxChar => auxChar.Name.ToLower().Equals(skinName.ToLower()));
-
+        
         if (currentCharacter != null)
         {
             _player.pSkin = currentCharacter.Name;
-            //TODO Suleman: Uncomment Later, causing stack overflow
-            //_player.ChangePlayerSkin(currentCharacter.Name);
             ChangeSkin(currentCharacter);
         }
     }
@@ -76,7 +74,7 @@ public class Skin_Controller : MonoBehaviour
         {
             _meshRenderer.material.mainTexture = newMeshRenderer.sharedMaterial.mainTexture;
         }
-            
+
 
         GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh = newMeshRenderer.sharedMesh;
 

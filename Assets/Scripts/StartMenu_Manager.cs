@@ -26,7 +26,7 @@ public class StartMenu_Manager : MonoBehaviourPunCallbacks
     [SerializeField] private TMP_Text text_Version;
     private const string _gameScene = "Game";
 
-    private int RoomSize = 4; //CFCNetworkManager.Instance.maxConnections;
+    private int RoomSize = 5; //CFCNetworkManager.Instance.maxConnections;
 
     void Awake()
     {
@@ -101,6 +101,8 @@ public class StartMenu_Manager : MonoBehaviourPunCallbacks
         OnSetText("Loading... Please wait...".ToUpper());
         OnLoading();
         OnSuccess();
+
+        
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)

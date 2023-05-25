@@ -139,6 +139,7 @@ public class MenuManager : MonoBehaviour
     private int currentCam;
     private void OnChangeViewer()
     {
+        ShowKO(false);
         try
         {
             var listCamTarget = GameObject.FindGameObjectsWithTag("CinemachineTarget").ToList();
@@ -162,16 +163,22 @@ public class MenuManager : MonoBehaviour
     }
     private void OnReset()
     {
+        Debug.Log("Disconnect -> OnReset()");
         ShowKO(false);
         //TODO Suleman: Uncomment Later
         //CFCNetworkManager.singleton.StopClient();
-        SceneManager.LoadScene("Game");
+        PhotonNetwork.LeaveRoom();
+        //SceneManager.LoadScene("Game");
+        SceneManager.LoadScene("Menu");
     }
+
     private void OnQuit()
     {
         ShowWinner(false);
-        //TODO Suleman: Uncomment Later
+        //TODO Suleman: Uncomment Later, done
         //CFCNetworkManager.singleton.StopClient();
+        PhotonNetwork.LeaveRoom();
+        Debug.Log("Player has left the room");
         SceneManager.LoadScene("Menu");
     }
     

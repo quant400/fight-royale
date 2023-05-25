@@ -64,6 +64,25 @@ MonoBehaviour:
   - CmdOnDeath
   - RPCPlayBlockDamageAnimation
   - RPCPlayHitAnimation
+  - RpcQuitMatch
+  - TargetQuitMatch
+  - CmdStealObject
+  - RpcStealObject
+  - CmdAnimationPickUp
+  - CmdPickUp
+  - CmdThrow
+  - RpcPickUp
+  - RpcThrow
+  - RpcResetPosition
+  - RpcResetCollision
+  - RpcAnimationPickUp
+  - TargetSendUpdatedScore
+  - RpcPreGameState
+  - TargetRequestEndtSession
+  - RPCPickUpAnimation
+  - RPCThrowAnimation
+  - TargetChangeSpectatorCamera
+  - CmdResetServer
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

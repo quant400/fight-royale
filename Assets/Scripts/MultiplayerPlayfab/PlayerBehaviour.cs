@@ -52,7 +52,7 @@ public class PlayerBehaviour : /*NetworkBehaviour*/MonoBehaviourPunCallbacks
 
     //[SyncVar(hook = nameof(OnScoreChanged))] public int score;
 
-    //TODO Suleman: Uncomment Later
+    //TODO Suleman: Uncomment Later, done
     //[SyncVar(hook = nameof(OnPlayerBlock))] public bool pIsBlocking;
     public bool pIsBlocking;
 
@@ -108,8 +108,11 @@ public class PlayerBehaviour : /*NetworkBehaviour*/MonoBehaviourPunCallbacks
         _pStatsController.SetHealth(pHealth);
         if (photonView.IsMine)
         {
-            _skinController.SetUpSkin(Character_Manager.Instance.GetCurrentCharacter.name);
-            pColor = Color_Manager.Instance.pallete.RandomPlayerColor();
+            //_skinController.SetUpSkin(Character_Manager.Instance.GetCurrentCharacter.name);
+            //pColor = Color_Manager.Instance.pallete.RandomPlayerColor();
+            ChangePlayerName(Character_Manager.Instance.GetCurrentCharacter.name);
+            ChangePlayerSkin(Character_Manager.Instance.GetCurrentCharacter.name.Replace("-"," "));
+            ChangePlayerColor(Color_Manager.Instance.pallete.RandomPlayerColor());
         }
 
 
@@ -257,21 +260,18 @@ public class PlayerBehaviour : /*NetworkBehaviour*/MonoBehaviourPunCallbacks
     [PunRPC]
     private void SetPlayerName(string newName)
     {
-        pName = newName;
-        _pStatsController.SetName(pName);
+        _pStatsController.SetName(newName);
     }
 
     [PunRPC]
     private void SetPlayerSkin(string newSkin)
     {
-        //pSkin = newSkin;
         _skinController.SetUpSkin(newSkin);
     }
 
     [PunRPC]
     private void SetPlayerHealth(float newHealth)
     {
-        //pHealth = newHealth;
         _pStatsController.SetHealth(newHealth);
     }
 
@@ -283,24 +283,22 @@ public class PlayerBehaviour : /*NetworkBehaviour*/MonoBehaviourPunCallbacks
 
     public void ChangePlayerName(string newName)
     {
-        photonView.RPC("SetPlayerName", RpcTarget.All, newName);
+        photonView.RPC("SetPlayerName", RpcTarget.AllBuffered, newName);
     }
 
     public void ChangePlayerSkin(string newSkin)
     {
-        if (photonView.IsMine)
-            photonView.RPC("SetPlayerSkin", RpcTarget.All, newSkin);
+        photonView.RPC("SetPlayerSkin", RpcTarget.AllBuffered, newSkin);
     }
 
     public void ChangePlayerHealth(float newHealth)
     {
-        if(photonView.IsMine)
-            photonView.RPC("SetPlayerHealth", RpcTarget.All, newHealth);
+        photonView.RPC("SetPlayerHealth", RpcTarget.AllBuffered, newHealth);
     }
 
     public void ChangePlayerColor(Color32 newColor)
     {
-        photonView.RPC("SetPlayerColor", RpcTarget.All, newColor);
+        photonView.RPC("SetPlayerColor", RpcTarget.AllBuffered, newColor);
     }
 
     /*public void OnDamage(float damage, bool block = false)
@@ -436,7 +434,6 @@ public class PlayerBehaviour : /*NetworkBehaviour*/MonoBehaviourPunCallbacks
         else
         {
             Death(dealerIdentity);
-            Debug.Log("RpcDamage -> PlayerDied");
         }
 
         //Debug.Log($"CmdHealth? {pName} {isServer}");
@@ -451,21 +448,28 @@ public class PlayerBehaviour : /*NetworkBehaviour*/MonoBehaviourPunCallbacks
     }
 
     //[TargetRpc]
-    //public void TargetQuitMatch(/*NetworkConnection target*/)
-    //{
-    //    QuitMatch();
-    //}
+    [PunRPC]
+    public void TargetQuitMatch(/*NetworkConnection target*/)
+    {
+        if(photonView.IsMine)
+        {
+            QuitMatch();
+        }
+    }
 
     //[ClientRpc]
-    //public void RpcQuitMatch()
-    //{
-    //    QuitMatch();
-    //}
+    [PunRPC]
+    public void RpcQuitMatch()
+    {
+        QuitMatch();
+    }
 
     public void QuitMatch()
     {
         //TODO Suleman: Uncomment Later
         //CFCNetworkManager.singleton.StopClient();
+        PhotonNetwork.LeaveRoom();
+        Debug.Log("Player has left the room");
         SceneManager.LoadScene("Menu");
     }
 
@@ -526,7 +530,6 @@ public class PlayerBehaviour : /*NetworkBehaviour*/MonoBehaviourPunCallbacks
         { 
             damage = 0.0f; 
         }
-
         var target = targetIdentity.GetComponent<PlayerBehaviour>();
         var dealer = dealerIdentity.GetComponent<PlayerBehaviour>();
         Debug.Log($"CmdOnDamage: Receive {damage} damage on {target.pName} from {dealer.pName}");
@@ -576,13 +579,15 @@ public class PlayerBehaviour : /*NetworkBehaviour*/MonoBehaviourPunCallbacks
     {
         //TODO Suleman: Uncomment Later
         //CmdResetServer();
+        photonView.RPC("CmdResetServer", RpcTarget.AllBuffered);
     }
     //TODO Suleman: Uncomment Later
     //[Command]
-    //private void CmdResetServer()
-    //{
-    //    _ResetServer();
-    //}
+    [PunRPC]
+    private void CmdResetServer()
+    {
+        _ResetServer();
+    }
 
     private void _ResetServer()
     {
@@ -610,100 +615,133 @@ public class PlayerBehaviour : /*NetworkBehaviour*/MonoBehaviourPunCallbacks
 
     //TODO Suleman: Uncomment Later
     //[TargetRpc]
-    //public void TargetChangeSpectatorCamera(PhotonView dead, PhotonView killer) 
-    //{
-    //    if (spectating == null || spectating == dead)
-    //    {
-    //        spectating = killer;
-    //        Camera_Manager.Instance.followCam.m_Follow = spectating.GetComponent<PlayerBehaviour>()._camTarget;
-    //    }
-    //}
+    [PunRPC]
+    public void TargetChangeSpectatorCamera(int deadViewID, int killerViewID)
+    {
+        PhotonView dead = PhotonView.Find(deadViewID);
+        PhotonView killer = PhotonView.Find(killerViewID);
+
+        if (spectating == null || spectating == dead)
+        {
+            spectating = killer;
+            Camera_Manager.Instance.followCam.m_Follow = spectating.GetComponent<PlayerBehaviour>()._camTarget;
+        }
+    }
 
     #region Pick and Throw
-    //TODO Suleman: Uncomment Later
+    //TODO Suleman: Uncomment Later, done
     //[Command]
-    //public void CmdStealObject(PhotonView carrier)
-    //{
-    //    var auxCarrier = carrier.GetComponent<PlayerBehaviour>();
-    //    auxCarrier._tpFightingControler.StolenObject();
-
-    //    RpcStealObject(carrier);
-    //}
-
-    //[ClientRpc]
-    //public void RpcStealObject(PhotonView carrier)
-    //{
-    //    var auxCarrier = carrier.GetComponent<PlayerBehaviour>();
-    //    auxCarrier._tpFightingControler.StolenObject();
-    //}
-
-    //[Command]
-    public void CmdAnimationPickUp(bool isPickUp)
+    [PunRPC]
+    public void CmdStealObject(int carrierID)
     {
-        //anim.SetLayerWeight(anim.GetLayerIndex("UpperBody"), isPickUp?1:0);
-        RpcAnimationPickUp(isPickUp);
+        PhotonView carrier = PhotonView.Find(carrierID);
+        var auxCarrier = carrier.GetComponent<PlayerBehaviour>();
+        auxCarrier._tpFightingControler.StolenObject();
+
+        photonView.RPC("RpcStealObject", RpcTarget.AllBuffered, carrier.ViewID);
     }
 
     //[ClientRpc]
+    [PunRPC]
+    public void RpcStealObject(int carrierID)
+    {
+        PhotonView carrier = PhotonView.Find(carrierID);
+        var auxCarrier = carrier.GetComponent<PlayerBehaviour>();
+        auxCarrier._tpFightingControler.StolenObject();
+    }
+
+    //[Command]
+    [PunRPC]
+    public void CmdAnimationPickUp(bool isPickUp)
+    {
+        //anim.SetLayerWeight(anim.GetLayerIndex("UpperBody"), isPickUp?1:0);
+        //RpcAnimationPickUp(isPickUp);
+        photonView.RPC("RpcAnimationPickUp", RpcTarget.All, isPickUp);
+    }
+
+    //[ClientRpc]
+    [PunRPC]
     public void RpcAnimationPickUp(bool isPickUp)
     {
         anim.SetLayerWeight(anim.GetLayerIndex("UpperBody"), isPickUp ? 1 : 0);
     }
 
     //[Command]
-    //public void CmdPickUp(NetworkIdentity item)
-    //{
-    //    //TODO Suleman: Uncomment Later
-    //    //item.RemoveClientAuthority();
-    //    //item.AssignClientAuthority(netIdentity.connectionToClient);
+    [PunRPC]
+    public void CmdPickUp(/*NetworkIdentity*/ int itemID)
+    {
+        PhotonView item = PhotonView.Find(itemID);
+        //TODO Suleman: Uncomment Later, done
+        //item.RemoveClientAuthority();
+        //item.AssignClientAuthority(photonView.connectionToClient);
+        //item.TransferOwnership(null);
+        //item.TransferOwnership(photonView.ViewID);
+        item.OwnershipTransfer = OwnershipOption.Takeover;
+        item.TransferOwnership(PhotonNetwork.LocalPlayer);
 
-    //    //var pickUpObject = item.GetComponent<Throwable_BehaviorV2>();
-    //    //if (pickUpObject.PickUp(netIdentity, _tpFightingControler._throwTargetTransform))
-    //    //{
-    //    //    _tpFightingControler._carryingObject = pickUpObject;
+        var pickUpObject = item.GetComponent<Throwable_BehaviorV2>();
+        if (pickUpObject.PickUp(photonView, _tpFightingControler._throwTargetTransform))
+        {
+            _tpFightingControler._carryingObject = pickUpObject;
 
-    //    //    RpcPickUp(item);
-    //    //}
-    //    //else 
-    //    //{
-    //    //    RpcStealObject(netIdentity);
-    //    //}
+            photonView.RPC("RpcPickUp", RpcTarget.AllBuffered, item.ViewID);
+        }
+        else
+        {
+            //RpcStealObject(photonView);
+            photonView.RPC("RpcStealObject", RpcTarget.AllBuffered, photonView.ViewID);
+        }
 
-    //}
+    }
 
     //[ClientRpc]
-    //public void RpcPickUp(NetworkIdentity item) 
-    //{
-    //    //TODO Suleman: Uncomment Later
-    //    //var pickUpObject = item.GetComponent<Throwable_BehaviorV2>();
-    //    //pickUpObject.PickUp(netIdentity, _tpFightingControler._throwTargetTransform);
-    //    //_tpFightingControler._carryingObject = pickUpObject;
-    //    ////pickUpObject.SetNoPhysics(true);
-    //}
+    [PunRPC]
+    public void RpcPickUp(/*NetworkIdentity*/ int itemID)
+    {
+        PhotonView item = PhotonView.Find(itemID);
+        //TODO Suleman: Uncomment Later
+        var pickUpObject = item.GetComponent<Throwable_BehaviorV2>();
+        pickUpObject.PickUp(photonView, _tpFightingControler._throwTargetTransform);
+        _tpFightingControler._carryingObject = pickUpObject;
+        //item.TransferOwnership(photonView.ViewID);
+        //pickUpObject.SetNoPhysics(true);
+    }
 
     //[Command]
-    //public void CmdThrow(NetworkIdentity item)
-    //{
-    //    var pickUpObject = item.GetComponent<Throwable_BehaviorV2>();
-    //    pickUpObject.ResetChair();
-    //    _tpFightingControler._carryingObject = null;
+    [PunRPC]
+    public void CmdThrow(int itemID)
+    {
+        PhotonView item = PhotonView.Find(itemID);
+        var pickUpObject = item.GetComponent<Throwable_BehaviorV2>();
+        pickUpObject.ResetChair();
+        _tpFightingControler._carryingObject = null;
+        //item.TransferOwnership(null);
+        item.OwnershipTransfer = OwnershipOption.Takeover;
+        item.TransferOwnership(PhotonNetwork.MasterClient);
 
-    //    RpcThrow(item);
-    //}
+        //Commented for Photon
+        //RpcThrow(item);
+        photonView.RPC("RpcThrow", RpcTarget.AllBuffered, item.ViewID);
+    }
 
     //[ClientRpc]
-    //public void RpcThrow(NetworkIdentity item)
-    //{
-    //    var pickUpObject = item.GetComponent<Throwable_BehaviorV2>();
-    //    pickUpObject.ResetChair();
-    //    _tpFightingControler._carryingObject = null;
-    //}
+    [PunRPC]
+    public void RpcThrow(/*NetworkIdentity*/ int itemID)
+    {
+        PhotonView item = PhotonView.Find(itemID);
+        var pickUpObject = item.GetComponent<Throwable_BehaviorV2>();
+        pickUpObject.ResetChair();
+        _tpFightingControler._carryingObject = null;
+        //item.TransferOwnership(null);
+
+    }
 
     #endregion
 
     #endregion
 
-    #region GameManager RPC
+
+
 
     [PunRPC]
     private void SyncMatchState(int newState)
@@ -759,7 +797,44 @@ public class PlayerBehaviour : /*NetworkBehaviour*/MonoBehaviourPunCallbacks
         GameManager.Instance.gameTimeoutTimerBehavior.UpdateTimer(time);
     }
 
+    [PunRPC]
+    public void TargetSendUpdatedScore(/*NetworkConnection con,*/ int score)
+    {
+        if (photonView.IsMine)
+        {
+            IngameUIControler.instance.UpdateScore(score);
+        }
+    }
 
+    [PunRPC]
+    public void RpcPreGameState()
+    {
+        GameManager.Instance.match.ChangeState(MatchManager.MatchState.PreGame);
+    }
 
-    #endregion
+    [PunRPC]
+    public void TargetRequestEndtSession(/*NetworkConnection con , */int score, int kills)
+    {
+        gameplayView.instance.RequestEndSession(score, kills);
+    }
+
+    //[PunRPC]
+    //public void RpcResetPosition(int itemViewID)
+    //{
+    //    PhotonView item = PhotonView.Find(itemViewID);
+    //    item.GetComponent<Throwable_BehaviorV2>().ResetPosition();
+    //}
+
+    [PunRPC]
+    public void RpcResetCollision(int carrierID)
+    {
+        Debug.Log("Pick and Throw -> RpcResetCollision -> PlayerBehaviour");
+
+        PhotonView carrier = PhotonView.Find(carrierID);
+        Debug.Log("Carrier: " + carrier);
+        var lastCarrier = carrier.GetComponent<PlayerBehaviour>();
+        Debug.Log("lastCarrier: " + lastCarrier);
+        carrier.GetComponent<Throwable_BehaviorV2>().ResetCollision(lastCarrier);
+    }
+
 }

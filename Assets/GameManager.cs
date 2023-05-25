@@ -80,15 +80,15 @@ public class GameManager : MonoBehaviourPun
     public void SetMatchState(int newState)
     {
         currentMatchState = newState;
-        player.RPC("SyncMatchState", RpcTarget.All, newState);
+        player.RPC("SyncMatchState", RpcTarget.AllBuffered, newState);
     }
 
     // Transferred PUN RPC to PlayerBehaviour.cs
-    [PunRPC]
-    private void SyncMatchState(int newState)
-    {
-        currentMatchState = newState;
-    }
+    //[PunRPC]
+    //private void SyncMatchState(int newState)
+    //{
+    //    currentMatchState = newState;
+    //}
     // End Transfer
 
     public void SendScore()
@@ -101,28 +101,38 @@ public class GameManager : MonoBehaviourPun
         Debug.Log("GameManager - OnClientConnect()");
 
         player = netId;
-        if (/*isServer*/PhotonNetwork.IsMasterClient)
-        {
-            match.OnPlayersChanges();
-        }
+        //if (/*isServer*/PhotonNetwork.IsMasterClient)
+        //{
+        //    match.OnPlayersChanges();
+        //}
         match.OnPlayersChanges();
     }
     
     public void OnClientDisconnect()
     {
-        if (/*isServer*/PhotonNetwork.IsMasterClient)
+        if (match.currentState == MatchManager.MatchState.InGame)
         {
-            if (match.currentState == MatchManager.MatchState.InGame)
-            {
-                //TODO Suleman: Uncomment Later
-                CheckWinner();
-            }
-            else 
-            {
-                match.OnPlayersChanges();
-            }
-
+            CheckWinner();
         }
+        else
+        {
+            match.OnPlayersChanges();
+        }
+
+        // Commented for Photon
+        //if (/*isServer*/PhotonNetwork.IsMasterClient)
+        //{
+        //    if (match.currentState == MatchManager.MatchState.InGame)
+        //    {
+        //        //TODO Suleman: Uncomment Later
+        //        CheckWinner();
+        //    }
+        //    else 
+        //    {
+        //        match.OnPlayersChanges();
+        //    }
+
+        //}
     }
     
     #region Game
@@ -155,8 +165,13 @@ public class GameManager : MonoBehaviourPun
     {
         KickDemoPlayers();
         Connection_Manager.Instance.SendCloseLobby();
-        //TODO Suleman: Uncomment Later
-        player.RPC("RpcSetupStartGameTimer", RpcTarget.All, preGameTime);
+        //TODO Suleman: Close Photon Room here, done
+        // Closing current room so that new players cannot join this room
+        PhotonNetwork.CurrentRoom.IsVisible = false;
+        PhotonNetwork.CurrentRoom.IsOpen = false;
+
+        //TODO Suleman: Uncomment Later, done
+        player.RPC("RpcSetupStartGameTimer", RpcTarget.AllBuffered, preGameTime);
         MrTime_Manager.Instance.SetTimer(preGameTime, UpdatePreGameTimer, StartGame);
     }
 
@@ -167,65 +182,69 @@ public class GameManager : MonoBehaviourPun
         {
             //TODO Suleman: Uncomment Later
             //player.TargetQuitMatch(/*player.connectionToClient*/);
+            if(player.photonView.IsMine)
+            {
+                player.photonView.RPC("TargetQuitMatch", RpcTarget.All);
+            }
         }
     }
 
     private void UpdatePreGameTimer(int time)
     {
-        level.ResetPlayers();
+        //level.ResetPlayers();
         //TODO Suleman: Uncomment Later
-        player.RPC("RpcUpdateTimer", RpcTarget.All, time);
+        player.RPC("RpcUpdateTimer", RpcTarget.AllBuffered, time);
         Debug.Log("Começando em: "+time);
     }
 
     // Transferred PUN RPC to PlayerBehaviour.cs
-    //TODO Suleman: Uncomment Later
     //[ClientRpc]
-    [PunRPC]
-    public void RpcSetupStartGameTimer(int time)
-    {
-        timerBehavior.SetupTimer("Game begins in", time);
-    }
+    //[PunRPC]
+    //public void RpcSetupStartGameTimer(int time)
+    //{
+    //    timerBehavior.SetupTimer("Game begins in", time);
+    //}
 
-    //[ClientRpc]
-    [PunRPC]
-    public void RpcSetupTimeOutTimer(int time)
-    {
-        timerBehavior.SetupTimer("Game will start in ", time);
-    }
+    ////[ClientRpc]
+    //[PunRPC]
+    //public void RpcSetupTimeOutTimer(int time)
+    //{
+    //    timerBehavior.SetupTimer("Game will start in ", time);
+    //}
 
-    //[ClientRpc]
-    [PunRPC]
-    public void RpcSetupEndingTimer(int time)
-    {
-        timerBehavior.SetupTimer("Leaving in", time);
-    }
+    ////[ClientRpc]
+    //[PunRPC]
+    //public void RpcSetupEndingTimer(int time)
+    //{
+    //    timerBehavior.SetupTimer("Leaving in", time);
+    //}
 
-    //[ClientRpc]
-    [PunRPC]
-    public void RpcUpdateTimer(int time)
-    {
-        timerBehavior.UpdateTimer(time);
-    }
+    ////[ClientRpc]
+    //[PunRPC]
+    //public void RpcUpdateTimer(int time)
+    //{
+    //    timerBehavior.UpdateTimer(time);
+    //}
 
-    //[ClientRpc]
-    [PunRPC]
-    public void RpcStopTimeOutTimer()
-    {
-        timerBehavior.StopTimer();
-    }
+    ////[ClientRpc]
+    //[PunRPC]
+    //public void RpcStopTimeOutTimer()
+    //{
+    //    timerBehavior.StopTimer();
+    //}
 
-    //[ClientRpc]
-    //TODO Suleman: Check if this is getting called
-    [PunRPC]
-    public void RpcRequestStartSession()
-    {
-        gameplayView.instance.RequestStartSession();
-    }
+    ////[ClientRpc]
+    ////TODO Suleman: Check if this is getting called
+    //[PunRPC]
+    //public void RpcRequestStartSession()
+    //{
+    //    gameplayView.instance.RequestStartSession();
+    //}
     // End Transfer
 
     private void StartGame()
     {
+        level.ResetPlayers();
         //Resetar tudo
         match.ChangeState(MatchManager.MatchState.InGame);
         //timer.StartTime();
@@ -241,19 +260,18 @@ public class GameManager : MonoBehaviourPun
     {
         //todo: tela de empate
         //TODO Suleman: Uncomment Later
-        player.RPC("RpcDraw", RpcTarget.All);
+        player.RPC("RpcDraw", RpcTarget.AllBuffered);
         match.ChangeState(MatchManager.MatchState.PostGame);
     }
 
     // Transferred PUN RPC to PlayerBehaviour.cs
-    //TODO Suleman: Uncomment Later
     //[ClientRpc]
-    [PunRPC]
-    public void RpcDraw()
-    {
-        MenuManager.Instance.ShowKO();
-    }
-    // End Transfer
+    //[PunRPC]
+    //public void RpcDraw()
+    //{
+    //    MenuManager.Instance.ShowKO();
+    //}
+    //// End Transfer
 
     private void UpdateGameTimeout(int time)
     { /*
@@ -264,9 +282,9 @@ public class GameManager : MonoBehaviourPun
         }
         */
         //TODO Suleman: Uncomment Later
-        player.RPC("RpcEndGameTimeout", RpcTarget.All, time);
+        player.RPC("RpcEndGameTimeout", RpcTarget.AllBuffered, time);
     }
-    //TODO Suleman: Uncomment Later
+    //TODO Suleman: Not being used
     //[ClientRpc]
     //public void RpcSetupGameTimeout(int time)
     //{
@@ -275,18 +293,20 @@ public class GameManager : MonoBehaviourPun
 
     // Transferred PUN RPC to PlayerBehaviour.cs
     //[ClientRpc]
-    [PunRPC]
-    public void RpcEndGameTimeout(int time)
-    {
-        gameTimeoutTimerBehavior.UpdateTimer(time);
-    }
+    //[PunRPC]
+    //public void RpcEndGameTimeout(int time)
+    //{
+    //    gameTimeoutTimerBehavior.UpdateTimer(time);
+    //}
     // End Transfer
 
+    // Transferred PUN RPC to PlayerBehaviour.cs
     //[TargetRpc]
     //public void TargetSendUpdatedScore(/*NetworkConnection con,*/int score)
     //{
     //    IngameUIControler.instance.UpdateScore(score);
     //}
+    // End Transfer
     #endregion
 
     #region Ending
@@ -308,9 +328,9 @@ public class GameManager : MonoBehaviourPun
         try
         {
             var winner = analytics.GetWinner();
-            winner.gameObject.GetComponent<PlayerBehaviour>().photonView.RPC("RpcWin", RpcTarget.All);/* RpcWin();*/
+            winner.gameObject.GetComponent<PlayerBehaviour>().photonView.RPC("RpcWin", RpcTarget.AllBuffered);/* RpcWin();*/
             //TODO Suleman: Uncomment Later
-            player.RPC("RpcSetupEndingTimer", RpcTarget.All, postGameTime);
+            player.RPC("RpcSetupEndingTimer", RpcTarget.AllBuffered, postGameTime);
             MrTime_Manager.Instance.SetTimer(postGameTime, UpdatePostGameTimer, EndMatch);
         }
         catch (System.Exception ex)
@@ -321,29 +341,47 @@ public class GameManager : MonoBehaviourPun
     }
     //TODO Suleman: Uncomment Later
     //[TargetRpc]
+    // Transferred PUN RPC to PlayerBehaviour.cs
+    //[PunRPC]
     //public void TargetRequestEndtSession(/*NetworkConnection con , */int score, int kills)
     //{
-    //    gameplayView.instance.RequestEndSession(score,kills);
+    //    gameplayView.instance.RequestEndSession(score, kills);
     //}
+    // End Transfer
 
     private void EndMatch()
     {
         Connection_Manager.Instance.SendOpenLobby();
 
         var playersIds = new List<int>();
-        
-        foreach (var conn in NetworkServer.connections)
+
+        //Commented for Photon
+        //foreach (var conn in NetworkServer.connections)
+        //{
+        //    Debug.Log($"{conn.Key}: {conn.Value}");
+        //    playersIds.Add(conn.Key);
+        //    //conn.Value.identity.gameObject.GetComponent<PlayerBehaviour>().RpcQuitMatch();
+        //}
+
+        //for (int i = 0; i < playersIds.Count; i++)
+        //{
+        //    Debug.Log(NetworkServer.connections[playersIds[i]].identity.gameObject.GetComponent<PlayerBehaviour>().pName);
+        //    //TODO Suleman: Uncomment Later
+        //    NetworkServer.connections[playersIds[i]].identity.gameObject.GetComponent<PlayerBehaviour>().RpcQuitMatch();
+        //}
+
+        foreach (var player in PhotonNetwork.PlayerList)
         {
-            Debug.Log($"{conn.Key}: {conn.Value}");
-            playersIds.Add(conn.Key);
+            Debug.Log($"{player.ActorNumber}: {player.NickName}");
+            playersIds.Add(player.ActorNumber);
             //conn.Value.identity.gameObject.GetComponent<PlayerBehaviour>().RpcQuitMatch();
         }
 
         for (int i = 0; i < playersIds.Count; i++)
         {
-            Debug.Log(NetworkServer.connections[playersIds[i]].identity.gameObject.GetComponent<PlayerBehaviour>().pName);
+            //Debug.Log(NetworkServer.connections[playersIds[i]].identity.gameObject.GetComponent<PlayerBehaviour>().pName);
             //TODO Suleman: Uncomment Later
-            //NetworkServer.connections[playersIds[i]].identity.gameObject.GetComponent<PlayerBehaviour>().RpcQuitMatch();
+            player.RPC("RpcQuitMatch", RpcTarget.All);
         }
 
         //CFCNetworkManager.singleton.ServerChangeScene(SceneManager.GetActiveScene().name);
@@ -352,7 +390,7 @@ public class GameManager : MonoBehaviourPun
     private void UpdatePostGameTimer(int time)
     {
         //TODO Suleman: Uncomment Later
-        player.RPC("RpcUpdateTimer", RpcTarget.All, time);
+        player.RPC("RpcUpdateTimer", RpcTarget.AllBuffered, time);
         Debug.Log("Finalizando em: "+time);
     }
 
