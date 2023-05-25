@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -29,7 +30,7 @@ public class Skin_Controller : MonoBehaviour
     void Awake()
     {
         _player = GetComponent<PlayerBehaviour>();
-        _isLocalPlayer = _player == null || _player.isLocalPlayer;
+        _isLocalPlayer = _player == null || _player.GetComponent<PhotonView>().IsMine/*isLocalPlayer*/;
         _meshRenderer = gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
     }
 
@@ -61,6 +62,7 @@ public class Skin_Controller : MonoBehaviour
     {
         var currentCharacter = Character_Manager.Instance.GetCharacters.FirstOrDefault(
             auxChar => auxChar.Name.ToLower().Equals(skinName.ToLower()));
+        
         if (currentCharacter != null)
         {
             _player.pSkin = currentCharacter.Name;

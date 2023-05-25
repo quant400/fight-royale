@@ -34,7 +34,7 @@ public class MatchManager : NetworkBehaviour
         currentState = newState;
         
         onChangeState?.Invoke((int)currentState);
-
+        Debug.Log("ChangeState func -> currentState: " + currentState);
         switch (currentState)
         {
             case MatchState.Lobby:
@@ -106,17 +106,25 @@ public class MatchManager : NetworkBehaviour
             _timer.StopTimer();
             
             ChangeState(MatchState.PreGame);
+            GameManager.Instance.SetMatchState(1);
+            _gameManager.player.RPC("RpcPreGameState", Photon.Pun.RpcTarget.AllBuffered);
 
             isEnoughPlayerTime = false;
         }
-        else if (CFCNetworkManager.Instance._gameManager.analytics.GetNumberOfPlayers >= _gameManager.minPlayersToPlay && !isEnoughPlayerTime) //Quantidade minima atingida para começar a contar o tempo
+        //TODO Suleman: Changed the following condition from >= to == to solve the timer issue
+        else if (CFCNetworkManager.Instance._gameManager.analytics.GetNumberOfPlayers == _gameManager.minPlayersToPlay && !isEnoughPlayerTime) //Quantidade minima atingida para começar a contar o tempo
         {
             Debug.Log("Inicio por tempo");
-            
-            _gameManager.RpcSetupTimeOutTimer(_gameManager.timeOutTime);
+            //TODO Suleman: Uncomment Later
+            _gameManager.player.RPC("RpcSetupTimeOutTimer", Photon.Pun.RpcTarget.AllBuffered, _gameManager.timeOutTime);
             _timer.SetTimer(_gameManager.timeOutTime,
                 UpdateTimer,
-                () => ChangeState(MatchState.PreGame));
+                () =>
+                {
+                    ChangeState(MatchState.PreGame);
+                    GameManager.Instance.SetMatchState(1);
+                    _gameManager.player.RPC("RpcPreGameState", Photon.Pun.RpcTarget.AllBuffered);
+                });
             isEnoughPlayerTime = true;
         }
         else if(CFCNetworkManager.Instance._gameManager.analytics.GetNumberOfPlayers < _gameManager.minPlayersToPlay) //Quantidade insuficiente
@@ -124,9 +132,9 @@ public class MatchManager : NetworkBehaviour
             Debug.Log("Sem jogadores suficientes");
 
             _timer.StopTimer();
-            
-            _gameManager.RpcStopTimeOutTimer();
-            
+            //TODO Suleman: Uncomment Later
+            _gameManager.player.RPC("RpcStopTimeOutTimer", Photon.Pun.RpcTarget.AllBuffered);
+
             ChangeState(MatchState.Lobby);
             
             isEnoughPlayerTime = false;
@@ -135,7 +143,8 @@ public class MatchManager : NetworkBehaviour
 
     private void UpdateTimer(int time)
     {
-        _gameManager.RpcUpdateTimer(time);
+        //TODO Suleman: Uncomment Later
+        _gameManager.player.RPC("RpcUpdateTimer", Photon.Pun.RpcTarget.AllBuffered, time);
         Debug.Log("Esperando: "+time);
     }
 

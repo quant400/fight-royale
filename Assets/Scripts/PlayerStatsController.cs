@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -26,7 +27,7 @@ public class PlayerStatsController : MonoBehaviour
         //_damageEffect.color = new Vector4(_damageEffect.color.r, _damageEffect.color.g, _damageEffect.color.b,1-(health / 100));
 
         //for updating mini ui 
-        IngameUIControler.instance.UpdatePlayerHealth(GetComponent<PlayerBehaviour>().netIdentity, health / 100);
+        IngameUIControler.instance.UpdatePlayerHealth(GetComponent<PlayerBehaviour>().GetComponent<PhotonView>(), health / 100);
     }
 
     public void SetHealthBar(Image newBar)

@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,7 +13,7 @@ public class LocalPlayerCanvas : MonoBehaviour
 
     private void Start()
     {
-        if(GetComponentInParent<PlayerBehaviour>().isLocalPlayer)
+        if(GetComponentInParent<PlayerBehaviour>().GetComponent<PhotonView>().IsMine/*isLocalPlayer*/)
         {
             OtherCanvas.SetActive(false);
             GetComponentInParent<PlayerStatsController>().SetHealthBar(localPlayerHealth);

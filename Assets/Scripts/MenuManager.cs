@@ -3,6 +3,7 @@ using System.Collections;
 using System.Linq;
 using Cinemachine;
 using Mirror;
+using Photon.Pun;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -138,6 +139,7 @@ public class MenuManager : MonoBehaviour
     private int currentCam;
     private void OnChangeViewer()
     {
+        ShowKO(false);
         try
         {
             var listCamTarget = GameObject.FindGameObjectsWithTag("CinemachineTarget").ToList();
@@ -161,20 +163,28 @@ public class MenuManager : MonoBehaviour
     }
     private void OnReset()
     {
+        Debug.Log("Disconnect -> OnReset()");
         ShowKO(false);
-        CFCNetworkManager.singleton.StopClient();
-        SceneManager.LoadScene("Game");
+        //TODO Suleman: Uncomment Later
+        //CFCNetworkManager.singleton.StopClient();
+        PhotonNetwork.LeaveRoom();
+        //SceneManager.LoadScene("Game");
+        SceneManager.LoadScene("Menu");
     }
+
     private void OnQuit()
     {
         ShowWinner(false);
-        CFCNetworkManager.singleton.StopClient();
+        //TODO Suleman: Uncomment Later, done
+        //CFCNetworkManager.singleton.StopClient();
+        PhotonNetwork.LeaveRoom();
+        Debug.Log("Player has left the room");
         SceneManager.LoadScene("Menu");
     }
     
     private void OnResetServer()
     {
-        var localPlayer = FindObjectsOfType<PlayerBehaviour>().First(aux=> aux.isLocalPlayer);
+        var localPlayer = FindObjectsOfType<PlayerBehaviour>().First(aux=> aux.GetComponent<PhotonView>().IsMine/*isLocalPlayer*/);
         localPlayer.ResetServer();
     }
     private void OpenLink(string url)

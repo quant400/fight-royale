@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Mirror;
+using Photon.Pun;
 
 public class ChatMessage : MonoBehaviour
 {
@@ -15,9 +16,9 @@ public class ChatMessage : MonoBehaviour
     TMP_Text messageText;
 
 
-    public void SetMessage(NetworkIdentity player,string message)
+    public void SetMessage(PhotonView player,string message)
     {
-        if(player.isLocalPlayer)
+        if(player.IsMine)
         {
             senderCahr.transform.parent.parent.GetComponent<Image>().color = new Color(0.9450981f, 0.1215686f, 0.172549f, 1f);
             senderCahr.sprite = IngameUIControler.instance.chatPics[player];

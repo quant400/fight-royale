@@ -86,9 +86,10 @@ public class ThrowableBehavior : NetworkBehaviour
             if (collision.gameObject.tag == "Player")
             {
                 var target = collision.gameObject.GetComponent<PlayerBehaviour>();
-                lastThrower.OnDamage(lastPlayer, target.netIdentity, 15);
+                //TODO Suleman: Uncomment Later
+                //lastThrower.OnDamage(lastPlayer, target.netIdentity, 15);
             }
-            
+
             lastThrower = null;
             carryTargetTransform = null;
         }

@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using Cinemachine;
 using Mirror;
 using Mirror.Websocket;
+using Photon.Pun;
+using Photon.Realtime;
 using PlayFab;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class CFCNetworkManager : NetworkManager
+public class CFCNetworkManager : MonoBehaviourPunCallbacks
 {
     public static CFCNetworkManager Instance;
 
@@ -20,24 +22,60 @@ public class CFCNetworkManager : NetworkManager
     public GameManager _gameManager;
     public TimerManager timer;
 
-    public int connectedPlayersCount =>
-        NetworkServer.connections.Count;
+    public int connectedPlayersCount => PhotonNetwork.CurrentRoom.PlayerCount;//NetworkServer.connections.Count;
+    public int maxConnections = 5;
 
-    public override void Awake()
+    [SerializeField] private GameObject player;
+
+
+    public /*override*/ void Awake()
     {
-        base.Awake();
+        //base.Awake();
         if (Instance == null) Instance = this;
-        
     }
+
+    // TODO Suleman: Added for Photon
+    public override void OnEnable()
+    {
+        base.OnEnable();
+        PhotonNetwork.AddCallbackTarget(this);
+
+        // TODO Suleman: Copied the following here from OnJoinedRoom() because it never got called
+        CharacterCustomizationMsg characterMessage = new CharacterCustomizationMsg()
+        {
+            skinName = Character_Manager.Instance.GetCurrentCharacter.Name
+        };
+
+        dollyCam.Priority = 0;
+        followCam.Priority = 10;
+        //TODO Suleman: Uncomment Later
+        //NetworkClient.Send(characterMessage);
+        //MenuManager.Instance.ShowTutorial();
+        //MenuManager.Instance.ShowLeaderboardsAllTime();
+        //MenuManager.Instance.ShowLeaderboardsDaily();
+        timer.CloseAreaManager.StartTimer();
+    }
+
+    public override void OnDisable()
+    {
+        base.OnDisable();
+        PhotonNetwork.RemoveCallbackTarget(this);
+    }
+
+    //public override void OnConnectedToMaster()
+    //{
+    //    base.OnConnectedToMaster();
+    //    PhotonNetwork.JoinRandomRoom();
+    //}
 
     #region Server
-
-    public override void OnStartServer()
-    {
-        base.OnStartServer();
-        NetworkServer.RegisterHandler<CharacterCustomizationMsg>(OnCreateCharacter);
-        Connection_Manager.Instance.Api_PlayfabMatchmaking.CreateDataTitle();
-    }
+    //TODO Suleman: Uncomment Later
+    //public override void OnStartServer()
+    //{
+    //    base.OnStartServer();
+    //    NetworkServer.RegisterHandler<CharacterCustomizationMsg>(OnCreateCharacter);
+    //    Connection_Manager.Instance.Api_PlayfabMatchmaking.CreateDataTitle();
+    //}
 
 
     private void TryUpdateLobbyPlayer(int ConnectedPlayersCount)
@@ -59,81 +97,82 @@ public class CFCNetworkManager : NetworkManager
 
     }
 
-    public override void OnServerDisconnect(NetworkConnection conn)
-    {
-        var diffConnectedPlayersCount = connectedPlayersCount - 1;
-        if (diffConnectedPlayersCount < 0) { diffConnectedPlayersCount = 0; }
-        TryUpdateLobbyPlayer(diffConnectedPlayersCount);
+    //TODO Suleman: Uncomment Later
+    //public override void OnServerDisconnect(NetworkConnection conn)
+    //{
+    //    var diffConnectedPlayersCount = connectedPlayersCount - 1;
+    //    if (diffConnectedPlayersCount < 0) { diffConnectedPlayersCount = 0; }
+    //    TryUpdateLobbyPlayer(diffConnectedPlayersCount);
 
-        try
-        {
-           
-              
-            if (((CFCAuth.AuthRequestMessage) conn.authenticationData).nftWallet.Equals("Demo"))
-            {
-                Debug.Log("Disconnect as Demo");
-                base.OnServerDisconnect(conn);
-                return;
-            }
+    //    try
+    //    {
 
-            PlayerBehaviour.playerNames.Remove(((CFCAuth.AuthRequestMessage)conn.authenticationData).authUsername);
-            _gameManager.analytics.RemovePlayer(conn.identity);
-            //_gameManager.RpcRemoveWorn(conn.identity);
-            //_gameManager.CheckWinner();
-                
-            base.OnServerDisconnect(conn);
 
-            Debug.Log(_gameManager.match.currentState);
-            if (_gameManager.match.currentState == MatchManager.MatchState.InGame || 
-                _gameManager.match.currentState == MatchManager.MatchState.PreGame ||
-                _gameManager.match.currentState == MatchManager.MatchState.Lobby)
-            {
-                _gameManager.OnClientDisconnect();
-            }
+    //        if (((CFCAuth.AuthRequestMessage) conn.authenticationData).nftWallet.Equals("Demo"))
+    //        {
+    //            Debug.Log("Disconnect as Demo");
+    //            base.OnServerDisconnect(conn);
+    //            return;
+    //        }
 
-            if (//_gameManager.match.currentState != MatchManager.MatchState.Lobby &&
-                NetworkServer.connections.Count <= 0)
-            {
-                //_gameManager.CmdClearWearbles();
-                Connection_Manager.Instance.SendOpenLobby();
-            
-                //singleton.ServerChangeScene(SceneManager.GetActiveScene().name);
-                //singleton.StopServer();
-                Debug.Log("entrou");
-                singleton.ServerChangeScene(SceneManager.GetActiveScene().name);
-                singleton.StopServer();
-            }
+    //        PlayerBehaviour.playerNames.Remove(((CFCAuth.AuthRequestMessage)conn.authenticationData).authUsername);
+    //        _gameManager.analytics.RemovePlayer(conn.identity);
+    //        //_gameManager.CheckWinner();
 
-           
-        }
-        catch (Exception e)
-        {
-            Debug.Log("CFCNetworkManager - OnServerDisconnect() -> " + e);
-        }
-        
-    }
+    //        base.OnServerDisconnect(conn);
 
-    public override void OnServerAddPlayer(NetworkConnection conn)
-    {
-        base.OnServerAddPlayer(conn);
-        Debug.Log("OnServerAddPlayer");
+    //        Debug.Log(_gameManager.match.currentState);
+    //        if (_gameManager.match.currentState == MatchManager.MatchState.InGame || 
+    //            _gameManager.match.currentState == MatchManager.MatchState.PreGame ||
+    //            _gameManager.match.currentState == MatchManager.MatchState.Lobby)
+    //        {
+    //            _gameManager.OnClientDisconnect();
+    //        }
 
-        if (!((CFCAuth.AuthRequestMessage) conn.authenticationData).nftWallet.Equals("Demo"))
-        {
-            _gameManager.OnClientConnect(conn.identity);
-        }
+    //        if (//_gameManager.match.currentState != MatchManager.MatchState.Lobby &&
+    //            NetworkServer.connections.Count <= 0)
+    //        {   
+    //            Connection_Manager.Instance.SendOpenLobby();
 
-           TryUpdateLobbyPlayer(connectedPlayersCount);
-    }
+    //            //singleton.ServerChangeScene(SceneManager.GetActiveScene().name);
+    //            //singleton.StopServer();
+    //            Debug.Log("entrou");
+    //            singleton.ServerChangeScene(SceneManager.GetActiveScene().name);
+    //            singleton.StopServer();
+    //        }
+
+
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        Debug.Log("CFCNetworkManager - OnServerDisconnect() -> " + e);
+    //    }
+
+    //}
+
+    //TODO Suleman: Uncomment Later
+    //public override void OnServerAddPlayer(NetworkConnection conn)
+    //{
+    //    base.OnServerAddPlayer(conn);
+    //    Debug.Log("OnServerAddPlayer");
+
+    //    if (!((CFCAuth.AuthRequestMessage) conn.authenticationData).nftWallet.Equals("Demo"))
+    //    {
+               // called the following in ClientStartUp under function SpawnPlayer()
+    //        _gameManager.OnClientConnect(conn.identity);
+    //    }
+
+    //       TryUpdateLobbyPlayer(connectedPlayersCount);
+    //}
 
     #endregion
 
     #region Client
 
-    public override void OnClientConnect(NetworkConnection conn)
+    public override void OnJoinedRoom() //OnClientConnect(NetworkConnection conn)
     {
-        base.OnClientConnect(conn);
-
+        //base.OnClientConnect(conn);
+        base.OnJoinedRoom();
 
         // you can send the message here, or wherever else you want
         CharacterCustomizationMsg characterMessage = new CharacterCustomizationMsg()
@@ -143,7 +182,8 @@ public class CFCNetworkManager : NetworkManager
 
         dollyCam.Priority = 0;
         followCam.Priority = 10;
-        NetworkClient.Send(characterMessage);
+        //TODO Suleman: Uncomment Later
+        //NetworkClient.Send(characterMessage);
         MenuManager.Instance.ShowTutorial();
         MenuManager.Instance.ShowLeaderboardsAllTime();
         MenuManager.Instance.ShowLeaderboardsDaily();
@@ -151,12 +191,14 @@ public class CFCNetworkManager : NetworkManager
 
     }
 
-    public override void OnClientDisconnect(NetworkConnection conn)
+    public override void OnDisconnected(DisconnectCause cause) //OnClientDisconnect(NetworkConnection conn)
     {
-        base.OnClientDisconnect(conn);
-
+        //base.OnClientDisconnect(conn);
+        base.OnDisconnected(cause);
+        Debug.Log("Disconnected: " + cause.ToString());
         dollyCam.Priority = 0;
         followCam.Priority = 10;
+        Debug.Log("Disconnect -> OnDisconnected()");
 
         ModalWarning.Instance.Show("Client disconnected, retry?", MenuManager.Instance.Reset);
     }

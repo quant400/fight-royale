@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CFC.Serializable.Admin.TitleData;
 using Mirror;
+using Photon.Pun;
 using UnityEngine;
 
 public class AnalyticsManager : MonoBehaviour
@@ -15,7 +16,7 @@ public class AnalyticsManager : MonoBehaviour
 
     #region Connection
 
-    public void AddPlayer(string id, NetworkIdentity netIdentity)
+    public void AddPlayer(string id, PhotonView netIdentity)
     {
         //var oldPlayer = players.FirstOrDefault(aux => aux.id == id);
         //if (oldPlayer != null)
@@ -50,7 +51,7 @@ public class AnalyticsManager : MonoBehaviour
     
     #region Sets
 
-    public void SetPlayerDead(NetworkIdentity netIdentity)
+    public void SetPlayerDead(PhotonView netIdentity)
     {
         var auxPlayer = GetPlayerByNetIdentity(netIdentity);
         if (auxPlayer != null) auxPlayer.isDead = true;
@@ -65,16 +66,18 @@ public class AnalyticsManager : MonoBehaviour
     public int GetNumberOfPlayersAlive() => players.Count(aux => aux.isConnected && !aux.isDead);
     public int GetNumberOfPlayers => players.Count(aux => aux.isConnected);
 
-    public NetworkIdentity GetWinner()
+    public PhotonView GetWinner()
     {
-        NetworkIdentity playerIdentity = null;
+        PhotonView playerIdentity = null;
         if (players.Count(aux => !aux.isDead && aux.isConnected) == 1)
         {
             var auxPlayer = players.First(aux => aux.isConnected && !aux.isDead);
             if (auxPlayer != null)
             {
                 playerIdentity = auxPlayer.netIdentity;
-                GameManager.Instance.TargetRequestEndtSession(playerIdentity.connectionToClient, auxPlayer.score, auxPlayer.kills);
+                //TODO Suleman: Uncomment Later
+                //GameManager.Instance.TargetRequestEndtSession(auxPlayer.score, auxPlayer.kills);
+                GameManager.Instance.player.RPC("TargetRequestEndtSession", RpcTarget.All, auxPlayer.score, auxPlayer.kills);
             }
 
         }
@@ -94,10 +97,13 @@ public class AnalyticsManager : MonoBehaviour
          {
              RequestStartSession(player);
          }*/
-        GameManager.Instance.RpcRequestStartSession();
+        // Commented for Photon
+        //GameManager.Instance.RpcRequestStartSession();
+        //TODO Suleman: Uncomment Later
+        GameManager.Instance.player.RPC("RpcRequestStartSession", RpcTarget.All);
     }
 
-    public void AddDamageDealt(NetworkIdentity netIdentity, float damage)
+    public void AddDamageDealt(PhotonView netIdentity, float damage)
     {
         var player = GetPlayerByNetIdentity(netIdentity);
         player.damageDealt += damage;
@@ -106,7 +112,7 @@ public class AnalyticsManager : MonoBehaviour
 
     }
     
-    public void AddDamageReceived(NetworkIdentity netIdentity, float damage)
+    public void AddDamageReceived(PhotonView netIdentity, float damage)
     {
         var player = GetPlayerByNetIdentity(netIdentity);
         player.damageReceived += damage;
@@ -114,41 +120,54 @@ public class AnalyticsManager : MonoBehaviour
         _Debug($"AddDamageReceived: playerHit={player.id}");
     }
     
-    public void AddKill(NetworkIdentity killerIdentity, NetworkIdentity deadIdentity)
+    public void AddKill(PhotonView killerIdentity, PhotonView deadIdentity)
     {
         //Killer
         var killer = GetPlayerByNetIdentity(killerIdentity);
         killer.kills++;
-        AddScore(killer.netIdentity, _pointsPerKill);
+        // Commented for Photon
+        //AddScore(killer.netIdentity, _pointsPerKill);
+        AddScore(killerIdentity, _pointsPerKill);
 
-        
+
+
         //Dead
         var dead = GetPlayerByNetIdentity(deadIdentity);
         dead.killerId = killer.id;
         SetPlayerDead(deadIdentity);
-        GameManager.Instance.TargetRequestEndtSession(deadIdentity.connectionToClient,dead.score,dead.kills);
+        //TODO Suleman: Uncomment Later
+        //GameManager.Instance.TargetRequestEndtSession(dead.score, dead.kills);
+        GameManager.Instance.player.RPC("TargetRequestEndtSession", RpcTarget.All, dead.score, dead.kills);
         _Debug($"AddKill: killer={killer.id}, dead={dead.id}");
 
         UpdateSpectatorCamera(dead.netIdentity, killer.netIdentity);
     }
 
-    public void UpdateSpectatorCamera(NetworkIdentity dead, NetworkIdentity killer) 
+    public void UpdateSpectatorCamera(PhotonView dead, PhotonView killer) 
     {
         foreach (var player in players.Where(aux=> aux.isConnected && aux.isDead).Select(aux=>aux.netIdentity.GetComponent<PlayerBehaviour>()))
         {
-            player.TargetChangeSpectatorCamera(dead, killer);
+            //TODO Suleman: Uncomment Later
+            //player.TargetChangeSpectatorCamera(dead, killer);
+            player.photonView.RPC("TargetChangeSpectatorCamera", RpcTarget.All, dead.ViewID, killer.ViewID);
         }
     }
 
-    private void AddScore(NetworkIdentity netId, int score)
+    private void AddScore(PhotonView netId, int score)
     {
         var player = GetPlayerByNetIdentity(netId);
         player.score += score;
 
         //UpdateScore
         var playerBehaviour = netId.GetComponent<PlayerBehaviour>();
-        GameManager.Instance.TargetSendUpdatedScore(netId.connectionToClient, player.score);
-        
+        //TODO Suleman: Uncomment Later, done
+        //GameManager.Instance.TargetSendUpdatedScore(player.score);
+
+        if (playerBehaviour.photonView.IsMine)
+        {
+            playerBehaviour.photonView.RPC("TargetSendUpdatedScore", RpcTarget.All, player.score);
+        }
+
         _Debug($"AddScore: player={player.id}, score={score}");
     }
 
@@ -220,9 +239,9 @@ public class AnalyticsManager : MonoBehaviour
         return players.LastOrDefault(aux => aux.id == id);
     }
 
-    private Player GetPlayerByNetIdentity(NetworkIdentity netIdentity)
+    private Player GetPlayerByNetIdentity(PhotonView netIdentity)
     {
-        return players.LastOrDefault(aux => aux.netIdentity.netId == netIdentity.netId);
+        return players.LastOrDefault(aux => aux.netIdentity.ViewID == netIdentity.ViewID);
     }
 
     private void _Debug(string desc)
@@ -238,7 +257,7 @@ public class AnalyticsManager : MonoBehaviour
 public class Player
 {
     public string id;
-    public NetworkIdentity netIdentity;
+    public PhotonView netIdentity;
     public bool isConnected = true;
     public bool isDead = false;
     public float damageDealt = 0;
@@ -247,7 +266,7 @@ public class Player
     public int kills = 0;
     public int score = 0;
 
-    public Player(string id, NetworkIdentity netIdentity)
+    public Player(string id, PhotonView netIdentity)
     {
         this.id = id;
         this.netIdentity = netIdentity;
