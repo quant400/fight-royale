@@ -98,6 +98,11 @@ public class WearableDatabaseReader
         return _data[sku]["SLUG"];
     }
 
+    public string GetType(int sku)
+    {
+        return _data[sku]["TYPE"];
+    }
+
     public int GetRarityLevel(int sku)
     {
         return int.Parse(_data[sku]["RARITY LEVEL"]);

@@ -88,7 +88,7 @@ public class LockerRoomAPI : MonoBehaviour
 
         wearableDatabase = new WearableDatabaseReader();
         wearableDatabase.LoadData(CSV_FILE_PATH);
-        //MintWearable("175", "asd");
+        MintWearable("175", "asd");
     }
     
     // Update is called once per frame
@@ -118,29 +118,26 @@ public class LockerRoomAPI : MonoBehaviour
     {
         string slug = "";
 
-        int temp = Random.Range(0, 4);
+        int temp = Random.Range(0, 6);
         switch (temp)
         {
             case 0:
-                slug = "Belts";
+                slug = "BELTS";
                 break;
             case 1:
-                slug = "Gloves";
+                slug = "GLOVES";
                 break;
             case 2:
-                slug = "Shoes";
+                slug = "SHOES";
                 break;
             case 3:
-                slug = "Shorts";
+                slug = "SHORTS";
                 break;
             case 4:
-                slug = "Masks";
+                slug = "EXTRA";
                 break;
             case 5:
-                slug = "Glasses";
-                break;
-            case 6:
-                slug = "Trainers";
+                slug = "TRAINERS";
                 break;
         }
 

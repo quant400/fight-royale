@@ -206,6 +206,8 @@ public class KeyMaker : MonoBehaviour
                     break;
                 case UnityWebRequest.Result.Success:
                     ResponseObject temp = JsonUtility.FromJson<ResponseObject>(webRequest.downloadHandler.text);
+
+                    Debug.Log(webRequest.downloadHandler.text);
                     SetCode(temp.code);
                     //Debug.Log(webRequest.downloadHandler.text);
                     string json = "{ \"accounts\": " + JsonHelper.ToJson(temp.nfts).Replace("{\"Items\":", "");
