@@ -439,7 +439,9 @@ public class TPFightingController : MonoBehaviour
         //TODO Suleman: Uncomment Later
         if (!_player.photonView.IsMine/* || _player.isServer*/) return;
 
-        _carryingObject.Throw();
+        //_carryingObject.Throw();
+        _player.photonView.RPC("RpcThrowItem", RpcTarget.AllBuffered, _carryingObject.photonView.ViewID);
+
         //_player.CmdThrow(_carryingObject.photonView);
         _player.photonView.RPC("CmdThrow", RpcTarget.AllBuffered, _carryingObject.photonView.ViewID);
         //_anim.SetLayerWeight(_anim.GetLayerIndex("UpperBody"), 0);
