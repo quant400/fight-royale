@@ -6,8 +6,9 @@ using Mirror;
 using Newtonsoft.Json;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using Photon.Pun;
 
-public class PowerUpManager : NetworkBehaviour
+public class PowerUpManager : MonoBehaviour/*NetworkBehaviour*/
 {
     public static PowerUpManager Instance;
     [SerializeField] private  List<GameObject> powerUpList;
@@ -34,17 +35,21 @@ public class PowerUpManager : NetworkBehaviour
         for (int i = 0; i<spawnList.Count;i++)
         {
             int random = Random.Range(0, powerUpList.Count);
-            RpcSpawnPowerUp(i,random, i);
-        
+
+            // TODO Suleman, Uncomment later
+            //RpcSpawnPowerUp(i,random, i);
+
             SpawnPowerUp(i, powerUpList[random], spawnList[i]);
         }
     }
 
-    [ClientRpc]
-    private void RpcSpawnPowerUp(int powerUpId, int powerUpIndex, int spawnIndex)
-    {
-        SpawnPowerUp(powerUpId, powerUpList[powerUpIndex], spawnList[spawnIndex]);
-    }
+    // TODO Suleman, Uncomment later
+    //[ClientRpc]
+    //[PunRPC]
+    //private void RpcSpawnPowerUp(int powerUpId, int powerUpIndex, int spawnIndex)
+    //{
+    //    SpawnPowerUp(powerUpId, powerUpList[powerUpIndex], spawnList[spawnIndex]);
+    //}
 
     private void SpawnPowerUp(int powerUpId, GameObject powerUpGO, Transform spawn)
     {

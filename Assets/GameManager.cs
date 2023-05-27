@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,24 +42,12 @@ public class GameManager : MonoBehaviourPun
 
     void Awake()
     {
-        Debug.Log("GameManager instance already created");
-        if (Instance == null) Instance = this;
-        //if (!isServer) return;
-
-        Subscribe();
-
-        //GameObject GMObj = GameManager.Instance.gameObject;
-        ActivateObjects(this.gameObject);
-    }
-
-    private void ActivateObjects(GameObject gm)
-    {
-        gm.SetActive(true);
-
-        foreach (Transform child in gm.transform)
+        if (Instance == null)
         {
-            ActivateObjects(child.gameObject);
+            Instance = this;
         }
+        //if (!isServer) return;
+        Subscribe();
     }
 
     public void Subscribe()

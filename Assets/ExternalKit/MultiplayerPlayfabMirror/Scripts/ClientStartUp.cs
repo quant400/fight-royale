@@ -66,31 +66,11 @@ public class ClientStartUp : MonoBehaviour
     {
         Debug.Log("ClientStartUp - SpawnPlayer()");
 
-		//if (GameManager.Instance == null) Debug.Log("Game Manager instance null");
-		//GameObject GMObj = GameManager.Instance.gameObject;
-		//ActivateObjects(GMObj);
-
-		Debug.Log("ClientStartUp - Activate objects called");
-
-        yield return new WaitForSeconds(4);
+        yield return new WaitForSeconds(2);
         GameObject playerObject = PhotonNetwork.Instantiate(player.name, Vector3.zero, Quaternion.identity);
-		Debug.Log("Player Object: " + playerObject.name);
 		Camera_Manager.Instance.railCam.gameObject.SetActive(false);
         GameManager.Instance.OnClientConnect(playerObject.GetPhotonView());
-
-        Debug.Log("ClientStartUp - SpawnPlayer OnClientConnect called");
-
     }
-
-	private void ActivateObjects(GameObject gm)
-	{
-		gm.SetActive(true);
-
-		foreach (Transform child in gm.transform)
-		{
-			ActivateObjects(child.gameObject);
-		}
-	}
 
 	private void OnLoginError(PlayFabError response)
 	{

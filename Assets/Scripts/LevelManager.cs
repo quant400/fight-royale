@@ -7,7 +7,7 @@ using Photon.Pun;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class LevelManager : NetworkBehaviour
+public class LevelManager : MonoBehaviour/*NetworkBehaviour*/
 {
     [SerializeField] private List<PropsBehavior> _props;
     [SerializeField] private List<Throwable_BehaviorV2> _throwables;

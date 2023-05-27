@@ -111,9 +111,11 @@ public class Skin_Controller : MonoBehaviour
 
             _meshRenderer[i].gameObject.name = newMeshRenderers[i].gameObject.name;
         }
-        UpdateWearables();
-       
+        //TODO Suleman: Uncomment Later
+        //UpdateWearables();
+
     }
+
     public void UpdateWearables()
     {
         //TODO Suleman: Uncomment Later

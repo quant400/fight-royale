@@ -4230,7 +4230,7 @@ GameObject:
   - component: {fileID: 5403015088618219985}
   - component: {fileID: 2612888239937723054}
   m_Layer: 6
-  m_Name: Player_PrefabV2 new
+  m_Name: Player_PrefabV2_new
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4290,9 +4290,6 @@ MonoBehaviour:
   pName: 
   pSkin: 
   pHealth: 100
-  pColor:
-    serializedVersion: 2
-    rgba: 0
   pIsBlocking: 0
 --- !u!114 &2475750513943854316
 MonoBehaviour:
