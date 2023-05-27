@@ -83,6 +83,9 @@ MonoBehaviour:
   - RPCThrowAnimation
   - TargetChangeSpectatorCamera
   - CmdResetServer
+  - Throw
+  - RpcTestThrow
+  - RpcThrowItem
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

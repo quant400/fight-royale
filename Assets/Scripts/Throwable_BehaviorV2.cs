@@ -91,18 +91,32 @@ public class Throwable_BehaviorV2 : MonoBehaviourPun /*NetworkBehaviour*/
         SetNoPhysics(false);
     }
 
-    public void Throw() 
+    public void Throw()
     {
         SetNoPhysics(false);
 
-        if (carrierNetIdentity != null) 
+        if (carrierNetIdentity != null)
         {
             var force = (carrierNetIdentity.transform.forward + (Vector3.up / 10)) * throwForce;
             rb.AddForce(force, ForceMode.Force);
-        }       
+        }
 
         carrierTarget = null;
     }
+
+    //[PunRPC]
+    //public void Throw()
+    //{
+    //    SetNoPhysics(false);
+
+    //    if (carrierNetIdentity != null)
+    //    {
+    //        var force = (carrierNetIdentity.transform.forward + (Vector3.up / 10)) * throwForce;
+    //        rb.AddForce(force, ForceMode.Force);
+    //    }
+
+    //    carrierTarget = null;
+    //}
 
 
 
@@ -129,7 +143,7 @@ public class Throwable_BehaviorV2 : MonoBehaviourPun /*NetworkBehaviour*/
 
         Physics.IgnoreCollision(collider, carrier.GetComponent<CharacterController>(), false);
         //RpcResetCollision(carrierNetIdentity);
-        //carrier.photonView.RPC("RpcResetCollision", RpcTarget.AllBuffered, carrierNetIdentity.ViewID);
+        /*carrier.*/photonView.RPC("RpcResetCollision", RpcTarget.AllBuffered, carrierNetIdentity.ViewID);
 
         carrierNetIdentity = null;
     }

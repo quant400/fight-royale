@@ -7215,9 +7215,6 @@ MonoBehaviour:
   pName: 
   pSkin: 
   pHealth: 100
-  pColor:
-    serializedVersion: 2
-    rgba: 0
   pIsBlocking: 0
 --- !u!114 &2475750513943854316
 MonoBehaviour:
