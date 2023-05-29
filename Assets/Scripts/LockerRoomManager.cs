@@ -751,7 +751,11 @@ public class LockerRoomManager : MonoBehaviour
             StartCoroutine(ChangeAnimator(0.01f, modelToInstantiate, modelNumber));
         }
 
-        modelName.text = model.ToUpper();
+        if(modelNumber == 1)
+        {
+            modelName.text = model.ToUpper();
+        }
+        
     }
 
     public void ModelRightButton()

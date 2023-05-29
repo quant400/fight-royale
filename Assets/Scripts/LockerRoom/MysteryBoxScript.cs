@@ -98,7 +98,7 @@ public class MysteryBoxScript : MonoBehaviour
     
     public void LootReward()
     {
-        //lockerRoomApi.MintWearable(lockerRoomManager.currentCharacter.nftID.ToString(), "rand");
+        lockerRoomApi.MintWearable(lockerRoomManager.currentCharacter.nftID.ToString(), "rand");
 
         animator.SetBool("isOpen", true);
 
