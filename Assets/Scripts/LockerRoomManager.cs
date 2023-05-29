@@ -448,6 +448,8 @@ public class LockerRoomManager : MonoBehaviour
                             wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color.b, 1);
 
                         WearableSwapper(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
+
+                        wearableButtonSelected[0] = 0;
                     }
                 }
                 else if (lockerRoomApi.wearableDatabase.GetType(currentCharacter.wearablesData.wearables[i].sku) == "glasses")
@@ -473,6 +475,8 @@ public class LockerRoomManager : MonoBehaviour
                             wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.b, 1);
 
                         WearableSwapper(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
+
+                        wearableButtonSelected[1] = 0;
                     }
                 }
                 else if (lockerRoomApi.wearableDatabase.GetSlot(currentCharacter.wearablesData.wearables[i].sku) == "Gloves")
@@ -498,6 +502,8 @@ public class LockerRoomManager : MonoBehaviour
                             wearableButtons[0].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[0].transform.GetChild(0).GetComponent<Image>().color.b, 1);
 
                         WearableSwapper(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
+
+                        wearableButtonSelected[2] = 0;
                     }
                 }
                 else if (lockerRoomApi.wearableDatabase.GetSlot(currentCharacter.wearablesData.wearables[i].sku) == "Shoes")
@@ -523,6 +529,8 @@ public class LockerRoomManager : MonoBehaviour
                             wearableButtons[3].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[3].transform.GetChild(0).GetComponent<Image>().color.b, 1);
 
                         WearableSwapper(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
+
+                        wearableButtonSelected[3] = 0;
                     }
                 }
                 else if (lockerRoomApi.wearableDatabase.GetSlot(currentCharacter.wearablesData.wearables[i].sku) == "Shorts")
@@ -548,6 +556,8 @@ public class LockerRoomManager : MonoBehaviour
                             wearableButtons[1].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[1].transform.GetChild(0).GetComponent<Image>().color.b, 1);
 
                         WearableSwapper(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
+
+                        wearableButtonSelected[4] = 0;
                     }
                 }
                 else if (lockerRoomApi.wearableDatabase.GetType(currentCharacter.wearablesData.wearables[i].sku) == "masks")
@@ -573,6 +583,8 @@ public class LockerRoomManager : MonoBehaviour
                             wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.b, 1);
 
                         WearableSwapper(lockerRoomApi.wearableDatabase.GetSlug(currentCharacter.wearablesData.wearables[i].sku));
+
+                        wearableButtonSelected[5] = 0;
                     }
                 }
                 else if (lockerRoomApi.wearableDatabase.GetType(currentCharacter.wearablesData.wearables[i].sku) == "trainers")
