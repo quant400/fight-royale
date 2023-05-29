@@ -88,7 +88,7 @@ public class LockerRoomAPI : MonoBehaviour
 
         wearableDatabase = new WearableDatabaseReader();
         wearableDatabase.LoadData(CSV_FILE_PATH);
-        MintWearable("175", "asd");
+        //MintWearable("175", "asd");
     }
     
     // Update is called once per frame

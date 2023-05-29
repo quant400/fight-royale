@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class JuiceDisplayScript : MonoBehaviour
 {
-    public GameObject juiceText, CoinText, display;
+    public GameObject juiceText, CoinText, juiceTextMysteryBox, CoinTextMysteryBox, display;
     string juiceBal = "0";
     string coinBal = "0";
 
@@ -32,17 +32,31 @@ public class JuiceDisplayScript : MonoBehaviour
     public void UpdateJuiceBalance()
     {
         if (juiceBal == "")
+        {
             juiceText.GetComponent<TMPro.TMP_Text>().text = "0";
+            juiceTextMysteryBox.GetComponent<TMPro.TMP_Text>().text = "0";
+        }
         else
+        {
             juiceText.GetComponent<TMPro.TMP_Text>().text = juiceBal;
+            juiceTextMysteryBox.GetComponent<TMPro.TMP_Text>().text = juiceBal;
+        }
+            
     }
 
     public void UpdateCoinBalance()
     {
 
         if (coinBal == "")
+        {
             CoinText.GetComponent<TMPro.TMP_Text>().text = "0";
+            CoinTextMysteryBox.GetComponent<TMPro.TMP_Text>().text = "0";
+        }
         else
+        {
             CoinText.GetComponent<TMPro.TMP_Text>().text = coinBal;
+            CoinTextMysteryBox.GetComponent<TMPro.TMP_Text>().text = coinBal;
+        }
+            
     }
 }

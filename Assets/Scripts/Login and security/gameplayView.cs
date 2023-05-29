@@ -37,7 +37,7 @@ public class gameplayView : MonoBehaviour
         
         DontDestroyOnLoad(this);
         //for testing
-        SetRandomWearables();
+        //SetRandomWearables();
     }
     private void OnEnable()
     {
@@ -129,22 +129,38 @@ public class gameplayView : MonoBehaviour
                 {
                     if (isFirst)
                     {
-                        wearablesEqipped += lockerRoomApi.wearableDatabase.GetSlot(wearable.sku) + "_" + lockerRoomApi.wearableDatabase.GetSlug(wearable.sku);
+                        if(lockerRoomApi.wearableDatabase.GetSlot(wearable.sku) != "Extras")
+                        {
+                            wearablesEqipped += lockerRoomApi.wearableDatabase.GetSlot(wearable.sku) + "_" + lockerRoomApi.wearableDatabase.GetSlug(wearable.sku);
+                        }
+                        else
+                        {
+                            wearablesEqipped += lockerRoomApi.wearableDatabase.GetType(wearable.sku) + "_" + lockerRoomApi.wearableDatabase.GetSlug(wearable.sku);
+                        }
 
                         isFirst = false;
                     }
                     else
                     {
-                        wearablesEqipped += "," + lockerRoomApi.wearableDatabase.GetSlot(wearable.sku) + "_" + lockerRoomApi.wearableDatabase.GetSlug(wearable.sku);
+                        if (lockerRoomApi.wearableDatabase.GetSlot(wearable.sku) != "Extras")
+                        {
+                            wearablesEqipped += "," + lockerRoomApi.wearableDatabase.GetSlot(wearable.sku) + "_" + lockerRoomApi.wearableDatabase.GetSlug(wearable.sku);
+                        }
+                        else
+                        {
+                            wearablesEqipped += "," + lockerRoomApi.wearableDatabase.GetType(wearable.sku) + "_" + lockerRoomApi.wearableDatabase.GetSlug(wearable.sku);
+                        }
+
+                        
                     }
                     bonusAtt += lockerRoomApi.wearableDatabase.GetAtk(wearable.sku);
-                    bonusAtt += lockerRoomApi.wearableDatabase.GetDef(wearable.sku);
-                    bonusAtt += lockerRoomApi.wearableDatabase.GetTek(wearable.sku);
+                    bonusDef += lockerRoomApi.wearableDatabase.GetDef(wearable.sku);
+                    bonusTek += lockerRoomApi.wearableDatabase.GetTek(wearable.sku);
                 }
             }
         }
 
-        //equipedWearables = wearablesEqipped;
+        equipedWearables = wearablesEqipped;
         Debug.Log(wearablesEqipped);
     }
 

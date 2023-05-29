@@ -38,6 +38,8 @@ public class LockerRoomManager : MonoBehaviour
     private LockerRoomAPI lockerRoomApi;
 
     public GameObject playerModelParentObject;
+    public GameObject playerModelParentObjectRight;
+    public GameObject playerModelParentObjectLeft;
     private Animator playerAnimator;
 
     public GameObject gloveUI;
@@ -225,7 +227,15 @@ public class LockerRoomManager : MonoBehaviour
 
         Intialize();
 
-        ActiveModelSwap(models[currentModel]);
+        ActiveModelSwap(models[currentModel], 1);
+
+        if(models.Count > 1)
+        {
+            ActiveModelSwap(models[currentModel + 1], 2);
+            
+            ActiveModelSwap(models[models.Count - 1], 3);
+
+        }
     }
 
     // Update is called once per frame
@@ -635,7 +645,7 @@ public class LockerRoomManager : MonoBehaviour
         }
     }
 
-    private void ActiveModelSwap(string model)
+    private void ActiveModelSwap(string model, int modelNumber)
     {
         /*
         if(playerModelParentObject.transform.childCount != 0)
@@ -673,8 +683,19 @@ public class LockerRoomManager : MonoBehaviour
 
         SkinnedMeshRenderer[] newMeshRenderers;
 
-        _meshRenderer = playerModelParentObject.GetComponentsInChildren<SkinnedMeshRenderer>();
-
+        if (modelNumber == 1)
+        {
+            _meshRenderer = playerModelParentObject.GetComponentsInChildren<SkinnedMeshRenderer>();
+        }
+        else if (modelNumber == 2)
+        {
+            _meshRenderer = playerModelParentObjectRight.GetComponentsInChildren<SkinnedMeshRenderer>();
+        }
+        else
+        {
+            _meshRenderer = playerModelParentObjectLeft.GetComponentsInChildren<SkinnedMeshRenderer>();
+        }
+        
         GameObject modelToInstantiate = Resources.Load(Path.Combine((characterModelsPath), model)) as GameObject;
 
         newMeshRenderers = modelToInstantiate.GetComponentsInChildren<SkinnedMeshRenderer>();
@@ -697,7 +718,20 @@ public class LockerRoomManager : MonoBehaviour
 
             _meshRenderer[i].sharedMesh = newMeshRenderers[i].sharedMesh;
 
-            Transform[] childrens = playerModelParentObject.transform.GetComponentsInChildren<Transform>(true);
+            Transform[] childrens;
+
+            if (modelNumber == 1)
+            {
+                childrens = playerModelParentObject.transform.GetComponentsInChildren<Transform>(true);
+            }
+            else if (modelNumber == 2)
+            {
+                childrens = playerModelParentObjectRight.transform.GetComponentsInChildren<Transform>(true);
+            }
+            else
+            {
+                childrens = playerModelParentObjectLeft.transform.GetComponentsInChildren<Transform>(true);
+            }
 
             // sort bones.
             Transform[] bones = new Transform[newMeshRenderers[i].bones.Length];
@@ -714,7 +748,7 @@ public class LockerRoomManager : MonoBehaviour
 
         if (!changeAnimatorCoroutine)
         {
-            StartCoroutine(ChangeAnimator(0.01f, modelToInstantiate));
+            StartCoroutine(ChangeAnimator(0.01f, modelToInstantiate, modelNumber));
         }
 
         modelName.text = model.ToUpper();
@@ -761,8 +795,16 @@ public class LockerRoomManager : MonoBehaviour
         GetCharacterAttributes(currentModel);
         
 
-        ActiveModelSwap(models[currentModel]);
-       
+        ActiveModelSwap(models[currentModel], 1);
+        
+        if (currentModel + 1 < models.Count)
+        {
+            ActiveModelSwap(models[currentModel + 1], 2);
+
+            ActiveModelSwap(models[models.Count - 1], 3);
+
+        }
+        
     }
 
     public void ModelLeftButton()
@@ -802,8 +844,15 @@ public class LockerRoomManager : MonoBehaviour
         GetCharacterAttributes(currentModel);
         
 
-        ActiveModelSwap(models[currentModel]);
-        
+        ActiveModelSwap(models[currentModel], 1);
+
+        if (currentModel + 1 < models.Count)
+        {
+            ActiveModelSwap(models[currentModel + 1], 2);
+
+            ActiveModelSwap(models[models.Count - 1], 3);
+
+        }
     }
 
     private void ResetCurrents()
@@ -1307,7 +1356,11 @@ public class LockerRoomManager : MonoBehaviour
                 }
             }
 
+            playerModelParentObject.transform.GetChild(7).transform.gameObject.SetActive(false);
+            playerModelParentObject.transform.GetChild(8).transform.gameObject.SetActive(false);
         }
+
+        
     }
 
     private void EquipGloves()
@@ -1762,6 +1815,8 @@ public class LockerRoomManager : MonoBehaviour
                 }
             }
 
+            playerModelParentObject.transform.GetChild(7).transform.gameObject.SetActive(false);
+            playerModelParentObject.transform.GetChild(8).transform.gameObject.SetActive(false);
         }
     }
 
@@ -2270,13 +2325,13 @@ public class LockerRoomManager : MonoBehaviour
                         previewAttributes["speed"] -= lockerRoomApi.wearableDatabase.GetSpd(currentExtras[0]);
                     }
 
-                    previewAttributes["attack"] += lockerRoomApi.wearableDatabase.GetAtk(masksSKUandID[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))][0]);
+                    previewAttributes["attack"] += lockerRoomApi.wearableDatabase.GetAtk(masksSKUandID[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) - glasses.Count][0]);
 
-                    previewAttributes["defense"] += lockerRoomApi.wearableDatabase.GetDef(masksSKUandID[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))][0]);
+                    previewAttributes["defense"] += lockerRoomApi.wearableDatabase.GetDef(masksSKUandID[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) - glasses.Count][0]);
 
-                    previewAttributes["technique"] += lockerRoomApi.wearableDatabase.GetTek(masksSKUandID[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))][0]);
+                    previewAttributes["technique"] += lockerRoomApi.wearableDatabase.GetTek(masksSKUandID[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) - glasses.Count][0]);
 
-                    previewAttributes["speed"] += lockerRoomApi.wearableDatabase.GetSpd(masksSKUandID[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))][0]);
+                    previewAttributes["speed"] += lockerRoomApi.wearableDatabase.GetSpd(masksSKUandID[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) - glasses.Count][0]);
 
 
                     SetAttributeSliders(previewAttributes, true);
@@ -2609,19 +2664,52 @@ public class LockerRoomManager : MonoBehaviour
         }
     }
 
-    IEnumerator ChangeAnimator(float secs, GameObject model)
+    IEnumerator ChangeAnimator(float secs, GameObject model, int modelNumber)
     {
-        changeAnimatorCoroutine = true;
-        playerAnimator.runtimeAnimatorController = oldConttoller;
-        
+        //changeAnimatorCoroutine = true;
+
+        if (modelNumber == 1)
+        {
+            playerAnimator.runtimeAnimatorController = oldConttoller;
+        }
+        else if (modelNumber == 2)
+        {
+            playerModelParentObjectRight.GetComponent<Animator>().runtimeAnimatorController = oldConttoller;
+        }
+        else
+        {
+            playerModelParentObjectLeft.GetComponent<Animator>().runtimeAnimatorController = oldConttoller;
+        }
+
 
         yield return new WaitForSeconds(secs);
-        playerAnimator.avatar = avatar;
-        playerAnimator.runtimeAnimatorController = controller;
-        rootBone = playerModelParentObject.transform.GetChild(1).GetComponent<SkinnedMeshRenderer>().rootBone;
 
 
-        changeAnimatorCoroutine = false;
+        if(modelNumber == 1)
+        {
+            playerAnimator.avatar = avatar;
+            playerAnimator.runtimeAnimatorController = controller;
+
+            rootBone = playerModelParentObject.transform.GetChild(1).GetComponent<SkinnedMeshRenderer>().rootBone;
+        }
+        else if (modelNumber == 2)
+        {
+            playerModelParentObjectRight.GetComponent<Animator>().avatar = avatar;
+            playerModelParentObjectRight.GetComponent<Animator>().runtimeAnimatorController = controller;
+
+            rootBone = playerModelParentObjectRight.transform.GetChild(1).GetComponent<SkinnedMeshRenderer>().rootBone;
+        }
+        else
+        {
+            playerModelParentObjectLeft.GetComponent<Animator>().avatar = avatar;
+            playerModelParentObjectLeft.GetComponent<Animator>().runtimeAnimatorController = controller;
+
+            rootBone = playerModelParentObjectLeft.transform.GetChild(1).GetComponent<SkinnedMeshRenderer>().rootBone;
+        }
+        
+
+
+        //changeAnimatorCoroutine = false;
     }
 
 

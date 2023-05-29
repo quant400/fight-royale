@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CharacterRotate : MonoBehaviour
 {
+    [SerializeField]
     private int intialRotation = -155;
 
     private RectTransform rectTransform;
