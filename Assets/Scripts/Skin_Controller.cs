@@ -174,7 +174,7 @@ public class Skin_Controller : MonoBehaviour
                 _meshRenderer[GetIndex(x[0]) - 3].sharedMesh = spawnedSkinnedMeshRenderer.sharedMesh;
             }
 
-            if(childIndex == 8)
+            if(childIndex >= 8)
             {
                 transform.GetChild(childIndex).gameObject.SetActive(true);
             }
