@@ -197,9 +197,9 @@ public class Skin_Controller : MonoBehaviour
                 return 6;
             case "Belts":
                 return 8;
-            case "Mask":
+            case "masks":
                 return 9;
-            case "Glasses":
+            case "glasses":
                 return 10;
         }
 
