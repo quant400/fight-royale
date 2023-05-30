@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 
-public class PowerUpBehavior : NetworkBehaviour
+public class PowerUpBehavior : MonoBehaviour/*NetworkBehaviour*/
 {
     public PowerUp PowerUp;
     public int id;
@@ -21,12 +21,13 @@ public class PowerUpBehavior : NetworkBehaviour
         isAvailable = true;
         gameObject.SetActive(true);
     }
-    
-    [ClientRpc]
-    public void RpcSpawnPowerUp()
-    {
-        SpawnPowerUp();
-    }
+
+    // TODO Suleman: Uncomment later
+    //[ClientRpc]
+    //public void RpcSpawnPowerUp()
+    //{
+    //    SpawnPowerUp();
+    //}
 
     public void DestroyYourSelf()
     {
@@ -41,10 +42,11 @@ public class PowerUpBehavior : NetworkBehaviour
         return PowerUp;
     }
 
-    [Command]
-    public void CmdDestroyPowerUp()
-    {
+    // TODO Suleman: Uncomment later
+    //[Command]
+    //public void CmdDestroyPowerUp()
+    //{
         
-    }
+    //}
 
 }

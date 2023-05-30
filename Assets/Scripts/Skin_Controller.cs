@@ -112,18 +112,18 @@ public class Skin_Controller : MonoBehaviour
             _meshRenderer[i].gameObject.name = newMeshRenderers[i].gameObject.name;
         }
         //TODO Suleman: Uncomment Later
-        //UpdateWearables();
+        UpdateWearables();
 
     }
 
     public void UpdateWearables()
     {
         //TODO Suleman: Uncomment Later
-        //if (GetComponent<PlayerBehaviour>().isLocalPlayer)
-        //    wearablesWorn = gameplayView.instance.equipedWearables.Split(',');
-        //else if (!GetComponent<PlayerBehaviour>().isLocalPlayer && !GetComponent<PlayerBehaviour>().isServer)
-        //    wearablesWorn = GetComponent<PlayerBehaviour>().pWearables.Split(',');
-        //Debug.Log("Update Called: "+ wearablesWorn[0]);
+        if (GetComponent<PlayerBehaviour>().photonView.IsMine/*isLocalPlayer*/)
+            wearablesWorn = gameplayView.instance.equipedWearables.Split(',');
+        else if (!GetComponent<PlayerBehaviour>().photonView.IsMine/*isLocalPlayer*/ /*&& !GetComponent<PlayerBehaviour>().isServer*/)
+            wearablesWorn = GetComponent<PlayerBehaviour>().pWearables.Split(',');
+        Debug.Log("Update Called: " + wearablesWorn[0]);
         GameObject modelToInstantiate = null;
 
         int childIndex;

@@ -99,6 +99,7 @@ public class GameManager : MonoBehaviourPun
     
     public void OnClientDisconnect()
     {
+        Debug.Log("OnClientDisconnect()");
         if (match.currentState == MatchManager.MatchState.InGame)
         {
             CheckWinner();

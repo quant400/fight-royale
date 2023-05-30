@@ -32,9 +32,11 @@ public class AnalyticsManager : MonoBehaviour
 
     }
 
-    public void  RemovePlayer(NetworkIdentity netIdentity)
+    public void  RemovePlayer(PhotonView netIdentity)
     {
-        var auxPlayer = GetPlayerById(((CFCAuth.AuthRequestMessage) netIdentity.connectionToClient.authenticationData).nftId);
+        // Commented for Photon
+        //var auxPlayer = GetPlayerById(((CFCAuth.AuthRequestMessage) netIdentity.connectionToClient.authenticationData).nftId);
+        var auxPlayer = GetPlayerByNetIdentity(netIdentity);
         auxPlayer.isConnected = false;
     }
 

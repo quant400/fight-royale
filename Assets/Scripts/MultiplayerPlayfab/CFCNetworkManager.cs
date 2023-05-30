@@ -98,57 +98,61 @@ public class CFCNetworkManager : MonoBehaviourPunCallbacks
     }
 
     //TODO Suleman: Uncomment Later
-    //public override void OnServerDisconnect(NetworkConnection conn)
-    //{
-    //    var diffConnectedPlayersCount = connectedPlayersCount - 1;
-    //    if (diffConnectedPlayersCount < 0) { diffConnectedPlayersCount = 0; }
-    //    TryUpdateLobbyPlayer(diffConnectedPlayersCount);
+    // Never gets called
+    public override void OnLeftRoom() /*OnServerDisconnect(NetworkConnection conn)*/
+    {
+        var diffConnectedPlayersCount = connectedPlayersCount - 1;
+        if (diffConnectedPlayersCount < 0) { diffConnectedPlayersCount = 0; }
+        TryUpdateLobbyPlayer(diffConnectedPlayersCount);
 
-    //    try
-    //    {
+        try
+        {
+
+            //Commented for Photon
+            //if (((CFCAuth.AuthRequestMessage)conn.authenticationData).nftWallet.Equals("Demo"))
+            //{
+            //    Debug.Log("Disconnect as Demo");
+            //    base.OnServerDisconnect(conn);
+            //    return;
+            //}
+
+            //Commented for Photon
+            //PlayerBehaviour.playerNames.Remove(((CFCAuth.AuthRequestMessage)conn.authenticationData).authUsername);
+            _gameManager.analytics.RemovePlayer(photonView/*conn.identity*/);
+            //_gameManager.CheckWinner();
+
+            //Commented for Photon
+            //base.OnServerDisconnect(conn);
+
+            Debug.Log(_gameManager.match.currentState);
+            if (_gameManager.match.currentState == MatchManager.MatchState.InGame ||
+                _gameManager.match.currentState == MatchManager.MatchState.PreGame ||
+                _gameManager.match.currentState == MatchManager.MatchState.Lobby)
+            {
+                _gameManager.OnClientDisconnect();
+            }
+
+            if (//_gameManager.match.currentState != MatchManager.MatchState.Lobby &&
+                NetworkServer.connections.Count <= 0)
+            {
+                Connection_Manager.Instance.SendOpenLobby();
+
+                //singleton.ServerChangeScene(SceneManager.GetActiveScene().name);
+                //singleton.StopServer();
+                Debug.Log("entrou");
+                //Commented for Photon
+                //singleton.ServerChangeScene(SceneManager.GetActiveScene().name);
+                //singleton.StopServer();
+            }
 
 
-    //        if (((CFCAuth.AuthRequestMessage) conn.authenticationData).nftWallet.Equals("Demo"))
-    //        {
-    //            Debug.Log("Disconnect as Demo");
-    //            base.OnServerDisconnect(conn);
-    //            return;
-    //        }
+        }
+        catch (Exception e)
+        {
+            Debug.Log("CFCNetworkManager - OnServerDisconnect() -> " + e);
+        }
 
-    //        PlayerBehaviour.playerNames.Remove(((CFCAuth.AuthRequestMessage)conn.authenticationData).authUsername);
-    //        _gameManager.analytics.RemovePlayer(conn.identity);
-    //        //_gameManager.CheckWinner();
-
-    //        base.OnServerDisconnect(conn);
-
-    //        Debug.Log(_gameManager.match.currentState);
-    //        if (_gameManager.match.currentState == MatchManager.MatchState.InGame || 
-    //            _gameManager.match.currentState == MatchManager.MatchState.PreGame ||
-    //            _gameManager.match.currentState == MatchManager.MatchState.Lobby)
-    //        {
-    //            _gameManager.OnClientDisconnect();
-    //        }
-
-    //        if (//_gameManager.match.currentState != MatchManager.MatchState.Lobby &&
-    //            NetworkServer.connections.Count <= 0)
-    //        {   
-    //            Connection_Manager.Instance.SendOpenLobby();
-
-    //            //singleton.ServerChangeScene(SceneManager.GetActiveScene().name);
-    //            //singleton.StopServer();
-    //            Debug.Log("entrou");
-    //            singleton.ServerChangeScene(SceneManager.GetActiveScene().name);
-    //            singleton.StopServer();
-    //        }
-
-
-    //    }
-    //    catch (Exception e)
-    //    {
-    //        Debug.Log("CFCNetworkManager - OnServerDisconnect() -> " + e);
-    //    }
-
-    //}
+    }
 
     //TODO Suleman: Uncomment Later
     //public override void OnServerAddPlayer(NetworkConnection conn)
@@ -158,7 +162,7 @@ public class CFCNetworkManager : MonoBehaviourPunCallbacks
 
     //    if (!((CFCAuth.AuthRequestMessage) conn.authenticationData).nftWallet.Equals("Demo"))
     //    {
-               // called the following in ClientStartUp under function SpawnPlayer()
+    // called the following in ClientStartUp under function SpawnPlayer()
     //        _gameManager.OnClientConnect(conn.identity);
     //    }
 
@@ -201,6 +205,7 @@ public class CFCNetworkManager : MonoBehaviourPunCallbacks
         Debug.Log("Disconnect -> OnDisconnected()");
 
         ModalWarning.Instance.Show("Client disconnected, retry?", MenuManager.Instance.Reset);
+        _gameManager.OnClientDisconnect();
     }
 
     public void OnCreateCharacter(NetworkConnection conn, CharacterCustomizationMsg message)

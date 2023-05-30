@@ -37,13 +37,22 @@ public class PowerUpManager : MonoBehaviour/*NetworkBehaviour*/
             int random = Random.Range(0, powerUpList.Count);
 
             // TODO Suleman, Uncomment later
-            //RpcSpawnPowerUp(i,random, i);
+            // Commented for Photon
+            //RpcSpawnPowerUp(i, random, i);
+            GameManager.Instance.player.RPC("RpcSpawnPowerUp", RpcTarget.AllBuffered, i, random, i);
 
-            SpawnPowerUp(i, powerUpList[random], spawnList[i]);
+            // Commented for Photon
+            //SpawnPowerUp(i, powerUpList[random], spawnList[i]);
         }
     }
 
-    // TODO Suleman, Uncomment later
+    public void SetupSpawnPowerUp(int powerUpId, int powerUpIndex, int spawnIndex)
+    {
+        SpawnPowerUp(powerUpId, powerUpList[powerUpIndex], spawnList[spawnIndex]);
+    }
+
+    // TODO Suleman, Uncomment later, done
+    // Transferred PUN RPC to PlayerBehaviour.cs
     //[ClientRpc]
     //[PunRPC]
     //private void RpcSpawnPowerUp(int powerUpId, int powerUpIndex, int spawnIndex)

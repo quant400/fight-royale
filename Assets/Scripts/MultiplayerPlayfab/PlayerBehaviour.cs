@@ -10,6 +10,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using Models;
 using Photon.Realtime;
+using Photon.Pun.Demo.PunBasics;
 
 public class PlayerBehaviour : /*NetworkBehaviour*/MonoBehaviourPunCallbacks
 {
@@ -51,6 +52,7 @@ public class PlayerBehaviour : /*NetworkBehaviour*/MonoBehaviourPunCallbacks
 
     //TODO Suleman: Uncomment Later
     //[SyncVar(hook = nameof(OnPlayerWearableChanged))] public string pWearables;
+    public string pWearables;
 
     /* private void OnScoreChanged(int oidScore, int newScore)
      {
@@ -104,24 +106,32 @@ public class PlayerBehaviour : /*NetworkBehaviour*/MonoBehaviourPunCallbacks
         _pStatsController.SetHealth(pHealth);
         if (photonView.IsMine)
         {
-            //_skinController.SetUpSkin(Character_Manager.Instance.GetCurrentCharacter.name);
-            //pColor = Color_Manager.Instance.pallete.RandomPlayerColor();
-            ChangePlayerName(Character_Manager.Instance.GetCurrentCharacter.name);
-            ChangePlayerSkin(Character_Manager.Instance.GetCurrentCharacter.name.Replace("-"," "));
-            //ChangePlayerColor(Color_Manager.Instance.pallete.RandomPlayerColor());
+            ChangePlayerSkin(Character_Manager.Instance.GetCurrentCharacter.name.Replace("-", " "));
+            ChangePlayerWearable(gameplayView.instance.equipedWearables);
         }
-        
+
     }
 
     public override void OnEnable()
     {
         PhotonNetwork.AddCallbackTarget(this);
         GameManager.Instance.analytics.AddPlayer(photonView.ViewID.ToString(), photonView);
+
+        if (photonView.IsMine)
+        {
+            ChangePlayerName(Character_Manager.Instance.GetCurrentCharacter.name);
+        }
     }
 
     public override void OnDisable()
     {
         PhotonNetwork.RemoveCallbackTarget(this);
+    }
+
+    private void OnApplicationQuit()
+    {
+        GameManager.Instance.OnClientDisconnect();
+        GameManager.Instance.analytics.RemovePlayer(photonView);
     }
 
     void OnTriggerEnter(Collider other)
@@ -141,7 +151,8 @@ public class PlayerBehaviour : /*NetworkBehaviour*/MonoBehaviourPunCallbacks
                 //    CmdPowerUp(other.GetComponent<PowerUpBehavior>().id);
 
                 if (photonView.IsMine)
-                    CmdPowerUp(other.GetComponent<PowerUpBehavior>().id);
+                    photonView.RPC("CmdPowerUp", RpcTarget.AllBuffered, other.GetComponent<PowerUpBehavior>().id);
+                    //CmdPowerUp(other.GetComponent<PowerUpBehavior>().id);
 
                 //_pAttributes.OnPowerUp(other.GetComponent<PowerUpBehavior>().GetPowerUp());
                 break;
@@ -188,13 +199,14 @@ public class PlayerBehaviour : /*NetworkBehaviour*/MonoBehaviourPunCallbacks
         if (powerUp != null && powerUp.isAvailable)
         {
             powerUp.isAvailable = false;
-            RpcPowerUp(powerUpId);
+            //RpcPowerUp(powerUpId);
+            photonView.RPC("RpcPowerUp", RpcTarget.AllBuffered, powerUpId);
         }
 
-        photonView.RPC("RpcPowerUp", RpcTarget.All, powerUpId);
+        
     }
 
-
+    [PunRPC]
     private void RpcPowerUp(int powerUpId)
     {
 
@@ -260,9 +272,12 @@ public class PlayerBehaviour : /*NetworkBehaviour*/MonoBehaviourPunCallbacks
     //    _skinController.UpdateWearables();
     //}
 
+    
+
     [PunRPC]
     private void SetPlayerName(string newName)
     {
+        pName = newName;
         _pStatsController.SetName(newName);
     }
 
@@ -277,6 +292,13 @@ public class PlayerBehaviour : /*NetworkBehaviour*/MonoBehaviourPunCallbacks
     private void SetPlayerHealth(float newHealth)
     {
         _pStatsController.SetHealth(newHealth);
+    }
+
+    [PunRPC]
+    public void SetPlayerWearable(string newWearable)
+    {
+        pWearables = newWearable;
+        _skinController.UpdateWearables();
     }
 
     //[PunRPC]
@@ -299,6 +321,11 @@ public class PlayerBehaviour : /*NetworkBehaviour*/MonoBehaviourPunCallbacks
     public void ChangePlayerHealth(float newHealth)
     {
         photonView.RPC("SetPlayerHealth", RpcTarget.AllBuffered, newHealth);
+    }
+
+    public void ChangePlayerWearable(string newWearable)
+    {
+        photonView.RPC("SetPlayerWearable", RpcTarget.AllBuffered, newWearable);
     }
 
     //public void ChangePlayerColor(Color32 newColor)
@@ -377,10 +404,11 @@ public class PlayerBehaviour : /*NetworkBehaviour*/MonoBehaviourPunCallbacks
         //CFCNetworkManager.Instance.agora?.onJoin(false, callId);
     }
 
-    public void SendMessage(NetworkIdentity playerIdentity, Color32 color, string message)
+    public void SendMessage(PhotonView playerIdentity,/* Color32 color,*/ string message)
     {
         //TODO Suleman: Uncomment Later
-        //CmdOnSendGlobalMessage(playerIdentity, color, message);
+        //CmdOnSendGlobalMessage(playerIdentity, /*color,*/ message);
+        photonView.RPC("RpcMessageCreated", RpcTarget.AllBuffered, playerIdentity.ViewID, message);
     }
 
     // Commented for Photon
@@ -547,14 +575,15 @@ public class PlayerBehaviour : /*NetworkBehaviour*/MonoBehaviourPunCallbacks
         target.photonView.RPC("RpcDamage", RpcTarget.All, dealerIdentity.ViewID, damage);
     }
 
-    //TODO Suleman: Uncomment Later
+
     //[Command]
-    // Done the following in SetBoolIsBlocking()
+    //Done the following in SetBoolIsBlocking()
     //public void CmdBlocking(bool blocking)
     //{
     //    pIsBlocking = blocking;
     //}
 
+    //TODO Suleman: Uncomment Later
     //[Command]
     //void CmdCall(string callId)
     //{
@@ -569,16 +598,20 @@ public class PlayerBehaviour : /*NetworkBehaviour*/MonoBehaviourPunCallbacks
     //}
 
     //[Command]
-    //void CmdOnSendGlobalMessage(NetworkIdentity playerIdentity, Color32 color, string message)
+    //[PunRPC]
+    //void CmdOnSendGlobalMessage(int playerID, /*Color32 color,*/ string message)
     //{
-    //    RpcMessageCreated(playerIdentity, color, message);
+    //    PhotonView playerIdentity = PhotonView.Find(playerID);
+    //    RpcMessageCreated(playerIdentity, /*color,*/ message);
     //}
 
     //[ClientRpc]
-    //void RpcMessageCreated(NetworkIdentity playerIdentity, Color32 color, string message)
-    //{
-    //    ChatGlobal_Manager.Instance.CreateMessage(playerIdentity, color, message);
-    //}
+    [PunRPC]
+    void RpcMessageCreated(int playerID, /*Color32 color,*/ string message)
+    {
+        PhotonView playerIdentity = PhotonView.Find(playerID);
+        ChatGlobal_Manager.Instance.CreateMessage(playerIdentity, /*color,*/ message);
+    }
 
     public void ResetServer()
     {
@@ -760,11 +793,11 @@ public class PlayerBehaviour : /*NetworkBehaviour*/MonoBehaviourPunCallbacks
     //{
     //    //Debug.Log("Command run");
     //    //string res = "";
-    //    GameObject[] players= GameObject.FindGameObjectsWithTag("Player");
+    //    GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
     //    foreach (GameObject p in players)
     //    {
-    //        var temp= p.GetComponent<PlayerBehaviour>();
-    //        Targetrecieve(this.connectionToClient,temp.netIdentity,temp.pWearables);
+    //        var temp = p.GetComponent<PlayerBehaviour>();
+    //        Targetrecieve(this.connectionToClient, temp.netIdentity, temp.pWearables);
     //    }
 
 
@@ -776,14 +809,14 @@ public class PlayerBehaviour : /*NetworkBehaviour*/MonoBehaviourPunCallbacks
     //    Debug.Log(x);
     //}
     //[TargetRpc]
-    //void Targetrecieve(NetworkConnection con,NetworkIdentity ni,string x)
+    //void Targetrecieve(NetworkConnection con, NetworkIdentity ni, string x)
     //{
     //    //Debug.Log("Targetrcp run: "+x);
     //    GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-    //    foreach(GameObject p in players)
+    //    foreach (GameObject p in players)
     //    {
     //        var temp = p.GetComponent<PlayerBehaviour>();
-    //        if (temp.netIdentity==ni)
+    //        if (temp.netIdentity == ni)
     //        {
     //            //Debug.Log(x);
     //            //temp.pWearables = x;
@@ -910,4 +943,9 @@ public class PlayerBehaviour : /*NetworkBehaviour*/MonoBehaviourPunCallbacks
         //carrierTarget = null;
     }
 
+    [PunRPC]
+    private void RpcSpawnPowerUp(int powerUpId, int powerUpIndex, int spawnIndex)
+    {
+        PowerUpManager.Instance.SetupSpawnPowerUp(powerUpId, powerUpIndex, spawnIndex);
+    }
 }

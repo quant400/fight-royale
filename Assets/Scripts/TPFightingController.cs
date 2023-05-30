@@ -40,7 +40,7 @@ public class TPFightingController : MonoBehaviour
     [SerializeField] private LayerMask _throwableMask;
     [SerializeField] public Transform _throwTargetTransform;
     public Throwable_BehaviorV2 _carryingObject;
-    [SerializeField] private NetworkTransformChild _carryTransformChild;
+    //[SerializeField] private NetworkTransformChild _carryTransformChild;
 
     [SerializeField]
     GameObject punchEffect, kickEffect;
