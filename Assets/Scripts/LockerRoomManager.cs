@@ -132,7 +132,9 @@ public class LockerRoomManager : MonoBehaviour
 
     private string characterModelsPath = "FIGHTERS2.0Redone";
 
+
     private const string BeltsModelsPath = "WearableModels/Belts";
+    //private const string BeltsModelsPath = "WearableModels/Gen2/belts2";
     private const string BeltsSpritePath = "DisplaySprites/Wearables/Belts/";
 
     private const string GlassesModelsPath = "WearableModels/Glasses";
@@ -148,9 +150,11 @@ public class LockerRoomManager : MonoBehaviour
     private const string ShoesSpritePath = "DisplaySprites/Wearables/Shoes/";
 
     private const string ShortsModelsPath = "WearableModels/Shorts";
+    //private const string ShortsModelsPath = "WearableModels/Gen2/shorts2";
     private const string ShortsSpritePath = "DisplaySprites/Wearables/Shorts/";
 
     private const string MasksModelsPath = "WearableModels/Masks";
+    //private const string MasksModelsPath = "WearableModels/Gen2/masks2";
     private const string MasksSpritePath = "DisplaySprites/Wearables/Masks/";
 
     private const string TrainersModelsPath = "WearableModels/Trainers";
@@ -995,7 +999,15 @@ public class LockerRoomManager : MonoBehaviour
             }
             else
             {
-                playerModelParentObject.transform.GetChild(childIndex).transform.gameObject.SetActive(false);
+                if(childIndex == 7 || childIndex == 8)
+                {
+                    playerModelParentObject.transform.GetChild(7).transform.gameObject.SetActive(false);
+                    playerModelParentObject.transform.GetChild(8).transform.gameObject.SetActive(false);
+                }
+                else
+                {
+                    playerModelParentObject.transform.GetChild(childIndex).transform.gameObject.SetActive(false);
+                }
 
                 return;
             }
@@ -1068,7 +1080,21 @@ public class LockerRoomManager : MonoBehaviour
 
         if (childIndex >= 6)
         {
-            playerModelParentObject.transform.GetChild(childIndex).transform.gameObject.SetActive(true);
+
+            if (childIndex == 7)
+            {
+                playerModelParentObject.transform.GetChild(7).transform.gameObject.SetActive(true);
+                playerModelParentObject.transform.GetChild(8).transform.gameObject.SetActive(false);
+            }
+            else if(childIndex == 8)
+            {
+                playerModelParentObject.transform.GetChild(7).transform.gameObject.SetActive(false);
+                playerModelParentObject.transform.GetChild(8).transform.gameObject.SetActive(true);
+            }
+            else
+            {
+                playerModelParentObject.transform.GetChild(childIndex).transform.gameObject.SetActive(true);
+            }
         }
     }
 
@@ -2752,9 +2778,15 @@ public class LockerRoomManager : MonoBehaviour
             }
             else if (wearableButtonSelected[1] == 1 || wearableButtonSelected[5] == 1)
             {
-                totalPages = (glasses.Count / (gridObject.transform.childCount - 2)) + (masks.Count / (gridObject.transform.childCount - 2));
+                totalPages = (glasses.Count + masks.Count) / (gridObject.transform.childCount - 2);
 
-                if (glasses.Count + masks.Count < (gridObject.transform.childCount - 2))
+                Debug.Log("Total Pages: " + totalPages);
+
+                Debug.Log("glasses.Count + masks.Count: " + (glasses.Count + masks.Count));
+
+                Debug.Log("gridObject.transform.childCount - 2: " + (gridObject.transform.childCount - 2));
+
+                if ((glasses.Count + masks.Count) < (gridObject.transform.childCount - 2))
                 {
                     totalPages += 1;
                 }
@@ -2916,10 +2948,10 @@ public class LockerRoomManager : MonoBehaviour
             canvasGroups[i] = wearableUI[i].GetComponent<CanvasGroup>();
         }
 
-        
+        /*
         if (!gameplayView.instance)
         {
-        
+        */
             models = ModelNames(characterModelsPath);
 
             belts = ModelNames(BeltsModelsPath);
@@ -2937,7 +2969,7 @@ public class LockerRoomManager : MonoBehaviour
             masks = ModelNames(MasksModelsPath);
 
             trainers = ModelNames(TrainersModelsPath);
-        }
+        //}
     }
 
     private void EmptyAllLists()
@@ -2995,6 +3027,8 @@ public class LockerRoomManager : MonoBehaviour
             gridObject.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(false);
 
             gridObject.transform.GetChild(0).transform.GetChild(1).gameObject.SetActive(true);
+
+            gridObject.transform.GetChild(0).transform.GetChild(2).gameObject.SetActive(false);
         }
 
         for (int i = 0; i < gridObject.transform.childCount - 1; i++)
