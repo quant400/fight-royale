@@ -109,6 +109,7 @@ public class gameplayView : MonoBehaviour
     public int bonusAtt;
     public int bonusDef;
     public int bonusTek;
+    public int bonusSpeed;
 
     [SerializeField]
     private LockerRoomAPI lockerRoomApi;
@@ -119,6 +120,7 @@ public class gameplayView : MonoBehaviour
         bonusAtt = 0;
         bonusDef = 0;
         bonusTek = 0;
+        bonusSpeed = 0;
         wearablesEqipped = "";
 
         if(wearableReply.num != 0)
@@ -156,6 +158,7 @@ public class gameplayView : MonoBehaviour
                     bonusAtt += lockerRoomApi.wearableDatabase.GetAtk(wearable.sku);
                     bonusDef += lockerRoomApi.wearableDatabase.GetDef(wearable.sku);
                     bonusTek += lockerRoomApi.wearableDatabase.GetTek(wearable.sku);
+                    bonusSpeed += lockerRoomApi.wearableDatabase.GetSpd(wearable.sku);
                 }
             }
         }

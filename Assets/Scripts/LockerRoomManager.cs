@@ -1750,10 +1750,10 @@ public class LockerRoomManager : MonoBehaviour
     {
         int previousMask = currentExtras[1];
 
-        if ((gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) < masks.Count)
+        if ((gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) < glasses.Count + masks.Count)
         {
             wearableButtons[2].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(MasksSpritePath,
-                masks[(gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]), typeof(Sprite)) as Sprite;
+                masks[(gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) - glasses.Count]), typeof(Sprite)) as Sprite;
 
             wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.r,
                 wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.b, 1);
@@ -1770,13 +1770,13 @@ public class LockerRoomManager : MonoBehaviour
                 totalAttributes["speed"] -= lockerRoomApi.wearableDatabase.GetSpd(currentExtras[0]);
             }
 
-            totalAttributes["attack"] += lockerRoomApi.wearableDatabase.GetAtk(masksSKUandID[(gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))][0]);
+            totalAttributes["attack"] += lockerRoomApi.wearableDatabase.GetAtk(masksSKUandID[(gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) - glasses.Count][0]);
 
-            totalAttributes["defense"] += lockerRoomApi.wearableDatabase.GetDef(masksSKUandID[(gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))][0]);
+            totalAttributes["defense"] += lockerRoomApi.wearableDatabase.GetDef(masksSKUandID[(gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) - glasses.Count][0]);
 
-            totalAttributes["technique"] += lockerRoomApi.wearableDatabase.GetTek(masksSKUandID[(gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))][0]);
+            totalAttributes["technique"] += lockerRoomApi.wearableDatabase.GetTek(masksSKUandID[(gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) - glasses.Count][0]);
 
-            totalAttributes["speed"] += lockerRoomApi.wearableDatabase.GetSpd(masksSKUandID[(gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))][0]);
+            totalAttributes["speed"] += lockerRoomApi.wearableDatabase.GetSpd(masksSKUandID[(gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) - glasses.Count][0]);
 
             SetAttributeSliders(totalAttributes, true);
 
@@ -1786,8 +1786,12 @@ public class LockerRoomManager : MonoBehaviour
             }
 
 
-            currentExtras[0] = masksSKUandID[(gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))][0];
-            currentExtras[1] = masksSKUandID[(gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))][1];
+
+            currentExtras[0] = masksSKUandID[(gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) - glasses.Count][0];
+            currentExtras[1] = masksSKUandID[(gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) - glasses.Count][1];
+
+            Debug.Log("SKU = " + currentExtras[0]);
+            Debug.Log("ID = " + currentExtras[1]);
 
             for (int i = 0; i < currentCharacter.wearablesData.wearables.Length; i++)
             {
@@ -2026,7 +2030,18 @@ public class LockerRoomManager : MonoBehaviour
             }
             else if (wearableButtonSelected[1] == 1)
             {
-                EquipGlasses();
+                if (((gridSelectionNum - 1) + ((currentPage - 1) * (gridObject.transform.childCount - 1))) < glasses.Count)
+                {
+                    Debug.Log("EquipGlasses");
+
+                    EquipGlasses();
+                }
+                else
+                {
+                    Debug.Log("EquipMask");
+
+                    EquipMask();
+                }
             }
             else if (wearableButtonSelected[2] == 1)
             {
@@ -2042,7 +2057,18 @@ public class LockerRoomManager : MonoBehaviour
             }
             else if (wearableButtonSelected[5] == 1)
             {
-                EquipMask();
+                if (((gridSelectionNum - 1) + ((currentPage - 1) * (gridObject.transform.childCount - 1))) < glasses.Count)
+                {
+                    Debug.Log("EquipGlasses");
+
+                    EquipGlasses();
+                }
+                else
+                {
+                    Debug.Log("EquipMask");
+
+                    EquipMask();
+                }
             }
             else if (wearableButtonSelected[6] == 1)
             {
@@ -2762,105 +2788,27 @@ public class LockerRoomManager : MonoBehaviour
         {
             if (wearableButtonSelected[0] == 1)
             {
-                totalPages = belts.Count / (gridObject.transform.childCount - 2);
-
-                if (belts.Count < (gridObject.transform.childCount - 2))
-                {
-                    totalPages += 1;
-                }
-                else
-                {
-                    if (belts.Count % (gridObject.transform.childCount - 2) != 0)
-                    {
-                        totalPages += 1;
-                    }
-                }
+                totalPages = (int)(Mathf.Ceil((float)(belts.Count + 1) / (float)(gridObject.transform.childCount - 1)));
             }
             else if (wearableButtonSelected[1] == 1 || wearableButtonSelected[5] == 1)
             {
-                totalPages = (glasses.Count + masks.Count) / (gridObject.transform.childCount - 2);
-
-                Debug.Log("Total Pages: " + totalPages);
-
-                Debug.Log("glasses.Count + masks.Count: " + (glasses.Count + masks.Count));
-
-                Debug.Log("gridObject.transform.childCount - 2: " + (gridObject.transform.childCount - 2));
-
-                if ((glasses.Count + masks.Count) < (gridObject.transform.childCount - 2))
-                {
-                    totalPages += 1;
-                }
-                else
-                {
-                    if ((glasses.Count + masks.Count) % (gridObject.transform.childCount - 2) != 0)
-                    {
-                        totalPages += 1;
-                    }
-                }
+                totalPages = (int)(Mathf.Ceil((float)(glasses.Count + masks.Count + 1) / (float)(gridObject.transform.childCount - 1)));
             }
             else if (wearableButtonSelected[2] == 1)
             {
-                totalPages = gloves.Count / (gridObject.transform.childCount - 2);
-
-                if (gloves.Count < (gridObject.transform.childCount - 2))
-                {
-                    totalPages += 1;
-                }
-                else
-                {
-                    if (gloves.Count % (gridObject.transform.childCount - 2) != 0)
-                    {
-                        totalPages += 1;
-                    }
-                }
+                totalPages = (int)(Mathf.Ceil((float)(gloves.Count + 1) / (float)(gridObject.transform.childCount - 1)));
             }
             else if (wearableButtonSelected[3] == 1)
             {
-                totalPages = shoes.Count / (gridObject.transform.childCount - 2);
-
-                if (shoes.Count < (gridObject.transform.childCount - 2))
-                {
-                    totalPages += 1;
-                }
-                else
-                {
-                    if (shoes.Count % (gridObject.transform.childCount - 2) != 0)
-                    {
-                        totalPages += 1;
-                    }
-                }
+                totalPages = (int)(Mathf.Ceil((float)(shoes.Count + 1) / (float)(gridObject.transform.childCount - 1)));
             }
             else if (wearableButtonSelected[4] == 1)
             {
-                totalPages = shorts.Count / (gridObject.transform.childCount - 2);
-
-                if (shorts.Count < (gridObject.transform.childCount - 2))
-                {
-                    totalPages += 1;
-                }
-                else
-                {
-                    if (shorts.Count % (gridObject.transform.childCount - 2) != 0)
-                    {
-                        totalPages += 1;
-                    }
-                }
+                totalPages = (int)(Mathf.Ceil((float)(shorts.Count + 1) / (float)(gridObject.transform.childCount - 1)));
             }
             else if (wearableButtonSelected[6] == 1)
             {
-                totalPages = trainers.Count / (gridObject.transform.childCount - 2);
-
-                if (trainers.Count < (gridObject.transform.childCount - 2))
-                {
-                    totalPages += 1;
-                }
-                else
-                {
-                    if (trainers.Count % (gridObject.transform.childCount - 2) != 0)
-                    {
-                        totalPages += 1;
-                    }
-                }
+                totalPages = (int)(Mathf.Ceil((float)(trainers.Count + 1) / (float)(gridObject.transform.childCount - 1)));
             }
 
 
@@ -2948,10 +2896,10 @@ public class LockerRoomManager : MonoBehaviour
             canvasGroups[i] = wearableUI[i].GetComponent<CanvasGroup>();
         }
 
-        /*
+        
         if (!gameplayView.instance)
         {
-        */
+        
             models = ModelNames(characterModelsPath);
 
             belts = ModelNames(BeltsModelsPath);
@@ -2969,7 +2917,7 @@ public class LockerRoomManager : MonoBehaviour
             masks = ModelNames(MasksModelsPath);
 
             trainers = ModelNames(TrainersModelsPath);
-        //}
+        }
     }
 
     private void EmptyAllLists()
@@ -3067,19 +3015,10 @@ public class LockerRoomManager : MonoBehaviour
                 }
                 else
                 {
-                    if (((currentPage < 3) && (i + ((currentPage - 1) * (gridObject.transform.childCount - 2)) < belts.Count)) ||
-                        ((currentPage > 2) && (i + ((currentPage - 1) * (gridObject.transform.childCount - 2) + 1) < belts.Count)))
+                    if (i + ((currentPage - 1) * (gridObject.transform.childCount - 1)) - 1 < belts.Count)
                     {
-                        if (currentPage < 3)
-                        {
-                            gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(BeltsSpritePath,
-                                belts[i + ((currentPage - 1) * (gridObject.transform.childCount - 2))]), typeof(Sprite)) as Sprite;
-                        }
-                        else
-                        {
-                            gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(BeltsSpritePath,
-                                belts[i + ((currentPage - 1) * (gridObject.transform.childCount - 2)) + 1]), typeof(Sprite)) as Sprite;
-                        }
+                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(BeltsSpritePath,
+                            belts[i + ((currentPage - 1) * (gridObject.transform.childCount - 1)) - 1]), typeof(Sprite)) as Sprite;
 
                         if (i == 0)
                         {
@@ -3104,6 +3043,7 @@ public class LockerRoomManager : MonoBehaviour
                             gridObject.transform.GetChild(i).transform.GetChild(1).transform.gameObject.SetActive(true);
                         }
                     }
+
                 }
             }
             else if (wearableButtonSelected[1] == 1 || wearableButtonSelected[5] == 1)
@@ -3151,19 +3091,10 @@ public class LockerRoomManager : MonoBehaviour
                 }
                 else
                 {
-                    if (((currentPage < 3) && (i + ((currentPage - 1) * (gridObject.transform.childCount - 2)) < glasses.Count)) || 
-                        ((currentPage > 2) && (i + ((currentPage - 1) * (gridObject.transform.childCount - 2) + 1) < (glasses.Count))))
+                    if (i + ((currentPage - 1) * (gridObject.transform.childCount - 1)) - 1 < glasses.Count)
                     {
-                        if (currentPage < 3)
-                        {
-                            gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlassesSpritePath,
-                                glasses[i + ((currentPage - 1) * (gridObject.transform.childCount - 2))]), typeof(Sprite)) as Sprite;
-                        }
-                        else
-                        {
-                            gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlassesSpritePath,
-                                glasses[i + ((currentPage - 1) * (gridObject.transform.childCount - 2)) + 1]), typeof(Sprite)) as Sprite;
-                        }
+                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlassesSpritePath,
+                            glasses[i + ((currentPage - 1) * (gridObject.transform.childCount - 1)) - 1]), typeof(Sprite)) as Sprite;
 
                         if (i == 0)
                         {
@@ -3174,19 +3105,10 @@ public class LockerRoomManager : MonoBehaviour
                             gridObject.transform.GetChild(i).transform.GetChild(1).transform.gameObject.SetActive(false);
                         }
                     }
-                    else if (((currentPage < 3) && (i + ((currentPage - 1) * (gridObject.transform.childCount - 2)) < (masks.Count + glasses.Count))) || 
-                        ((currentPage > 2) && (i + ((currentPage - 1) * (gridObject.transform.childCount - 2) + 1) < (masks.Count + glasses.Count))))
+                    else if (i + ((currentPage - 1) * (gridObject.transform.childCount - 1)) - 1 < glasses.Count + masks.Count)
                     {
-                        if(currentPage < 3)
-                        {
-                            gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(MasksSpritePath,
-                                masks[(i + ((currentPage - 1) * (gridObject.transform.childCount - 2))) - glasses.Count]), typeof(Sprite)) as Sprite;
-                        }
-                        else
-                        {
-                            gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(MasksSpritePath,
-                                masks[(i + ((currentPage - 1) * (gridObject.transform.childCount - 2))) - glasses.Count + 1]), typeof(Sprite)) as Sprite;
-                        }
+                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(MasksSpritePath,
+                            masks[i + ((currentPage - 1) * (gridObject.transform.childCount - 1)) - 1 - glasses.Count]), typeof(Sprite)) as Sprite;
 
                         if (i == 0)
                         {
@@ -3244,19 +3166,10 @@ public class LockerRoomManager : MonoBehaviour
                 }
                 else
                 {
-                    if (((currentPage < 3) && (i + ((currentPage - 1) * (gridObject.transform.childCount - 2)) < gloves.Count)) ||
-                        ((currentPage > 2) && (i + ((currentPage - 1) * (gridObject.transform.childCount - 2) + 1) < gloves.Count)))
+                    if (i + ((currentPage - 1) * (gridObject.transform.childCount - 1)) - 1 < gloves.Count)
                     {
-                        if (currentPage < 3)
-                        {
-                            gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlovesSpritePath,
-                                gloves[i + ((currentPage - 1) * (gridObject.transform.childCount - 2))]), typeof(Sprite)) as Sprite;
-                        }
-                        else
-                        {
-                            gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlovesSpritePath,
-                                gloves[i + ((currentPage - 1) * (gridObject.transform.childCount - 2)) + 1]), typeof(Sprite)) as Sprite;
-                        }
+                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlovesSpritePath,
+                            gloves[i + ((currentPage - 1) * (gridObject.transform.childCount - 1)) - 1]), typeof(Sprite)) as Sprite;
 
                         if (i == 0)
                         {
@@ -3314,19 +3227,10 @@ public class LockerRoomManager : MonoBehaviour
                 }
                 else
                 {
-                    if (((currentPage < 3) && (i + ((currentPage - 1) * (gridObject.transform.childCount - 2)) < shoes.Count)) ||
-                        ((currentPage > 2) && (i + ((currentPage - 1) * (gridObject.transform.childCount - 2) + 1) < shoes.Count)))
+                    if (i + ((currentPage - 1) * (gridObject.transform.childCount - 1)) - 1 < shoes.Count)
                     {
-                        if (currentPage < 3)
-                        {
-                            gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(ShoesSpritePath,
-                                shoes[i + ((currentPage - 1) * (gridObject.transform.childCount - 2))]), typeof(Sprite)) as Sprite;
-                        }
-                        else
-                        {
-                            gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(ShoesSpritePath,
-                                shoes[i + ((currentPage - 1) * (gridObject.transform.childCount - 2)) + 1]), typeof(Sprite)) as Sprite;
-                        }
+                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(ShoesSpritePath,
+                            shoes[i + ((currentPage - 1) * (gridObject.transform.childCount - 1)) - 1]), typeof(Sprite)) as Sprite;
 
                         if (i == 0)
                         {
@@ -3384,19 +3288,10 @@ public class LockerRoomManager : MonoBehaviour
                 }
                 else
                 {
-                    if (((currentPage < 3) && (i + ((currentPage - 1) * (gridObject.transform.childCount - 2)) < shorts.Count)) ||
-                        ((currentPage > 2) && (i + ((currentPage - 1) * (gridObject.transform.childCount - 2) + 1) < shorts.Count)))
+                    if (i + ((currentPage - 1) * (gridObject.transform.childCount - 1)) - 1 < shorts.Count)
                     {
-                        if (currentPage < 3)
-                        {
-                            gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(ShortsSpritePath,
-                                shorts[i + ((currentPage - 1) * (gridObject.transform.childCount - 2))]), typeof(Sprite)) as Sprite;
-                        }
-                        else
-                        {
-                            gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(ShortsSpritePath,
-                                shorts[i + ((currentPage - 1) * (gridObject.transform.childCount - 2)) + 1]), typeof(Sprite)) as Sprite;
-                        }
+                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(ShortsSpritePath,
+                            shorts[i + ((currentPage - 1) * (gridObject.transform.childCount - 1)) - 1]), typeof(Sprite)) as Sprite;
 
                         if (i == 0)
                         {
@@ -3455,19 +3350,10 @@ public class LockerRoomManager : MonoBehaviour
                 }
                 else
                 {
-                    if (((currentPage < 3) && (i + ((currentPage - 1) * (gridObject.transform.childCount - 2)) < trainers.Count)) ||
-                        ((currentPage > 2) && (i + ((currentPage - 1) * (gridObject.transform.childCount - 2) + 1) < trainers.Count)))
+                    if (i + ((currentPage - 1) * (gridObject.transform.childCount - 1)) - 1 < trainers.Count)
                     {
-                        if (currentPage < 3)
-                        {
-                            gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(TrainersSpritePath,
-                                trainers[i + ((currentPage - 1) * (gridObject.transform.childCount - 2))]), typeof(Sprite)) as Sprite;
-                        }
-                        else
-                        {
-                            gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(TrainersSpritePath,
-                                trainers[i + ((currentPage - 1) * (gridObject.transform.childCount - 2)) + 1]), typeof(Sprite)) as Sprite;
-                        }
+                        gridObject.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(TrainersSpritePath,
+                            trainers[i + ((currentPage - 1) * (gridObject.transform.childCount - 1)) - 1]), typeof(Sprite)) as Sprite;
 
                         if (i == 0)
                         {

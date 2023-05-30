@@ -77,6 +77,9 @@ public class LockerRoomAPI : MonoBehaviour
     [SerializeField]
     private Button playButton;
 
+    [SerializeField]
+    private Image lootSprite;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -184,6 +187,23 @@ public class LockerRoomAPI : MonoBehaviour
                 Debug.Log("health: = " + r.data.health);
 
                 Debug.Log("MINT END");
+
+
+                if (wearableDatabase.GetSlot(r.data.sku) == "Extras")
+                {
+                    Debug.Log("DisplaySprites/Wearables/" + wearableDatabase.GetType(r.data.sku) + "/" + wearableDatabase.GetSlug(r.data.sku));
+
+                    lootSprite.sprite = Resources.Load("DisplaySprites/Wearables/" + wearableDatabase.GetType(r.data.sku) + "/" + wearableDatabase.GetSlug(r.data.sku), typeof(Sprite)) as Sprite;
+                }
+                else
+                {
+                    Debug.Log("DisplaySprites/Wearables/" + wearableDatabase.GetSlot(r.data.sku) + "/" + wearableDatabase.GetSlug(r.data.sku));
+
+                    lootSprite.sprite = Resources.Load("DisplaySprites/Wearables/" + wearableDatabase.GetSlot(r.data.sku) + "/" + wearableDatabase.GetSlug(r.data.sku), typeof(Sprite)) as Sprite;
+                }
+
+                KeyMaker.instance.getJuiceFromRestApi(assetId);
+
                 /*
                 if (KeyMaker.instance.buildType == BuildType.staging)
                     Debug.Log(request.downloadHandler.text);

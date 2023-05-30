@@ -100,8 +100,6 @@ public class MysteryBoxScript : MonoBehaviour
     {
         lockerRoomApi.MintWearable(lockerRoomManager.currentCharacter.nftID.ToString(), "rand");
 
-        animator.SetBool("isOpen", true);
-
         StartCoroutine(LootOpeningAnimation());
     }
 
@@ -111,6 +109,12 @@ public class MysteryBoxScript : MonoBehaviour
 
 
         //loot.GetComponent<RectTransform>().DOLocalMoveZ(loot.GetComponent<RectTransform>().position.z - 221, 2f);
+
+
+        yield return new WaitForSeconds(0.2f);
+
+        animator.SetBool("isOpen", true);
+
 
         float origY = loot.GetComponent<RectTransform>().localPosition.y;
 
