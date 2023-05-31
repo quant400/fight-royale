@@ -42,8 +42,15 @@ public class LockerRoomManager : MonoBehaviour
     public GameObject playerModelParentObjectLeft;
     private Animator playerAnimator;
 
-    public GameObject gloveUI;
-    public GameObject shortUI;
+    //public GameObject gloveUI;
+    //public GameObject shortUI;
+    [SerializeField]
+    private Image stillBackground;
+    [SerializeField]
+    private Image statsBackground;
+    [SerializeField]
+    private Image baseImage;
+
     public TMP_Text modelName;
 
     public string[] colors;
@@ -191,6 +198,8 @@ public class LockerRoomManager : MonoBehaviour
         public Dictionary<string, int> baseAttributes;
 
         public Dictionary<string, int> wearableAttributes;
+
+        public string fighterEdition;
     }
 
     // Start is called before the first frame update
@@ -273,6 +282,22 @@ public class LockerRoomManager : MonoBehaviour
             {
                 currentCharacter.baseAttributes.Add(attributes.trait_type, int.Parse(attributes.value));
             }
+
+            if(attributes.trait_type == "edition")
+            {
+                currentCharacter.fighterEdition = attributes.value;
+
+                Debug.Log(currentCharacter.fighterEdition);
+
+                stillBackground.sprite = Resources.Load(Path.Combine("DisplaySprites/UI/" + currentCharacter.fighterEdition + "/", "change"), typeof(Sprite)) as Sprite;
+                statsBackground.sprite = Resources.Load(Path.Combine("DisplaySprites/UI/" + currentCharacter.fighterEdition + "/", "icon design 4"), typeof(Sprite)) as Sprite;
+                baseImage.sprite = Resources.Load(Path.Combine("DisplaySprites/UI/" + currentCharacter.fighterEdition + "/", "platform-purp_glow"), typeof(Sprite)) as Sprite;
+
+                foreach (GameObject image in wearableButtons)
+                {
+                    image.GetComponent<Image>().sprite = Resources.Load(Path.Combine("DisplaySprites/UI/" + currentCharacter.fighterEdition + "/", "purp_gradient_outerglow"), typeof(Sprite)) as Sprite;
+                }
+            }
         }
 
         if (!currentCharacter.baseAttributes.ContainsKey("speed"))
@@ -280,7 +305,6 @@ public class LockerRoomManager : MonoBehaviour
             currentCharacter.baseAttributes.Add("speed", 100);
         }
 
-        Debug.Log("baseAttributes");
 
         foreach (KeyValuePair<string, int> attributes in currentCharacter.baseAttributes)
         {
@@ -1138,71 +1162,6 @@ public class LockerRoomManager : MonoBehaviour
                 playerModelParentObject.transform.GetChild(childIndex).transform.gameObject.SetActive(true);
             }
         }
-    }
-
-    private void SpawnModel(GameObject objectToSpawn, int childIndex, bool isGlove, bool isCharModel)
-    {
-        GameObject spawnedObject;
-
-        int childCount;
-
-        if(isGlove)
-        {
-            childCount = gloveUI.transform.childCount;
-
-            Destroy(gloveUI.transform.GetChild(childCount - 1).gameObject);
-
-            spawnedObject = Instantiate(objectToSpawn, gloveUI.transform);
-
-        }
-        else
-        {
-            childCount = shortUI.transform.childCount;
-
-            
-            Destroy(shortUI.transform.GetChild(childCount - 1).gameObject);
-
-            spawnedObject = Instantiate(objectToSpawn, shortUI.transform);
-            
-        }
-
-        if (isCharModel)
-        {
-            //RemoveModelParts(spawnedObject, childIndex);
-        }
-
-        
-        if(mainCamera.orthographic)
-        {
-            if (isGlove)
-            {
-                spawnedObject.transform.localScale *= 120;
-
-                spawnedObject.transform.position = new Vector3(spawnedObject.transform.position.x - 6.5f, spawnedObject.transform.position.y - 8, spawnedObject.transform.position.z);
-            }
-            else
-            {
-                spawnedObject.transform.localScale *= 120;
-
-                spawnedObject.transform.position = new Vector3(spawnedObject.transform.position.x, spawnedObject.transform.position.y - 4.5f, spawnedObject.transform.position.z);
-            }
-        }
-        else
-        {
-            if (isGlove)
-            {
-                spawnedObject.transform.localScale *= 120;
-
-                spawnedObject.transform.position = new Vector3(spawnedObject.transform.position.x - 3.5f, spawnedObject.transform.position.y - 5, spawnedObject.transform.position.z);
-            }
-            else
-            {
-                spawnedObject.transform.localScale *= 100;
-
-                spawnedObject.transform.position = new Vector3(spawnedObject.transform.position.x + 0.45f, spawnedObject.transform.position.y - 2.2f, spawnedObject.transform.position.z);
-            }
-        }
-        
     }
 
     private void RemoveModelParts(GameObject modelParts, int partNotToDelete)
@@ -2152,8 +2111,6 @@ public class LockerRoomManager : MonoBehaviour
 
         if (currentShoes[0] == -1)
         {
-            Debug.Log("None");
-
             wearableButtons[3].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(ShoesSpritePath,
                 "none"), typeof(Sprite)) as Sprite;
 

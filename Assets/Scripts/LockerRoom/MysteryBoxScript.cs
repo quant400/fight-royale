@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public class MysteryBoxScript : MonoBehaviour
 {
@@ -120,6 +121,8 @@ public class MysteryBoxScript : MonoBehaviour
 
         float origZ = loot.GetComponent<RectTransform>().localPosition.z;
 
+        loot.GetComponent<Image>().enabled = true;
+
         loot.GetComponent<RectTransform>().localScale = Vector3.zero;
 
 
@@ -135,5 +138,7 @@ public class MysteryBoxScript : MonoBehaviour
 
         loot.GetComponent<RectTransform>().DOLocalMoveZ(origZ - 221, 1f);
     }
+
+
 
 }
