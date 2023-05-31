@@ -126,6 +126,10 @@ public class Skin_Controller : MonoBehaviour
         Debug.Log("Update Called: " + wearablesWorn[0]);
         GameObject modelToInstantiate = null;
 
+        transform.GetChild(8).gameObject.SetActive(false);
+        transform.GetChild(9).gameObject.SetActive(false);
+        transform.GetChild(10).gameObject.SetActive(false);
+
         int childIndex;
 
         GameObject wearable;
