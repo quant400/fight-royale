@@ -774,6 +774,48 @@ public class LockerRoomManager : MonoBehaviour
         
     }
 
+    public void UpdateModelAndWearables()
+    {
+        if (models.Count <= currentModel)
+        {
+            currentModel = 0;
+        }
+
+        EmptyWearablesLists();
+
+        //currentNFT = gameplayView.instance.currentNFTs[currentModel].id;
+
+        currentCharacter.nftID = gameplayView.instance.currentNFTs[currentModel].id;
+
+        ResetCurrents();
+
+        gridSelectionNum = 0;
+
+        foreach (Slider slider in slidersUI)
+        {
+            slider.DOKill();
+            slider.value = 0;
+
+        }
+
+        foreach (Slider slider in slidersGreenUI)
+        {
+            slider.DOKill();
+            slider.value = 0;
+
+        }
+
+        DisableLeftRight();
+        lockerRoomApi.GetWearables(currentCharacter.nftID.ToString(), true);
+
+        KeyMaker.instance.getJuiceFromRestApi(currentCharacter.nftID);
+
+        GetCharacterAttributes(currentModel);
+
+
+        ActiveModelSwap(models[currentModel], 1);
+    }
+
     public void ModelRightButton()
     {
         currentModel++;

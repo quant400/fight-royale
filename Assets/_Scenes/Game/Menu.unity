@@ -2608,6 +2608,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1539408340}
+        m_TargetAssemblyTypeName: LockerRoomManager, Assembly-CSharp
+        m_MethodName: UpdateModelAndWearables
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &164762570
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18206,7 +18218,7 @@ PrefabInstance:
     - target: {fileID: 5479180407007317759, guid: dcade7979c3da534db27311c23ab15d5,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -7362661
+      value: -7633141
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dcade7979c3da534db27311c23ab15d5, type: 3}
@@ -19254,6 +19266,7 @@ MonoBehaviour:
   bonusAtt: 0
   bonusDef: 0
   bonusTek: 0
+  bonusSpeed: 0
   lockerRoomApi: {fileID: 1261326184}
 --- !u!114 &1127853166
 MonoBehaviour:
@@ -22192,6 +22205,7 @@ MonoBehaviour:
   lockerRoomManager: {fileID: 1539408340}
   lockerRoomObject: {fileID: 1671124837}
   playButton: {fileID: 1261326149}
+  lootSprite: {fileID: 306614839}
 --- !u!1 &1262619930
 GameObject:
   m_ObjectHideFlags: 0
