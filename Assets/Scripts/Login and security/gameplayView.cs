@@ -37,7 +37,7 @@ public class gameplayView : MonoBehaviour
         
         DontDestroyOnLoad(this);
         //for testing
-        SetRandomWearables();
+        //SetRandomWearables();
     }
     private void OnEnable()
     {
@@ -109,6 +109,7 @@ public class gameplayView : MonoBehaviour
     public int bonusAtt;
     public int bonusDef;
     public int bonusTek;
+    public int bonusSpeed;
 
     [SerializeField]
     private LockerRoomAPI lockerRoomApi;
@@ -119,6 +120,7 @@ public class gameplayView : MonoBehaviour
         bonusAtt = 0;
         bonusDef = 0;
         bonusTek = 0;
+        bonusSpeed = 0;
         wearablesEqipped = "";
 
         if(wearableReply.num != 0)
@@ -129,22 +131,39 @@ public class gameplayView : MonoBehaviour
                 {
                     if (isFirst)
                     {
-                        wearablesEqipped += lockerRoomApi.wearableDatabase.GetSlot(wearable.sku) + "_" + lockerRoomApi.wearableDatabase.GetSlug(wearable.sku);
+                        if(lockerRoomApi.wearableDatabase.GetSlot(wearable.sku) != "Extras")
+                        {
+                            wearablesEqipped += lockerRoomApi.wearableDatabase.GetSlot(wearable.sku) + "_" + lockerRoomApi.wearableDatabase.GetSlug(wearable.sku);
+                        }
+                        else
+                        {
+                            wearablesEqipped += lockerRoomApi.wearableDatabase.GetType(wearable.sku) + "_" + lockerRoomApi.wearableDatabase.GetSlug(wearable.sku);
+                        }
 
                         isFirst = false;
                     }
                     else
                     {
-                        wearablesEqipped += "," + lockerRoomApi.wearableDatabase.GetSlot(wearable.sku) + "_" + lockerRoomApi.wearableDatabase.GetSlug(wearable.sku);
+                        if (lockerRoomApi.wearableDatabase.GetSlot(wearable.sku) != "Extras")
+                        {
+                            wearablesEqipped += "," + lockerRoomApi.wearableDatabase.GetSlot(wearable.sku) + "_" + lockerRoomApi.wearableDatabase.GetSlug(wearable.sku);
+                        }
+                        else
+                        {
+                            wearablesEqipped += "," + lockerRoomApi.wearableDatabase.GetType(wearable.sku) + "_" + lockerRoomApi.wearableDatabase.GetSlug(wearable.sku);
+                        }
+
+                        
                     }
                     bonusAtt += lockerRoomApi.wearableDatabase.GetAtk(wearable.sku);
-                    bonusAtt += lockerRoomApi.wearableDatabase.GetDef(wearable.sku);
-                    bonusAtt += lockerRoomApi.wearableDatabase.GetTek(wearable.sku);
+                    bonusDef += lockerRoomApi.wearableDatabase.GetDef(wearable.sku);
+                    bonusTek += lockerRoomApi.wearableDatabase.GetTek(wearable.sku);
+                    bonusSpeed += lockerRoomApi.wearableDatabase.GetSpd(wearable.sku);
                 }
             }
         }
 
-        //equipedWearables = wearablesEqipped;
+        equipedWearables = wearablesEqipped;
         Debug.Log(wearablesEqipped);
     }
 

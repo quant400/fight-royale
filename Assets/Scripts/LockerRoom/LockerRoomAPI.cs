@@ -77,6 +77,9 @@ public class LockerRoomAPI : MonoBehaviour
     [SerializeField]
     private Button playButton;
 
+    [SerializeField]
+    private Image lootSprite;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -118,29 +121,26 @@ public class LockerRoomAPI : MonoBehaviour
     {
         string slug = "";
 
-        int temp = Random.Range(0, 4);
+        int temp = Random.Range(0, 6);
         switch (temp)
         {
             case 0:
-                slug = "Belts";
+                slug = "BELTS";
                 break;
             case 1:
-                slug = "Gloves";
+                slug = "GLOVES";
                 break;
             case 2:
-                slug = "Shoes";
+                slug = "SHOES";
                 break;
             case 3:
-                slug = "Shorts";
+                slug = "SHORTS";
                 break;
             case 4:
-                slug = "Masks";
+                slug = "EXTRA";
                 break;
             case 5:
-                slug = "Glasses";
-                break;
-            case 6:
-                slug = "Trainers";
+                slug = "TRAINERS";
                 break;
         }
 
@@ -187,6 +187,23 @@ public class LockerRoomAPI : MonoBehaviour
                 Debug.Log("health: = " + r.data.health);
 
                 Debug.Log("MINT END");
+
+
+                if (wearableDatabase.GetSlot(r.data.sku) == "Extras")
+                {
+                    Debug.Log("DisplaySprites/Wearables/" + wearableDatabase.GetType(r.data.sku) + "/" + wearableDatabase.GetSlug(r.data.sku));
+
+                    lootSprite.sprite = Resources.Load("DisplaySprites/Wearables/" + wearableDatabase.GetType(r.data.sku) + "/" + wearableDatabase.GetSlug(r.data.sku), typeof(Sprite)) as Sprite;
+                }
+                else
+                {
+                    Debug.Log("DisplaySprites/Wearables/" + wearableDatabase.GetSlot(r.data.sku) + "/" + wearableDatabase.GetSlug(r.data.sku));
+
+                    lootSprite.sprite = Resources.Load("DisplaySprites/Wearables/" + wearableDatabase.GetSlot(r.data.sku) + "/" + wearableDatabase.GetSlug(r.data.sku), typeof(Sprite)) as Sprite;
+                }
+
+                KeyMaker.instance.getJuiceFromRestApi(assetId);
+
                 /*
                 if (KeyMaker.instance.buildType == BuildType.staging)
                     Debug.Log(request.downloadHandler.text);
