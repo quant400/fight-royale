@@ -4,6 +4,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public struct MintRequest
 {
@@ -79,6 +80,14 @@ public class LockerRoomAPI : MonoBehaviour
 
     [SerializeField]
     private Image lootSprite;
+
+    /*
+    [SerializeField]
+    private Sprite juiceBorderSprite, juiceSprite, fightSprite;
+    */
+    [SerializeField]
+    private Image juiceBorderImage, juiceImage, fightImage;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -322,10 +331,49 @@ public class LockerRoomAPI : MonoBehaviour
         }
     }
 
+    public void ChangeUiColor(Color32 change)
+    {
+        juiceBorderImage.DOColor(change, 0.5f);
+        juiceImage.DOColor(change, 0.5f);
+        fightImage.DOColor(change, 0.5f);
+    }
+
     public void BackToCharacterScreen()
     {
-        lockerRoomObject.SetActive(false);
+        bool isOpen = false;
 
-        playButton.interactable = false;
+        Color32 defaultColor = new Color32(134, 0, 255, 255);
+
+        foreach(int wearableButton in lockerRoomManager.wearableButtonSelected)
+        {
+            if(wearableButton == 1)
+            {
+                isOpen = true;
+            }
+        }
+
+        if(!isOpen)
+        {
+            lockerRoomObject.SetActive(false);
+
+            /*
+            juiceBorderImage.sprite = juiceBorderSprite;
+
+            juiceImage.sprite = juiceSprite;
+
+            fightImage.sprite = fightSprite;
+            */
+
+            juiceBorderImage.DOColor(defaultColor, 0.5f);
+            juiceImage.DOColor(defaultColor, 0.5f);
+            fightImage.DOColor(defaultColor, 0.5f);
+
+            playButton.interactable = false;
+        }
+        else
+        {
+            lockerRoomManager.WearableSelected();
+        }
+
     }
 }

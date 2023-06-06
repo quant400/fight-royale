@@ -47,9 +47,11 @@ public class LockerRoomManager : MonoBehaviour
     [SerializeField]
     private Image stillBackground;
     [SerializeField]
-    private Image statsBackground;
+    private Image statsBackground, characterNameBorder;
     [SerializeField]
     private Image baseImage;
+
+    private Image gridImage, rightButtonImage, leftButtonImage, backButtonImage;
 
     public TMP_Text modelName;
 
@@ -92,7 +94,7 @@ public class LockerRoomManager : MonoBehaviour
 
     private bool isShorts;
 
-    private int[] wearableButtonSelected;
+    public int[] wearableButtonSelected;
 
     [SerializeField]
     private GameObject[] wearableButtons;
@@ -106,6 +108,9 @@ public class LockerRoomManager : MonoBehaviour
 
     [SerializeField]
     private Slider[] slidersGreenUI;
+
+    [SerializeField]
+    private Image[] statsIconsUI;
 
     private Button[] objectButtons;
 
@@ -167,6 +172,8 @@ public class LockerRoomManager : MonoBehaviour
     private const string TrainersModelsPath = "WearableModels/Trainers";
     private const string TrainersSpritePath = "DisplaySprites/Wearables/Trainers/";
 
+    private Dictionary<string, Color32> fighterEditionColors;
+
     [SerializeField]
     RuntimeAnimatorController oldConttoller, controller;
     [SerializeField]
@@ -179,7 +186,7 @@ public class LockerRoomManager : MonoBehaviour
     private Dictionary<string, int> previewAttributes;
 
     [SerializeField]
-    Button right, left;
+    Button right, left, backButton;
     //private const string CSV_FILE_PATH = "CSV/WearableDatabase";
 
     //private WearableDatabaseReader wearableDatabase;
@@ -221,6 +228,8 @@ public class LockerRoomManager : MonoBehaviour
 
         previewAttributes = new Dictionary<string, int>();
 
+        fighterEditionColors = new Dictionary<string, Color32>();
+
         beltsSKUandID = new List<int[]>();
 
         glassesSKUandID = new List<int[]>();
@@ -237,6 +246,11 @@ public class LockerRoomManager : MonoBehaviour
 
         trainersSKUandID = new List<int[]>();
 
+        gridImage = gridObject.GetComponent<Image>();
+
+        rightButtonImage = right.transform.GetChild(0).GetComponent<Image>();
+        leftButtonImage = left.transform.GetChild(0).GetComponent<Image>();
+        backButtonImage = backButton.transform.GetChild(0).GetComponent<Image>();
 
         Intialize();
 
@@ -288,7 +302,7 @@ public class LockerRoomManager : MonoBehaviour
                 currentCharacter.fighterEdition = attributes.value;
 
                 Debug.Log(currentCharacter.fighterEdition);
-
+                /*
                 stillBackground.sprite = Resources.Load(Path.Combine("DisplaySprites/UI/" + currentCharacter.fighterEdition + "/", "change"), typeof(Sprite)) as Sprite;
                 statsBackground.sprite = Resources.Load(Path.Combine("DisplaySprites/UI/" + currentCharacter.fighterEdition + "/", "icon design 4"), typeof(Sprite)) as Sprite;
                 baseImage.sprite = Resources.Load(Path.Combine("DisplaySprites/UI/" + currentCharacter.fighterEdition + "/", "platform-purp_glow"), typeof(Sprite)) as Sprite;
@@ -297,6 +311,7 @@ public class LockerRoomManager : MonoBehaviour
                 {
                     image.GetComponent<Image>().sprite = Resources.Load(Path.Combine("DisplaySprites/UI/" + currentCharacter.fighterEdition + "/", "purp_gradient_outerglow"), typeof(Sprite)) as Sprite;
                 }
+                */
             }
         }
 
@@ -305,14 +320,199 @@ public class LockerRoomManager : MonoBehaviour
             currentCharacter.baseAttributes.Add("speed", 100);
         }
 
-
+        /*
         foreach (KeyValuePair<string, int> attributes in currentCharacter.baseAttributes)
         {
             Debug.Log(attributes.Key + " = " + attributes.Value);
         }
-        
+        */
 
         SetAttributeSliders(currentCharacter.baseAttributes, false);
+    }
+
+    private void ChangeUIColor(string fightType)
+    {
+        Color32 changeColor = new Color32(fighterEditionColors[fightType].r, fighterEditionColors[fightType].g, fighterEditionColors[fightType].b, (byte)(statsBackground.color.a * 255));
+
+        //stillBackground.DOColor(fighterEditionColors[fightType], 0.5f);
+        statsBackground.DOColor(changeColor, 0.5f);
+        baseImage.DOColor(fighterEditionColors[fightType], 0.5f);
+        gridImage.DOColor(fighterEditionColors[fightType], 0.5f);
+
+        if(fightType == "free mint")
+        {
+            rightButtonImage.DOColor(fighterEditionColors["Default"], 0.5f);
+            leftButtonImage.DOColor(fighterEditionColors["Default"], 0.5f);
+            characterNameBorder.DOColor(fighterEditionColors["Default"], 0.5f);
+            backButtonImage.DOColor(fighterEditionColors["Default"], 0.5f);
+            lockerRoomApi.ChangeUiColor(fighterEditionColors["Default"]);
+        }
+        else
+        {
+            rightButtonImage.DOColor(fighterEditionColors[fightType], 0.5f);
+            leftButtonImage.DOColor(fighterEditionColors[fightType], 0.5f);
+            characterNameBorder.DOColor(fighterEditionColors[fightType], 0.5f);
+            backButtonImage.DOColor(fighterEditionColors[fightType], 0.5f);
+            lockerRoomApi.ChangeUiColor(fighterEditionColors[fightType]);
+        }
+
+
+        foreach (GameObject image in wearableButtons)
+        {
+            image.GetComponent<Image>().DOColor(fighterEditionColors[fightType], 0.5f);
+        }
+
+        for (int i = 0; i < gridObject.transform.childCount - 1; i++)
+        {
+            gridObject.transform.GetChild(i).gameObject.GetComponent<Image>().DOColor(fighterEditionColors[fightType], 0.5f);
+        }
+
+        for (int i = 0; i < 3; i++)
+        {
+            if (fightType == "free mint")
+            {
+                gridObject.transform.GetChild(gridObject.transform.childCount - 1).transform.GetChild(i).gameObject.GetComponent<Image>().DOColor(fighterEditionColors["Default"], 0.5f);
+            }
+            else
+            {
+                gridObject.transform.GetChild(gridObject.transform.childCount - 1).transform.GetChild(i).gameObject.GetComponent<Image>().DOColor(fighterEditionColors[fightType], 0.5f);
+            }
+        }
+
+        
+
+        /*
+        foreach (Image icon in statsIconsUI)
+        {
+            icon.DOColor(fighterEditionColors[fightType], 0.5f);
+        }
+        */
+
+
+
+        for (int i = 0; i < slidersUI.Length; i++)
+        {
+            slidersUI[i].transform.GetChild(0).GetComponent<Image>().DOColor(fighterEditionColors[fightType], 0.5f);
+
+            slidersUI[i].transform.GetChild(1).GetComponent<Image>().DOColor(fighterEditionColors[fightType], 0.5f);
+
+            slidersUI[i].transform.GetChild(1).GetChild(0).GetComponent<Image>().DOColor(fighterEditionColors[fightType], 0.5f);
+        }
+
+        for (int i = 0; i < slidersGreenUI.Length; i++)
+        {
+            slidersGreenUI[i].transform.GetChild(0).GetComponent<Image>().DOColor(fighterEditionColors[fightType], 0.5f);
+
+            slidersGreenUI[i].transform.GetChild(1).GetComponent<Image>().DOColor(fighterEditionColors[fightType], 0.5f);
+
+            //slidersGreenUI[i].transform.GetChild(1).GetChild(0).GetComponent<Image>().DOColor(fighterEditionColors[fightType], 0.5f);
+        }
+
+        
+        foreach (GameObject objectImage in wearableButtons)
+        {
+            if(objectImage.transform.GetChild(0).GetComponent<Image>().color.a < 1)
+            {
+                objectImage.transform.GetChild(0).GetComponent<Image>().DOColor(new Color32(fighterEditionColors[fightType].r, fighterEditionColors[fightType].g
+                , fighterEditionColors[fightType].b, (byte)(0.5f * 255)), 0.5f);
+            }
+        }
+    }
+
+    int colorCounter = 0;
+
+    public void NextColor()
+    {
+        colorCounter++;
+
+        if(colorCounter > 10)
+        {
+            colorCounter = 0;
+        }
+
+        switch (colorCounter)
+        {
+            case 0:
+                ChangeUIColor("Muay Thai");
+                return;
+            case 1:
+                ChangeUIColor("MMA");
+                return;
+            case 2:
+                ChangeUIColor("Boxing");
+                return;
+            case 3:
+                ChangeUIColor("Krav Maga");
+                return;
+            case 4:
+                ChangeUIColor("Kung Fu");
+                return;
+            case 5:
+                ChangeUIColor("Tae Kwon Do");
+                return;
+            case 6:
+                ChangeUIColor("Wrestling");
+                return;
+            case 7:
+                ChangeUIColor("Karate");
+                return;
+            case 8:
+                ChangeUIColor("Jiu Jitsu");
+                return;
+            case 9:
+                ChangeUIColor("Judo");
+                return;
+            case 10:
+                ChangeUIColor("free mint");
+                return;
+        }
+    }
+
+    public void PreviousColor()
+    {
+        colorCounter--;
+
+        if (colorCounter < 0)
+        {
+            colorCounter = 10;
+        }
+
+        switch (colorCounter)
+        {
+            case 0:
+                ChangeUIColor("Muay Thai");
+                return;
+            case 1:
+                ChangeUIColor("MMA");
+                return;
+            case 2:
+                ChangeUIColor("Boxing");
+                return;
+            case 3:
+                ChangeUIColor("Krav Maga");
+                return;
+            case 4:
+                ChangeUIColor("Kung Fu");
+                return;
+            case 5:
+                ChangeUIColor("Tae Kwon Do");
+                return;
+            case 6:
+                ChangeUIColor("Wrestling");
+                return;
+            case 7:
+                ChangeUIColor("Karate");
+                return;
+            case 8:
+                ChangeUIColor("Jiu Jitsu");
+                return;
+            case 9:
+                ChangeUIColor("Judo");
+                return;
+            case 10:
+                ChangeUIColor("free mint");
+                return;
+        }
     }
 
     private void GetWearablesAttributes()
@@ -367,14 +567,14 @@ public class LockerRoomManager : MonoBehaviour
             }
         }
 
-        
+        /*
         Debug.Log("wearableAttributes");
 
         foreach (KeyValuePair<string, int> attributes in currentCharacter.wearableAttributes)
         {
             Debug.Log(attributes.Key + " = " + attributes.Value);
         }
-        
+        */
     }
 
     public void CaculateTotalAttrbutes()
@@ -840,8 +1040,15 @@ public class LockerRoomManager : MonoBehaviour
         ActiveModelSwap(models[currentModel], 1);
     }
 
+    public void UpdateJuice()
+    {
+        KeyMaker.instance.getJuiceFromRestApi(currentCharacter.nftID);
+    }
+
     public void ModelRightButton()
     {
+        ChangeCharacterAnimation(true);
+
         currentModel++;
 
         if(models.Count <= currentModel)
@@ -895,6 +1102,8 @@ public class LockerRoomManager : MonoBehaviour
 
     public void ModelLeftButton()
     {
+        ChangeCharacterAnimation(false);
+
         currentModel--;
 
         if (currentModel < 0)
@@ -1181,12 +1390,13 @@ public class LockerRoomManager : MonoBehaviour
 
         if ((gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) < belts.Count)
         {
+            wearableButtons[4].transform.GetChild(0).GetComponent<Image>().DOColor(fighterEditionColors["free mint"], 0.5f);
+
             wearableButtons[4].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(BeltsSpritePath,
                 belts[(gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]), typeof(Sprite)) as Sprite;
 
             wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color.r,
                 wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color.b, 1);
-
 
             if (currentBelt[0] != -1)
             {
@@ -1244,11 +1454,16 @@ public class LockerRoomManager : MonoBehaviour
     {
         if ((gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) < belts.Count)
         {
+            wearableButtons[4].transform.GetChild(0).GetComponent<Image>().DOColor(new Color32(fighterEditionColors[currentCharacter.fighterEdition].r, fighterEditionColors[currentCharacter.fighterEdition].g
+                , fighterEditionColors[currentCharacter.fighterEdition].b, (byte)(0.5f * 255)), 0.5f);
+
             wearableButtons[4].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(BeltsSpritePath,
                 "none"), typeof(Sprite)) as Sprite;
 
+            /*
             wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color.r,
                 wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color.b, 0.5f);
+            */
 
             if (currentBelt[0] != -1)
             {
@@ -1294,6 +1509,8 @@ public class LockerRoomManager : MonoBehaviour
 
         if ((gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) < glasses.Count)
         {
+            wearableButtons[2].transform.GetChild(0).GetComponent<Image>().DOColor(fighterEditionColors["free mint"], 0.5f);
+
             wearableButtons[2].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlassesSpritePath,
                 glasses[(gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]), typeof(Sprite)) as Sprite;
 
@@ -1358,11 +1575,15 @@ public class LockerRoomManager : MonoBehaviour
     {
         if ((gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) < glasses.Count)
         {
+            wearableButtons[2].transform.GetChild(0).GetComponent<Image>().DOColor(new Color32(fighterEditionColors[currentCharacter.fighterEdition].r, fighterEditionColors[currentCharacter.fighterEdition].g
+                , fighterEditionColors[currentCharacter.fighterEdition].b, (byte)(0.5f * 255)), 0.5f);
+
             wearableButtons[2].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlassesSpritePath,
                 "none"), typeof(Sprite)) as Sprite;
-
+            /*
             wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.r,
                 wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.b, 0.5f);
+            */
 
             if (currentExtras[0] != -1)
             {
@@ -1412,6 +1633,8 @@ public class LockerRoomManager : MonoBehaviour
 
         if ((gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) < gloves.Count)
         {
+            wearableButtons[0].transform.GetChild(0).GetComponent<Image>().DOColor(fighterEditionColors["free mint"], 0.5f);
+
             wearableButtons[0].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlovesSpritePath,
                 gloves[(gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]), typeof(Sprite)) as Sprite;
 
@@ -1476,12 +1699,15 @@ public class LockerRoomManager : MonoBehaviour
     {
         if ((gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) < gloves.Count)
         {
+            wearableButtons[0].transform.GetChild(0).GetComponent<Image>().DOColor(new Color32(fighterEditionColors[currentCharacter.fighterEdition].r, fighterEditionColors[currentCharacter.fighterEdition].g
+                , fighterEditionColors[currentCharacter.fighterEdition].b, (byte)(0.5f * 255)), 0.5f);
+
             wearableButtons[0].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlovesSpritePath,
                 "none"), typeof(Sprite)) as Sprite;
-
+            /*
             wearableButtons[0].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[0].transform.GetChild(0).GetComponent<Image>().color.r,
                 wearableButtons[0].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[0].transform.GetChild(0).GetComponent<Image>().color.b, 0.5f);
-
+            */
 
             if (currentGloves[0] != -1)
             {
@@ -1526,12 +1752,13 @@ public class LockerRoomManager : MonoBehaviour
 
         if ((gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) < shoes.Count)
         {
+            wearableButtons[3].transform.GetChild(0).GetComponent<Image>().DOColor(fighterEditionColors["free mint"], 0.5f);
+
             wearableButtons[3].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(ShoesSpritePath,
                 shoes[(gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]), typeof(Sprite)) as Sprite;
 
             wearableButtons[3].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[3].transform.GetChild(0).GetComponent<Image>().color.r,
                 wearableButtons[3].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[3].transform.GetChild(0).GetComponent<Image>().color.b, 1);
-
 
             if (currentShoes[0] != -1)
             {
@@ -1589,12 +1816,15 @@ public class LockerRoomManager : MonoBehaviour
     {
         if ((gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) < shoes.Count)
         {
+            wearableButtons[3].transform.GetChild(0).GetComponent<Image>().DOColor(new Color32(fighterEditionColors[currentCharacter.fighterEdition].r, fighterEditionColors[currentCharacter.fighterEdition].g
+                , fighterEditionColors[currentCharacter.fighterEdition].b, (byte)(0.5f * 255)), 0.5f);
+
             wearableButtons[3].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(ShoesSpritePath,
                 "none"), typeof(Sprite)) as Sprite;
-
+            /*
             wearableButtons[3].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[3].transform.GetChild(0).GetComponent<Image>().color.r,
                 wearableButtons[3].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[3].transform.GetChild(0).GetComponent<Image>().color.b, 0.5f);
-
+            */
 
             if (currentShoes[0] != -1)
             {
@@ -1640,6 +1870,8 @@ public class LockerRoomManager : MonoBehaviour
 
         if ((gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) < shorts.Count)
         {
+            wearableButtons[1].transform.GetChild(0).GetComponent<Image>().DOColor(fighterEditionColors["free mint"], 0.5f);
+
             wearableButtons[1].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(ShortsSpritePath,
                 shorts[(gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]), typeof(Sprite)) as Sprite;
 
@@ -1702,12 +1934,15 @@ public class LockerRoomManager : MonoBehaviour
     {
         if ((gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) < shorts.Count)
         {
+            wearableButtons[1].transform.GetChild(0).GetComponent<Image>().DOColor(new Color32(fighterEditionColors[currentCharacter.fighterEdition].r, fighterEditionColors[currentCharacter.fighterEdition].g
+                , fighterEditionColors[currentCharacter.fighterEdition].b, (byte)(0.5f * 255)), 0.5f);
+
             wearableButtons[1].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(ShortsSpritePath,
                 "none"), typeof(Sprite)) as Sprite;
-
+            /*
             wearableButtons[1].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[1].transform.GetChild(0).GetComponent<Image>().color.r,
                 wearableButtons[1].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[1].transform.GetChild(0).GetComponent<Image>().color.b, 0.5f);
-
+            */
 
             if (currentShort[0] != -1)
             {
@@ -1753,12 +1988,13 @@ public class LockerRoomManager : MonoBehaviour
 
         if ((gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) < glasses.Count + masks.Count)
         {
+            wearableButtons[2].transform.GetChild(0).GetComponent<Image>().DOColor(fighterEditionColors["free mint"], 0.5f);
+
             wearableButtons[2].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(MasksSpritePath,
                 masks[(gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) - glasses.Count]), typeof(Sprite)) as Sprite;
 
             wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.r,
                 wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.b, 1);
-
 
             if (currentExtras[0] != -1)
             {
@@ -1820,12 +2056,15 @@ public class LockerRoomManager : MonoBehaviour
     {
         if ((gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) < masks.Count)
         {
+            wearableButtons[2].transform.GetChild(0).GetComponent<Image>().DOColor(new Color32(fighterEditionColors[currentCharacter.fighterEdition].r, fighterEditionColors[currentCharacter.fighterEdition].g
+                , fighterEditionColors[currentCharacter.fighterEdition].b, (byte)(0.5f * 255)), 0.5f);
+
             wearableButtons[2].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(MasksSpritePath,
                 "none"), typeof(Sprite)) as Sprite;
-
+            /*
             wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.r,
                 wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.b, 0.5f);
-
+            */
 
             if (currentExtras[0] != -1)
             {
@@ -1876,12 +2115,13 @@ public class LockerRoomManager : MonoBehaviour
 
         if ((gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) < trainers.Count)
         {
+            wearableButtons[5].transform.GetChild(0).GetComponent<Image>().DOColor(fighterEditionColors["free mint"], 0.5f);
+
             wearableButtons[5].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(TrainersSpritePath,
                 trainers[(gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]), typeof(Sprite)) as Sprite;
 
             wearableButtons[5].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[5].transform.GetChild(0).GetComponent<Image>().color.r,
                 wearableButtons[5].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[5].transform.GetChild(0).GetComponent<Image>().color.b, 1);
-
 
             if (currentTrainers[0] != -1)
             {
@@ -1939,14 +2179,18 @@ public class LockerRoomManager : MonoBehaviour
     {
         if ((gridSelectionNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) < belts.Count)
         {
+            wearableButtons[5].transform.GetChild(0).GetComponent<Image>().DOColor(new Color32(fighterEditionColors[currentCharacter.fighterEdition].r, fighterEditionColors[currentCharacter.fighterEdition].g
+                , fighterEditionColors[currentCharacter.fighterEdition].b, (byte)(0.5f * 255)), 0.5f);
+
             wearableButtons[5].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(TrainersSpritePath,
                 "none"), typeof(Sprite)) as Sprite;
 
+            /*
             wearableButtons[5].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[5].transform.GetChild(0).GetComponent<Image>().color.r,
                 wearableButtons[5].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[5].transform.GetChild(0).GetComponent<Image>().color.b, 0.5f);
+            */
 
-
-            if(currentTrainers[0] != -1)
+            if (currentTrainers[0] != -1)
             {
                 totalAttributes["attack"] -= lockerRoomApi.wearableDatabase.GetAtk(currentTrainers[0]);
 
@@ -2081,59 +2325,89 @@ public class LockerRoomManager : MonoBehaviour
 
     private void UpdateUI()
     {
+        ChangeUIColor(currentCharacter.fighterEdition);
 
-        if(currentBelt[0] == -1)
+
+        if (currentBelt[0] == -1)
         {
+            wearableButtons[4].transform.GetChild(0).GetComponent<Image>().DOColor(new Color32(fighterEditionColors[currentCharacter.fighterEdition].r, fighterEditionColors[currentCharacter.fighterEdition].g
+                , fighterEditionColors[currentCharacter.fighterEdition].b, (byte)(0.5f * 255)), 0.5f);
+
             wearableButtons[4].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(BeltsSpritePath,
                 "none"), typeof(Sprite)) as Sprite;
-
+            /*
             wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color.r,
                 wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[4].transform.GetChild(0).GetComponent<Image>().color.b, 0.5f);
+            */
         }
 
         if (currentExtras[0] == -1)
         {
+            wearableButtons[2].transform.GetChild(0).GetComponent<Image>().DOColor(new Color32(fighterEditionColors[currentCharacter.fighterEdition].r, fighterEditionColors[currentCharacter.fighterEdition].g
+                , fighterEditionColors[currentCharacter.fighterEdition].b, (byte)(0.5f * 255)), 0.5f);
+
             wearableButtons[2].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlassesSpritePath,
                 "none"), typeof(Sprite)) as Sprite;
 
+            /*
             wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.r,
                 wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[2].transform.GetChild(0).GetComponent<Image>().color.b, 0.5f);
+            */
         }
 
         if (currentGloves[0] == -1)
         {
+            wearableButtons[0].transform.GetChild(0).GetComponent<Image>().DOColor(new Color32(fighterEditionColors[currentCharacter.fighterEdition].r, fighterEditionColors[currentCharacter.fighterEdition].g
+                , fighterEditionColors[currentCharacter.fighterEdition].b, (byte)(0.5f * 255)), 0.5f);
+
             wearableButtons[0].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(GlovesSpritePath,
                 "none"), typeof(Sprite)) as Sprite;
 
+            /*
             wearableButtons[0].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[0].transform.GetChild(0).GetComponent<Image>().color.r,
                 wearableButtons[0].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[0].transform.GetChild(0).GetComponent<Image>().color.b, 0.5f);
+            */
         }
 
         if (currentShoes[0] == -1)
         {
+            wearableButtons[3].transform.GetChild(0).GetComponent<Image>().DOColor(new Color32(fighterEditionColors[currentCharacter.fighterEdition].r, fighterEditionColors[currentCharacter.fighterEdition].g
+                , fighterEditionColors[currentCharacter.fighterEdition].b, (byte)(0.5f * 255)), 0.5f);
+
             wearableButtons[3].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(ShoesSpritePath,
                 "none"), typeof(Sprite)) as Sprite;
 
+            /*
             wearableButtons[3].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[3].transform.GetChild(0).GetComponent<Image>().color.r,
                 wearableButtons[3].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[3].transform.GetChild(0).GetComponent<Image>().color.b, 0.5f);
+            */
         }
 
         if (currentShort[0] == -1)
         {
+            wearableButtons[1].transform.GetChild(0).GetComponent<Image>().DOColor(new Color32(fighterEditionColors[currentCharacter.fighterEdition].r, fighterEditionColors[currentCharacter.fighterEdition].g
+                , fighterEditionColors[currentCharacter.fighterEdition].b, (byte)(0.5f * 255)), 0.5f);
+
             wearableButtons[1].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(ShortsSpritePath,
                 "none"), typeof(Sprite)) as Sprite;
 
+            /*
             wearableButtons[1].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[1].transform.GetChild(0).GetComponent<Image>().color.r,
                 wearableButtons[1].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[1].transform.GetChild(0).GetComponent<Image>().color.b, 0.5f);
+            */
         }
 
         if (currentTrainers[0] == -1)
         {
+            wearableButtons[5].transform.GetChild(0).GetComponent<Image>().DOColor(new Color32(fighterEditionColors[currentCharacter.fighterEdition].r, fighterEditionColors[currentCharacter.fighterEdition].g
+                , fighterEditionColors[currentCharacter.fighterEdition].b, (byte)(0.5f * 255)), 0.5f);
+
             wearableButtons[5].transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load(Path.Combine(TrainersSpritePath,
                 "none"), typeof(Sprite)) as Sprite;
-
+            /*
             wearableButtons[5].transform.GetChild(0).GetComponent<Image>().color = new Color(wearableButtons[5].transform.GetChild(0).GetComponent<Image>().color.r,
                 wearableButtons[5].transform.GetChild(0).GetComponent<Image>().color.g, wearableButtons[5].transform.GetChild(0).GetComponent<Image>().color.b, 0.5f);
+            */
         }
 
     }
@@ -2833,6 +3107,11 @@ public class LockerRoomManager : MonoBehaviour
 
             isWearableSelectionScreen = false;
 
+            for (int i = 0; i < wearableButtonSelected.Length; i++)
+            {
+                wearableButtonSelected[i] = 0;
+            }
+
             SetAttributeSliders(totalAttributes, true);
 
             WearableSelectedAnimation();
@@ -2848,6 +3127,8 @@ public class LockerRoomManager : MonoBehaviour
     {
         //wearableDatabase = new WearableDatabaseReader();
         //wearableDatabase.LoadData(CSV_FILE_PATH);
+
+        AssignFighterColors();
 
         if (gameplayView.instance)
         {
@@ -2917,6 +3198,22 @@ public class LockerRoomManager : MonoBehaviour
 
             trainers = ModelNames(TrainersModelsPath);
         }
+    }
+
+    private void AssignFighterColors()
+    {
+        fighterEditionColors.Add("Muay Thai", new Color32(0, 66, 145, 255));
+        fighterEditionColors.Add("MMA", new Color32(0, 148, 83, 255));
+        fighterEditionColors.Add("Boxing", new Color32(241, 31, 44, 255));
+        fighterEditionColors.Add("Kung Fu", new Color32(205, 79, 8, 255));
+        fighterEditionColors.Add("Krav Maga", new Color32(209, 212, 35, 255));
+        fighterEditionColors.Add("Tae Kwon Do", new Color32(149, 31, 241, 255));
+        fighterEditionColors.Add("Wrestling", new Color32(15, 207, 207, 255));
+        fighterEditionColors.Add("Karate", new Color32(223, 56, 156, 255));
+        fighterEditionColors.Add("Jiu Jitsu", new Color32(28, 134, 210, 255));
+        fighterEditionColors.Add("Judo", new Color32(101, 180, 74, 255));
+        fighterEditionColors.Add("free mint", new Color32(255, 255, 255, 255));
+        fighterEditionColors.Add("Default", new Color32(134, 0, 255, 255));
     }
 
     private void EmptyAllLists()
@@ -3391,15 +3688,15 @@ public class LockerRoomManager : MonoBehaviour
             canvasGroups[i].DOFade(0.0f, 0.5f);
 
             rectTransforms[i].DOScale(new Vector3(0, 0, 0), 1);
-
-            //playerBodyRectTransform.DOLocalMoveX(50, 0.5f);
-            
-            baseObjectRectTransform.DOLocalMoveX(-100, 0.5f);
-
-            gridObjectCanvasGroup.DOFade(1.0f, 0.5f);
-
-            gridObjectRectTransform.DOScale(new Vector3(0.8f, 0.8f, 0.8f), 1);
         }
+
+        //playerBodyRectTransform.DOLocalMoveX(50, 0.5f);
+
+        baseObjectRectTransform.DOLocalMoveX(-80, 0.5f);
+
+        gridObjectCanvasGroup.DOFade(1.0f, 0.5f);
+
+        gridObjectRectTransform.DOScale(new Vector3(0.8f, 0.8f, 0.8f), 1);
     }
 
     private void WearableSelectedAnimation()
@@ -3409,15 +3706,41 @@ public class LockerRoomManager : MonoBehaviour
             canvasGroups[i].DOFade(1.0f, 0.5f);
 
             rectTransforms[i].DOScale(new Vector3(1, 1, 1), 1);
-
-            //playerBodyRectTransform.DOLocalMoveX(0, 0.5f);
-
-            baseObjectRectTransform.DOLocalMoveX(0, 0.5f);
-
-            gridObjectCanvasGroup.DOFade(0.0f, 0.5f);
-
-            gridObjectRectTransform.DOScale(new Vector3(0, 0, 0), 1);
         }
+
+        //playerBodyRectTransform.DOLocalMoveX(0, 0.5f);
+
+        baseObjectRectTransform.DOLocalMoveX(0, 0.5f);
+
+        gridObjectCanvasGroup.DOFade(0.0f, 0.5f);
+
+        gridObjectRectTransform.DOScale(new Vector3(0, 0, 0), 1);
+    }
+
+    private void ChangeCharacterAnimation(bool isRight)
+    {
+        if(isRight)
+        {
+            baseObjectRectTransform.DOLocalMoveX(-2000, 0.25f).OnComplete(RightAnimation);
+        }
+        else
+        {
+            baseObjectRectTransform.DOLocalMoveX(2000, 0.25f).OnComplete(LeftAnimation);
+        }
+    }
+
+    private void RightAnimation()
+    {
+        baseObjectRectTransform.localPosition = new Vector3(2000, baseObjectRectTransform.localPosition.y, baseObjectRectTransform.localPosition.z);
+
+        baseObjectRectTransform.DOLocalMoveX(0f, 0.25f);
+    }
+
+    private void LeftAnimation()
+    {
+        baseObjectRectTransform.localPosition = new Vector3(-2000, baseObjectRectTransform.localPosition.y, baseObjectRectTransform.localPosition.z);
+
+        baseObjectRectTransform.DOLocalMoveX(0f, 0.25f);
     }
 
     private List<string> ModelNames(string folderPath)
