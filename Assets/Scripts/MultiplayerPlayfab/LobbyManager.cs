@@ -17,9 +17,9 @@ public class LobbyManager : MonoBehaviour
 
     void Start()
     {
-        //loginButton.onClick.AddListener(()=>OnLogin(nameInputField.text));
-        if(config.buildType != BuildType.REMOTE_SERVER && config.buildType != BuildType.LOCAL_SERVER)
-            OnLogin(Character_Manager.Instance.GetCurrentCharacter.Name);
+        loginButton.onClick.AddListener(() => OnLogin(nameInputField.text));
+        if (config.buildType != BuildType.REMOTE_SERVER && config.buildType != BuildType.LOCAL_SERVER)
+                OnLogin(Character_Manager.Instance.GetCurrentCharacter.Name);
     }
 
     void OnLogin(string name)

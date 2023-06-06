@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -29,7 +30,7 @@ public class Skin_Controller : MonoBehaviour
     void Awake()
     {
         _player = GetComponent<PlayerBehaviour>();
-        _isLocalPlayer = _player == null || _player.isLocalPlayer;
+        _isLocalPlayer = _player == null || _player.GetComponent<PhotonView>().IsMine/*isLocalPlayer*/;
         _meshRenderer = gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
     }
 
@@ -61,6 +62,7 @@ public class Skin_Controller : MonoBehaviour
     {
         var currentCharacter = Character_Manager.Instance.GetCharacters.FirstOrDefault(
             auxChar => auxChar.Name.ToLower().Equals(skinName.ToLower()));
+        
         if (currentCharacter != null)
         {
             _player.pSkin = currentCharacter.Name;
@@ -109,17 +111,24 @@ public class Skin_Controller : MonoBehaviour
 
             _meshRenderer[i].gameObject.name = newMeshRenderers[i].gameObject.name;
         }
+        //TODO Suleman: Uncomment Later
         UpdateWearables();
-       
+
     }
+
     public void UpdateWearables()
     {
-        if (GetComponent<PlayerBehaviour>().isLocalPlayer)
+        //TODO Suleman: Uncomment Later
+        if (GetComponent<PlayerBehaviour>().photonView.IsMine/*isLocalPlayer*/)
             wearablesWorn = gameplayView.instance.equipedWearables.Split(',');
-        else if (!GetComponent<PlayerBehaviour>().isLocalPlayer && !GetComponent<PlayerBehaviour>().isServer)
+        else if (!GetComponent<PlayerBehaviour>().photonView.IsMine/*isLocalPlayer*/ /*&& !GetComponent<PlayerBehaviour>().isServer*/)
             wearablesWorn = GetComponent<PlayerBehaviour>().pWearables.Split(',');
-        Debug.Log("Update Called: "+ wearablesWorn[0]);
+        Debug.Log("Update Called: " + wearablesWorn[0]);
         GameObject modelToInstantiate = null;
+
+        transform.GetChild(8).gameObject.SetActive(false);
+        transform.GetChild(9).gameObject.SetActive(false);
+        transform.GetChild(10).gameObject.SetActive(false);
 
         int childIndex;
 

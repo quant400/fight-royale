@@ -8,6 +8,8 @@ using PlayFab.MultiplayerModels;
 using Mirror;
 using Mirror.Websocket;
 using PlayFab.Helpers;
+using Photon.Pun;
+using Photon.Pun.Demo.PunBasics;
 
 public class ClientStartUp : MonoBehaviour
 {
@@ -17,6 +19,7 @@ public class ClientStartUp : MonoBehaviour
 	//public TelepathyTransport telepathyTransport;
 	//public ApathyTransport apathyTransport;
 	public WebsocketTransport webTransport;
+	[SerializeField] private GameObject player;
 
 
 	public void OnLoginUserButtonClick()
@@ -41,17 +44,33 @@ public class ClientStartUp : MonoBehaviour
 	public void LoginRemoteUser()
 	{
 		Debug.Log("[ClientStartUp].LoginRemoteUser");
-		
-		//We need to login a user to get at PlayFab API's. 
-		LoginWithCustomIDRequest request = new LoginWithCustomIDRequest()
-		{
-			TitleId = PlayFabSettings.TitleId,
-			CreateAccount = true,
-			CustomId = GUIDUtility.getUniqueID()
-		};
 
-		PlayFabClientAPI.LoginWithCustomID(request, OnPlayFabLoginSuccess, OnLoginError);
+		//networkManager.StartClient();
+		//Debug.Log("Server ip: " + PhotonNetwork.PhotonServerSettings.AppSettings.Server);
+
+		//PhotonNetwork.Instantiate(player.name, Vector3.zero, Quaternion.identity);
+		StartCoroutine(SpawnPlayer());
+
+		//We need to login a user to get at PlayFab API's. 
+		//LoginWithCustomIDRequest request = new LoginWithCustomIDRequest()
+		//{
+		//	TitleId = PlayFabSettings.TitleId,
+		//	CreateAccount = true,
+		//	CustomId = GUIDUtility.getUniqueID()
+		//};
+
+		//PlayFabClientAPI.LoginWithCustomID(request, OnPlayFabLoginSuccess, OnLoginError);
 	}
+
+    private IEnumerator SpawnPlayer()
+    {
+        Debug.Log("ClientStartUp - SpawnPlayer()");
+
+        yield return new WaitForSeconds(2);
+        GameObject playerObject = PhotonNetwork.Instantiate(player.name, Vector3.zero, Quaternion.identity);
+		Camera_Manager.Instance.railCam.gameObject.SetActive(false);
+        GameManager.Instance.OnClientConnect(playerObject.GetPhotonView());
+    }
 
 	private void OnLoginError(PlayFabError response)
 	{
@@ -75,7 +94,7 @@ public class ClientStartUp : MonoBehaviour
 			//Debug.Log(2);
 			ConnectRemoteClient();
 		}
-	}
+    }
 
 	private void RequestMultiplayerServer()
 	{

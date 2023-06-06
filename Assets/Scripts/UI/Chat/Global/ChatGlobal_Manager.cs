@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using CFC.Chatt.Global;
 using Mirror;
+using Photon.Pun;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -41,17 +42,22 @@ public class ChatGlobal_Manager : MonoBehaviour
 
         var text = _inputField.text;
         text = text.Replace("\n", " ");
-    
-        player.SendMessage(player.netIdentity, player.pColor, text);
+
+        //TODO Suleman: Uncomment Later
+        //player.SendMessage(player.netIdentity, player.pColor, text);
+        player.SendMessage(player.photonView, /*player.pColor,*/ text);
+
 
         _inputField.text = "";
     }
     
-    public void CreateMessage(NetworkIdentity playerIdentity, Color32 color, string message)
+    public void CreateMessage(PhotonView playerIdentity, /*Color32 color,*/ string message)
     {
         /* Message_Component messageComponent = Instantiate(_prefabGlobalMessage, _contentGlobalChat);
          _messages.Add(messageComponent);
          messageComponent.SetUp(playerIdentity, message, color);*/
+
+        //TODO Suleman: Uncomment Later
         IngameUIControler.instance.AddChat(playerIdentity, message);
     }
 }

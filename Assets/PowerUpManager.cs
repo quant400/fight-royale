@@ -6,8 +6,9 @@ using Mirror;
 using Newtonsoft.Json;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using Photon.Pun;
 
-public class PowerUpManager : NetworkBehaviour
+public class PowerUpManager : MonoBehaviour/*NetworkBehaviour*/
 {
     public static PowerUpManager Instance;
     [SerializeField] private  List<GameObject> powerUpList;
@@ -34,17 +35,30 @@ public class PowerUpManager : NetworkBehaviour
         for (int i = 0; i<spawnList.Count;i++)
         {
             int random = Random.Range(0, powerUpList.Count);
-            RpcSpawnPowerUp(i,random, i);
-        
-            SpawnPowerUp(i, powerUpList[random], spawnList[i]);
+
+            // TODO Suleman, Uncomment later
+            // Commented for Photon
+            //RpcSpawnPowerUp(i, random, i);
+            GameManager.Instance.player.RPC("RpcSpawnPowerUp", RpcTarget.AllBuffered, i, random, i);
+
+            // Commented for Photon
+            //SpawnPowerUp(i, powerUpList[random], spawnList[i]);
         }
     }
 
-    [ClientRpc]
-    private void RpcSpawnPowerUp(int powerUpId, int powerUpIndex, int spawnIndex)
+    public void SetupSpawnPowerUp(int powerUpId, int powerUpIndex, int spawnIndex)
     {
         SpawnPowerUp(powerUpId, powerUpList[powerUpIndex], spawnList[spawnIndex]);
     }
+
+    // TODO Suleman, Uncomment later, done
+    // Transferred PUN RPC to PlayerBehaviour.cs
+    //[ClientRpc]
+    //[PunRPC]
+    //private void RpcSpawnPowerUp(int powerUpId, int powerUpIndex, int spawnIndex)
+    //{
+    //    SpawnPowerUp(powerUpId, powerUpList[powerUpIndex], spawnList[spawnIndex]);
+    //}
 
     private void SpawnPowerUp(int powerUpId, GameObject powerUpGO, Transform spawn)
     {

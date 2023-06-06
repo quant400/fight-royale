@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using Mirror;
 using TMPro;
 using System.IO;
+using Photon.Pun;
 
 public class IngameUIControler : MonoBehaviour
 {
@@ -32,14 +33,14 @@ public class IngameUIControler : MonoBehaviour
     [SerializeField]
     TMP_InputField chatinput;
     bool chatOpen=false;
-    public Dictionary<NetworkIdentity,Sprite> chatPics = new Dictionary<NetworkIdentity, Sprite>();
+    public Dictionary<PhotonView,Sprite> chatPics = new Dictionary<PhotonView, Sprite>();
     //public Dictionary<NetworkIdentity,string> NameMap = new Dictionary<NetworkIdentity, string>();
 
     [SerializeField]
     Transform playerDisplayHolder;
     [SerializeField]
     GameObject playerDisplayObject;
-    public Dictionary<NetworkIdentity,Image> playerMap = new Dictionary<NetworkIdentity, Image>();
+    public Dictionary<PhotonView,Image> playerMap = new Dictionary<PhotonView, Image>();
 
     public bool localPlayerSpawned =false;
     int playerNum  = 0;
@@ -190,7 +191,7 @@ public class IngameUIControler : MonoBehaviour
 
     #region Player_Display
 
-    public void AddPlayer(NetworkIdentity p, GameObject chtr)
+    public void AddPlayer(PhotonView p, GameObject chtr)
     {
         var obj= Instantiate(playerDisplayObject, playerDisplayHolder);
         playerMap[p] = obj.transform.GetChild(2).GetChild(0).GetComponent<Image>();
@@ -200,7 +201,7 @@ public class IngameUIControler : MonoBehaviour
         SetChatDict(p);
     }
 
-    public void AddLocalPlayer(NetworkIdentity p)
+    public void AddLocalPlayer(PhotonView p)
     {
         /*var obj = Instantiate(playerDisplayObject, playerDisplayHolder);
         playerMap[p] = obj.transform.GetChild(2).GetChild(0).GetComponent<Image>();
@@ -210,14 +211,14 @@ public class IngameUIControler : MonoBehaviour
         SetChatDict(p);
     }
 
-    void SetChatDict(NetworkIdentity p)
+    void SetChatDict(PhotonView p)
     {
         string cName = p.gameObject.GetComponent<PlayerBehaviour>().pName.Replace(' ', '-');
         Sprite pic = Resources.Load(Path.Combine("DisplaySprites/HeadShots", cName), typeof(Sprite)) as Sprite;
         chatPics.Add(p, pic);
     }
 
-    public void UpdatePlayerHealth(NetworkIdentity p,float newHealth)
+    public void UpdatePlayerHealth(PhotonView p,float newHealth)
     {
         if (playerMap.ContainsKey(p))
         {
@@ -241,14 +242,14 @@ public class IngameUIControler : MonoBehaviour
         scr.text = "SCORE: "+score.ToString();
     }
 
-    public void AddChat(NetworkIdentity n, string Chat)
+    public void AddChat(PhotonView n, string Chat)
     {
         var ch=Instantiate(chatMessage,chatContainer);
         ch.GetComponent<ChatMessage>().SetMessage(n, Chat);
 
     }
 
-    public void RemovePlayer(NetworkIdentity p)
+    public void RemovePlayer(PhotonView p)
     {
         Destroy(playerMap[p].transform.parent.parent.gameObject);
         playerNum--;

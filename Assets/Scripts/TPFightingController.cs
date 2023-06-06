@@ -11,6 +11,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using DG.Tweening;
+using Photon.Pun;
 
 public class TPFightingController : MonoBehaviour
 {
@@ -39,7 +40,7 @@ public class TPFightingController : MonoBehaviour
     [SerializeField] private LayerMask _throwableMask;
     [SerializeField] public Transform _throwTargetTransform;
     public Throwable_BehaviorV2 _carryingObject;
-    [SerializeField] private NetworkTransformChild _carryTransformChild;
+    //[SerializeField] private NetworkTransformChild _carryTransformChild;
 
     [SerializeField]
     GameObject punchEffect, kickEffect;
@@ -62,7 +63,7 @@ public class TPFightingController : MonoBehaviour
 
     void Update()
     {
-        if (_player.isServer || !_player.isLocalPlayer) return;
+        if (/*_player.isServer ||*/ !_player.GetComponent<PhotonView>().IsMine/*isLocalPlayer*/) return;
 
         _player._cControler.stepOffset = _player._tpControler.Grounded ? _stepOffset : 0.1f;
         
@@ -71,12 +72,14 @@ public class TPFightingController : MonoBehaviour
         if (!isAttack && _player._tpControler.Grounded)
         {
             isBlocking = _inputs.block;
-            _player.CmdBlocking(isBlocking);
+            //TODO Suleman: Uncomment Later
+            _player.SetBoolIsBlocking(isBlocking);
             _player.pIsBlocking = isBlocking;
             _anim.SetBool("Block", isBlocking);
         }
         
-        if (_inputs.attack && _player._tpControler.Grounded && !isBlocking && !isHitted)
+        // TODO Suleman: Commented isHitted to resolve issue in which the player was not attacking once it had been attacked and isHitted was set to True, Need to check how to set isHitted to False
+        if (_inputs.attack && _player._tpControler.Grounded && !isBlocking /*&& !isHitted*/)
         {
             if (_isCarrying)
                 PreThrow();
@@ -96,7 +99,8 @@ public class TPFightingController : MonoBehaviour
             _inputs.toggleAttack = false;
         }
 
-        if (_inputs.action && _player._tpControler.Grounded && !isBlocking && !isHitted && _anim.GetLayerWeight(_anim.GetLayerIndex("UpperBody"))==0)
+        // TODO Suleman: Commented isHitted to resolve issue in which the player was not attacking once it had been attacked and isHitted was set to True, Need to check how to set isHitted to False
+        if (_inputs.action && _player._tpControler.Grounded && !isBlocking /*&& !isHitted*/ && _anim.GetLayerWeight(_anim.GetLayerIndex("UpperBody"))==0)
         {
             isAction = true;
 
@@ -174,6 +178,14 @@ public class TPFightingController : MonoBehaviour
 
     private void PlayAttackAnimation(string animName)
     {
+        GetComponent<PhotonView>().RPC("RPCPlayAttackAnimation", RpcTarget.All, animName);
+        // Commented for Photon
+        //_anim.Play(animName);
+    }
+
+    [PunRPC]
+    private void RPCPlayAttackAnimation(string animName)
+    {
         _anim.Play(animName);
     }
 
@@ -209,7 +221,7 @@ public class TPFightingController : MonoBehaviour
         m_PunchComboStep = 0;
         m_KickComboStep = 0;
         
-        if(_player.isLocalPlayer)
+        if(_player.GetComponent<PhotonView>().IsMine/*isLocalPlayer*/)
             _tpController.canMove = true;
     }
     
@@ -234,31 +246,62 @@ public class TPFightingController : MonoBehaviour
     {
         Debug.Log("TakeDamage");
 
-        if (_player.isLocalPlayer)
-            _player.CmdAnimationPickUp(true);
+        if (_player.GetComponent<PhotonView>().IsMine/*isLocalPlayer*/)
+        {
+            //TODO Suleman: Uncomment Later
+            //_player.CmdAnimationPickUp(true);
+            _player.photonView.RPC("CmdAnimationPickUp", RpcTarget.AllBuffered, true);
+        }
+            
 
         if (!_isCarrying) 
         {
-            _anim.Play("Hit");
-            isHitted = true;
+                GetComponent<PhotonView>().RPC("RPCPlayHitAnimation", RpcTarget.All);
+                //_anim.Play("Hit");
+                isHitted = true;
         }
         HitEffect();
     }
 
+    [PunRPC]
+    private void RPCPlayHitAnimation()
+    {
+        _anim.Play("Hit");
+    }
+
     public void ReturnFromHit() 
     {
-        if(_player.isLocalPlayer)
-            _player.CmdAnimationPickUp(false);
+        if(_player.GetComponent<PhotonView>().IsMine/*isLocalPlayer*/)
+        {
+            //TODO Suleman: Uncomment Later
+            //_player.CmdAnimationPickUp(false);
+            _player.photonView.RPC("CmdAnimationPickUp", RpcTarget.AllBuffered, false);
+        }
 
         isHitted = false;
     }
 
     public void BlockDamage()
     {
+        GetComponent<PhotonView>().RPC("RPCPlayBlockDamageAnimation", RpcTarget.All);
+        //_anim.Play("Block Hit");
+    }
+
+    [PunRPC]
+    private void RPCPlayBlockDamageAnimation()
+    {
         _anim.Play("Block Hit");
     }
-    
+
     public void Die()
+    {
+        GetComponent<PhotonView>().RPC("RPCPlayDeathAnimation", RpcTarget.All);
+        // Commented for Photon
+        //_anim.Play("Death");
+    }
+
+    [PunRPC]
+    private void RPCPlayDeathAnimation()
     {
         _anim.Play("Death");
     }
@@ -271,13 +314,13 @@ public class TPFightingController : MonoBehaviour
     
     public void CheckHit()
     {
-        if (!_player.isLocalPlayer ||_player.isServer) return;
+        if (!_player.GetComponent<PhotonView>().IsMine/*isLocalPlayer || _player.isServer*/) return;
         
         var colliders = Physics.OverlapBox(hitCollider.transform.position, hitCollider.size, hitCollider.transform.rotation, playersMask);
 			
         foreach (var collider in colliders.Select(player => player.GetComponent<PlayerBehaviour>()))
         {
-            if (collider.isLocalPlayer || collider == _player) continue;
+            if (collider.GetComponent<PhotonView>().IsMine/*isLocalPlayer*/ || collider == _player) continue;
 
             if (isPunch)
             {
@@ -298,8 +341,10 @@ public class TPFightingController : MonoBehaviour
 
     public void DealDamage(float damage, PlayerBehaviour target)
     {
-            _player.CmdOnDamage(_player.netIdentity, target.netIdentity, damage);
-            Debug.Log($"DealDamage: {_player.pName} deal {damage} damage on {target.pName}");
+        _player.photonView.RPC("CmdOnDamage", RpcTarget.All, _player.GetComponent<PhotonView>().ViewID, target.GetComponent<PhotonView>().ViewID, damage);
+        // Commented for Photon
+        //_player.CmdOnDamage(_player.GetComponent<PhotonView>()/*netIdentity*/, target.GetComponent<PhotonView>()/*netIdentity*/, damage);
+        Debug.Log($"DealDamage: {_player.pName} deal {damage} damage on {target.pName}");
     }
 
     public void CheckCall()
@@ -310,7 +355,7 @@ public class TPFightingController : MonoBehaviour
 			
         foreach (var collider in colliders.Select(player => player.GetComponent<PlayerBehaviour>()))
         {
-            if (collider.isLocalPlayer || collider == _player) continue;
+            if (collider.GetComponent<PhotonView>().IsMine/*isLocalPlayer*/ || collider == _player) continue;
 
             var callId = _player.pName + collider.pName;
             
@@ -326,9 +371,10 @@ public class TPFightingController : MonoBehaviour
     
     public void CheckAction()
     {
-        if (!_player.isLocalPlayer ||_player.isServer) return;
-        
-        var colliders = Physics.OverlapBox(hitCollider.transform.position, hitCollider.size/2, hitCollider.transform.rotation, _throwableMask);
+        // TODO Suleman: Uncomment later, modified for photon
+        if (!_player.photonView.IsMine /*|| _player.isServer*/) return;
+
+        var colliders = Physics.OverlapBox(hitCollider.transform.position, hitCollider.size / 2, hitCollider.transform.rotation, _throwableMask);
 
         var item = colliders.Select(aux => aux.GetComponent<Throwable_BehaviorV2>()).FirstOrDefault();
 
@@ -336,7 +382,7 @@ public class TPFightingController : MonoBehaviour
         {
             if (item.HasCarrier)
             {
-                _player.CmdStealObject(item.carrierNetIdentity);
+                _player.photonView.RPC("CmdStealObject", RpcTarget.AllBuffered, item.carrierNetIdentity.ViewID);
                 //item.carrierNetIdentity.GetComponent<PlayerBehaviour>()._tpFightingControler.StolenObject();
             }
             PrePickUp(item);
@@ -345,36 +391,63 @@ public class TPFightingController : MonoBehaviour
 
     public void PrePickUp(Throwable_BehaviorV2 item)
     {
-        _anim.Play("PickUp");
+        // Commented for Photon
+        //_anim.Play("PickUp");
+        GetComponent<PhotonView>().RPC("RPCPickUpAnimation", RpcTarget.All);
+
         //_anim.SetLayerWeight(_anim.GetLayerIndex("UpperBody"), 1);
 
-        _player.CmdAnimationPickUp(true);
+        //TODO Suleman: Uncomment Later
+        //_player.CmdAnimationPickUp(true);
+        _player.photonView.RPC("CmdAnimationPickUp", RpcTarget.AllBuffered, true);
         _carryingObject = item;
+    }
+
+    [PunRPC]
+    private void RPCPickUpAnimation()
+    {
+        _anim.Play("PickUp");
     }
 
     public void PickUp() 
     {
-        if (!_player.isLocalPlayer || _player.isServer) return;
+        //TODO Suleman: Uncomment Later
+        if (!_player.photonView.IsMine/*isLocalPlayer || _player.isServer*/) return;
 
-        _player.CmdPickUp(_carryingObject.netIdentity);
-        _carryingObject.PickUp(_player.netIdentity, _throwTargetTransform);
+        _player.photonView.RPC("CmdPickUp", RpcTarget.AllBuffered, _carryingObject.photonView.ViewID);
+        _carryingObject.PickUp(_player.photonView, _throwTargetTransform);
 
         isAction = false;
-    }   
+    }
 
     public void PreThrow()
+    {
+        // Commented for Photon
+        //_anim.Play("Throw");
+
+        GetComponent<PhotonView>().RPC("RPCThrowAnimation", RpcTarget.All);
+    }
+
+    [PunRPC]
+    private void RPCThrowAnimation()
     {
         _anim.Play("Throw");
     }
 
     private void Throw()
     {
-        if (!_player.isLocalPlayer || _player.isServer) return;
+        //TODO Suleman: Uncomment Later
+        if (!_player.photonView.IsMine/* || _player.isServer*/) return;
 
-        _carryingObject.Throw();
-        _player.CmdThrow(_carryingObject.netIdentity);
+        //_carryingObject.Throw();
+        _player.photonView.RPC("RpcThrowItem", RpcTarget.AllBuffered, _carryingObject.photonView.ViewID);
+
+        //_player.CmdThrow(_carryingObject.photonView);
+        _player.photonView.RPC("CmdThrow", RpcTarget.AllBuffered, _carryingObject.photonView.ViewID);
         //_anim.SetLayerWeight(_anim.GetLayerIndex("UpperBody"), 0);
-        _player.CmdAnimationPickUp(false);
+
+        //_player.CmdAnimationPickUp(false);
+        _player.photonView.RPC("CmdAnimationPickUp", RpcTarget.AllBuffered, false);
 
         _carryingObject = null;
 
@@ -384,8 +457,10 @@ public class TPFightingController : MonoBehaviour
     public void StolenObject() 
     {
         if (_carryingObject == null) return;
-
-        if(!_player.isServer) _player.CmdAnimationPickUp(false);
+        //TODO Suleman: Uncomment Later
+        /*if (!_player.isServer)*/
+        //_player.CmdAnimationPickUp(false);
+        _player.photonView.RPC("CmdAnimationPickUp", RpcTarget.AllBuffered, false);
         _carryingObject.ResetChair();
         _carryingObject.ResetCollision(_player);
 
@@ -461,7 +536,7 @@ public class TPFightingController : MonoBehaviour
 
     public void HitEffect()
     {
-        if (_player.isLocalPlayer)
+        if (_player.GetComponent<PhotonView>().IsMine/*isLocalPlayer*/)
         {
             cam.Shake(s);
             EnableDamageEffect(1f);

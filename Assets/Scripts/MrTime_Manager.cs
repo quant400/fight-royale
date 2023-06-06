@@ -6,7 +6,7 @@ using Mirror;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class MrTime_Manager : NetworkBehaviour
+public class MrTime_Manager : MonoBehaviour/*NetworkBehaviour*/
 {
     public static MrTime_Manager Instance;
 

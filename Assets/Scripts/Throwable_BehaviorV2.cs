@@ -1,11 +1,12 @@
 using Mirror;
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
-public class Throwable_BehaviorV2 : NetworkBehaviour
+public class Throwable_BehaviorV2 : MonoBehaviourPun /*NetworkBehaviour*/
 {
     private Vector3 _defaultPos;
     private Quaternion _defaultRot;
@@ -17,7 +18,7 @@ public class Throwable_BehaviorV2 : NetworkBehaviour
 
     //Carry variables
     private Transform carrierTarget;
-    public NetworkIdentity carrierNetIdentity;
+    public PhotonView carrierNetIdentity;
 
     public bool HasCarrier => carrierTarget != null;
 
@@ -31,7 +32,7 @@ public class Throwable_BehaviorV2 : NetworkBehaviour
 
     public void Update()
     {
-        if (carrierTarget != null && !isServer)// && carrierNetIdentity.isLocalPlayer) 
+        if (carrierTarget != null/* && !isServer*/)// && carrierNetIdentity.isLocalPlayer) 
         {
             MoveToTarget();
         }
@@ -43,11 +44,15 @@ public class Throwable_BehaviorV2 : NetworkBehaviour
         transform.rotation = carrierTarget.rotation;
     }
 
-    [ClientRpc]
-    public void RpcResetPosition() 
+    // Transferred PUN RPC to PlayerBehaviour.cs
+    // TODO Suleman: Uncomment later
+    //[ClientRpc]
+    [PunRPC]
+    public void RpcResetPosition()
     {
         ResetPosition();
     }
+    // End Transfer
 
     public void ResetPosition() 
     {
@@ -55,7 +60,7 @@ public class Throwable_BehaviorV2 : NetworkBehaviour
         transform.rotation = _defaultRot;
     }
 
-    public bool PickUp(NetworkIdentity carrier, Transform carryTarget) 
+    public bool PickUp(PhotonView carrier, Transform carryTarget) 
     {
         SetNoPhysics(true);
 
@@ -68,7 +73,7 @@ public class Throwable_BehaviorV2 : NetworkBehaviour
         return true;
     }
 
-    public void SetVariable(NetworkIdentity carrier, Transform carryTarget) 
+    public void SetVariable(PhotonView carrier, Transform carryTarget) 
     {
         carrierTarget = carryTarget;
         carrierNetIdentity = carrier;
@@ -86,53 +91,75 @@ public class Throwable_BehaviorV2 : NetworkBehaviour
         SetNoPhysics(false);
     }
 
-    public void Throw() 
+    public void Throw()
     {
         SetNoPhysics(false);
 
-        if (carrierNetIdentity != null) 
+        if (carrierNetIdentity != null)
         {
             var force = (carrierNetIdentity.transform.forward + (Vector3.up / 10)) * throwForce;
             rb.AddForce(force, ForceMode.Force);
-        }       
+        }
 
         carrierTarget = null;
     }
+
+    //[PunRPC]
+    //public void Throw()
+    //{
+    //    SetNoPhysics(false);
+
+    //    if (carrierNetIdentity != null)
+    //    {
+    //        var force = (carrierNetIdentity.transform.forward + (Vector3.up / 10)) * throwForce;
+    //        rb.AddForce(force, ForceMode.Force);
+    //    }
+
+    //    carrierTarget = null;
+    //}
 
 
 
     void OnCollisionEnter(Collision other)
     {
-        if (carrierNetIdentity == null || !isServer) return;
+        if (carrierNetIdentity == null/* || !isServer*/) return;
 
         var player = other.gameObject.GetComponent<PlayerBehaviour>();
         var carrier = carrierNetIdentity.GetComponent<PlayerBehaviour>();
 
-        if (player != null) 
+        //TODO Suleman: Uncomment Later
+        if (player != null)
         {
-            if (player.netId == carrierNetIdentity.netId)
+            if (player.photonView.ViewID == carrierNetIdentity.ViewID)
             {
                 return;
             }
-            else 
+            else
             {
-                carrier.OnDamage(carrier.netIdentity, player.netIdentity, 15);
+                carrier.OnDamage(carrier.photonView, player.photonView, 15);
 
             }
         }
 
         Physics.IgnoreCollision(collider, carrier.GetComponent<CharacterController>(), false);
-        RpcResetCollision(carrierNetIdentity);
+        //RpcResetCollision(carrierNetIdentity);
+        /*carrier.*/photonView.RPC("RpcResetCollision", RpcTarget.AllBuffered, carrierNetIdentity.ViewID);
 
         carrierNetIdentity = null;
     }
 
-    [ClientRpc]
-    public void RpcResetCollision(NetworkIdentity carrier) 
+    // Transferred PUN RPC to PlayerBehaviour.cs
+    // TODO Suleman: Uncomment later
+    //[ClientRpc]
+    [PunRPC]
+    public void RpcResetCollision(int carrierID)
     {
+        Debug.Log("Pick and Throw -> RpcResetCollision -> ThrowableBehaviourv2");
+        PhotonView carrier = PhotonView.Find(carrierID);
         var lastCarrier = carrier.GetComponent<PlayerBehaviour>();
         ResetCollision(lastCarrier);
     }
+    // End Transfer
 
     public void ResetCollision(PlayerBehaviour lastCarrier) 
     {

@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
-public class TimerManager : NetworkBehaviour
+public class TimerManager : MonoBehaviour/*NetworkBehaviour*/
 {
 
     private MenuManager Menu => MenuManager.Instance;
@@ -23,10 +23,16 @@ public class TimerManager : NetworkBehaviour
     public int MaxTime = 60;
     public int CriticalTime = 15;
     public int CloseTime = 5;
-    
-    [SyncVar] public GameState State;
-    [SyncVar(hook = nameof(OnCurrentTimeChange))] public int CurrentTime;
-    [SyncVar(hook = nameof(OnCurrentRoundChange))] public int currentRound = 0;
+
+    // TODO Suleman, Uncomment later
+    //[SyncVar] public GameState State;
+    //[SyncVar(hook = nameof(OnCurrentTimeChange))] public int CurrentTime;
+    //[SyncVar(hook = nameof(OnCurrentRoundChange))] public int currentRound = 0;
+
+    public GameState State;
+    public int CurrentTime;
+    public int currentRound = 0;
+
     private Coroutine _coroutineTimer;
 
     void Start()
@@ -39,7 +45,8 @@ public class TimerManager : NetworkBehaviour
 
     public void StartTime()
     {
-        if (!isServer) return;
+        // Commented for Photon
+        //if (!isServer) return;
         ResetTime();
         
 
@@ -47,7 +54,9 @@ public class TimerManager : NetworkBehaviour
         {
             Console.WriteLine($"Acabou!");
             return;
-            RpcResetDoors();
+
+            // TODO Suleman, Uncomment later
+            //RpcResetDoors();
             currentRound = 0;
         }
         //else
@@ -129,17 +138,18 @@ public class TimerManager : NetworkBehaviour
 
     }
 
-    [ClientRpc]
-    public void RpcCloseDoor(int doorCount)
-    {
-        CloseAreaManager.CloseArea(doorCount);
-    }
-    
-    [ClientRpc]
-    public void RpcResetDoors()
-    {
-        CloseAreaManager.ResetAreas();
-    }
+    // TODO Suleman, Uncomment later
+    //[ClientRpc]
+    //public void RpcCloseDoor(int doorCount)
+    //{
+    //    CloseAreaManager.CloseArea(doorCount);
+    //}
+
+    //[ClientRpc]
+    //public void RpcResetDoors()
+    //{
+    //    CloseAreaManager.ResetAreas();
+    //}
 
 
 
