@@ -81,6 +81,9 @@ public class LockerRoomAPI : MonoBehaviour
     [SerializeField]
     private Image lootSprite;
 
+    [SerializeField]
+    private GameObject grid3DObject, characterSelectionScreen;
+
     /*
     [SerializeField]
     private Sprite juiceBorderSprite, juiceSprite, fightSprite;
@@ -364,9 +367,14 @@ public class LockerRoomAPI : MonoBehaviour
             fightImage.sprite = fightSprite;
             */
 
-            juiceBorderImage.DOColor(defaultColor, 0.5f);
-            juiceImage.DOColor(defaultColor, 0.5f);
-            fightImage.DOColor(defaultColor, 0.5f);
+            //juiceBorderImage.DOColor(defaultColor, 0.5f);
+            //juiceImage.DOColor(defaultColor, 0.5f);
+            //fightImage.DOColor(defaultColor, 0.5f);
+
+            grid3DObject.SetActive(false);
+            characterSelectionScreen.SetActive(true);
+
+            Camera.main.depth = 0;
 
             playButton.interactable = false;
         }

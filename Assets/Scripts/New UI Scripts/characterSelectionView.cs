@@ -83,13 +83,13 @@ public class characterSelectionView : MonoBehaviour
         {
             if (i + startingindex >= myNFT.Length)
             {
-                charButtons[i].GetComponent<ButtonInfoHolder>().SetChar("null");
+                charButtons[i].GetComponent<ButtonInfoHolder>().SetChar("null", "null");
             }
 
             else
             {
                 string charName = NameToSlugConvert(myNFT[i + startingindex].name);
-                charButtons[i].GetComponent<ButtonInfoHolder>().SetChar(charName);
+                charButtons[i].GetComponent<ButtonInfoHolder>().SetChar(charName, myNFT[i + startingindex].attributes[4].value);
                 characterNFTMap[i + startingindex] = myNFT[i + startingindex];
             }
         }
@@ -112,12 +112,12 @@ public class characterSelectionView : MonoBehaviour
 
             if (i + startingindex >= info.Length)
             {
-                charButtons[i].GetComponent<ButtonInfoHolder>().SetChar("null");
+                charButtons[i].GetComponent<ButtonInfoHolder>().SetChar("null", "null");
             } 
             else
             {
                 string name = info[i + startingindex].name;
-                charButtons[i].GetComponent<ButtonInfoHolder>().SetChar(name);
+                charButtons[i].GetComponent<ButtonInfoHolder>().SetChar(name, "MMA");
                 characterNFTMap[i + startingindex] = new Account { id = "175", name = name };
             }
         }
@@ -192,11 +192,13 @@ public class characterSelectionView : MonoBehaviour
         {
 
             if (i + startingindex >= info.Length)
-                charButtons[i].GetComponent<ButtonInfoHolder>().SetChar("null");
+                charButtons[i].GetComponent<ButtonInfoHolder>().SetChar("null", "null");
             else
             {
                 string name = info[i + startingindex].name;
-                charButtons[i].GetComponent<ButtonInfoHolder>().SetChar(name);
+                //charButtons[i].GetComponent<ButtonInfoHolder>().SetChar(name);
+
+                charButtons[i].GetComponent<ButtonInfoHolder>().SetChar(name, "free mint");
                 characterNFTMap[i + startingindex] = new Account
                 {
                     id = gameplayView.instance.GetLoggedPlayerString(),
@@ -214,7 +216,8 @@ public class characterSelectionView : MonoBehaviour
                         new Attribute2 { trait_type = "rarity", value = "unlimited" },
                         new Attribute2 { trait_type = "edition", value = "free mint" },
                     },
-                    };
+                };
+
             }
         }
         ResetAvalaibleColors();

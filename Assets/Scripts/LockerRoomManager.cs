@@ -50,6 +50,8 @@ public class LockerRoomManager : MonoBehaviour
     private Image statsBackground, characterNameBorder;
     [SerializeField]
     private Image baseImage;
+    [SerializeField]
+    private Material gridMaterial;
 
     private Image gridImage, rightButtonImage, leftButtonImage, backButtonImage;
 
@@ -338,8 +340,9 @@ public class LockerRoomManager : MonoBehaviour
         statsBackground.DOColor(changeColor, 0.5f);
         baseImage.DOColor(fighterEditionColors[fightType], 0.5f);
         gridImage.DOColor(fighterEditionColors[fightType], 0.5f);
+        gridMaterial.DOColor(fighterEditionColors[fightType], 0.5f);
 
-        if(fightType == "free mint")
+        if (fightType == "free mint")
         {
             rightButtonImage.DOColor(fighterEditionColors["Default"], 0.5f);
             leftButtonImage.DOColor(fighterEditionColors["Default"], 0.5f);
@@ -3679,6 +3682,16 @@ public class LockerRoomManager : MonoBehaviour
             }
         }
         
+    }
+
+    public void Camera3DGridView()
+    {
+        mainCamera.depth = 2;
+    }
+
+    public void CameraMysteryBoxView()
+    {
+        mainCamera.depth = 0;
     }
 
     private void GoToSelectionScreenAnimation()
