@@ -35,12 +35,19 @@ public class characterSelectionView : MonoBehaviour
         backButton.onClick.AddListener(BackButtonOnClick);
         //charButtons[0].GetComponent<ButtonInfoHolder>().SetChar("a-rod");
         //StartCoroutine(GetRequest("https://api.cryptofightclub.io/game/sdk/0xbecd7b5cfab483d65662769ad4fecf05be4d4d05"));
-        gameplayView.instance.juiceDisplay.ActivateJuiceDisplay();
+        
         DisablePlay();
         leftButton.gameObject.SetActive(false);
     }
 
-    
+    private void OnEnable()
+    {
+        gameplayView.instance.juiceDisplay.ActivateJuiceDisplay();
+        gameplayView.instance.juiceDisplay.DeactivateJuiceDisplay();
+        gameplayView.instance.juiceDisplay.ActivateJuiceDisplay();
+    }
+
+
     #region login functions
     public void SetUpCharactersLogin()
     {

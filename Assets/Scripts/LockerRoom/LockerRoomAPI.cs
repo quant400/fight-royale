@@ -89,7 +89,7 @@ public class LockerRoomAPI : MonoBehaviour
     private Sprite juiceBorderSprite, juiceSprite, fightSprite;
     */
     [SerializeField]
-    private Image juiceBorderImage, juiceImage, fightImage;
+    private Image juiceBorderImage;
     
 
     // Start is called before the first frame update
@@ -337,8 +337,8 @@ public class LockerRoomAPI : MonoBehaviour
     public void ChangeUiColor(Color32 change)
     {
         juiceBorderImage.DOColor(change, 0.5f);
-        juiceImage.DOColor(change, 0.5f);
-        fightImage.DOColor(change, 0.5f);
+        //juiceImage.DOColor(change, 0.5f);
+        //fightImage.DOColor(change, 0.5f);
     }
 
     public void BackToCharacterScreen()

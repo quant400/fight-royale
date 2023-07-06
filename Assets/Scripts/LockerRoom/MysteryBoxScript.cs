@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
+using MoreMountains.Feedbacks;
+using MoreMountains.Tools;
 
 public class MysteryBoxScript : MonoBehaviour
 {
@@ -30,6 +32,11 @@ public class MysteryBoxScript : MonoBehaviour
 
     [SerializeField]
     private GameObject loot;
+
+    public MMFeedbacks MysterBoxOpenFeedback;
+    
+    [SerializeField]
+    private ParticleSystem sparkle1, sparkle2, sparkle3;
 
     /*
     private RaycastHit hit;
@@ -99,7 +106,7 @@ public class MysteryBoxScript : MonoBehaviour
     
     public void LootReward()
     {
-        lockerRoomApi.MintWearable(lockerRoomManager.currentCharacter.nftID.ToString(), "rand");
+        //lockerRoomApi.MintWearable(lockerRoomManager.currentCharacter.nftID.ToString(), "rand");
 
         StartCoroutine(LootOpeningAnimation());
     }
@@ -111,11 +118,16 @@ public class MysteryBoxScript : MonoBehaviour
 
         //loot.GetComponent<RectTransform>().DOLocalMoveZ(loot.GetComponent<RectTransform>().position.z - 221, 2f);
 
+        MysterBoxOpenFeedback?.PlayFeedbacks();
+
 
         yield return new WaitForSeconds(0.2f);
 
         animator.SetBool("isOpen", true);
 
+        sparkle1.Play();
+        sparkle2.Play();
+        sparkle3.Play();
 
         float origY = loot.GetComponent<RectTransform>().localPosition.y;
 
@@ -125,10 +137,6 @@ public class MysteryBoxScript : MonoBehaviour
 
         loot.GetComponent<RectTransform>().localScale = Vector3.zero;
 
-
-        Debug.Log("origY = " + origY);
-
-        Debug.Log("origZ = " + origZ);
 
         yield return new WaitForSeconds(0.1f);
 

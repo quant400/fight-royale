@@ -9,6 +9,8 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using CFC.Serializable;
 using System;
+using MoreMountains.Feedbacks;
+using UnityEngine.Events;
 
 public class LockerRoomManager : MonoBehaviour
 {
@@ -48,6 +50,8 @@ public class LockerRoomManager : MonoBehaviour
     private Image stillBackground;
     [SerializeField]
     private Image statsBackground, characterNameBorder;
+    [SerializeField]
+    private List<GameObject> CharacterButton;
     [SerializeField]
     private Image baseImage;
     [SerializeField]
@@ -114,6 +118,9 @@ public class LockerRoomManager : MonoBehaviour
     [SerializeField]
     private Image[] statsIconsUI;
 
+    [SerializeField]
+    private Button[] charcterPosesUI;
+
     private Button[] objectButtons;
 
     private RectTransform[] rectTransforms;
@@ -135,6 +142,9 @@ public class LockerRoomManager : MonoBehaviour
     private RectTransform gridObjectRectTransform;
     private CanvasGroup gridObjectCanvasGroup;
     private int gridSelectionNum = 0;
+
+    [SerializeField]
+    private GridMovement BackgroundGrid;
 
     private int currentPage = 0;
     private int totalPages = 0;
@@ -191,10 +201,10 @@ public class LockerRoomManager : MonoBehaviour
     Button right, left, backButton;
     //private const string CSV_FILE_PATH = "CSV/WearableDatabase";
 
-    //private WearableDatabaseReader wearableDatabase;
+    public MMFeedbacks RightPressFeedback;
+    public MMFeedbacks LeftPressFeedback;
 
-    [SerializeField]
-    Sprite juiceSpriteRed, juiceSpritePurple;
+    //private WearableDatabaseReader wearableDatabase;
 
     public CurrentCharacter currentCharacter;
 
@@ -302,8 +312,6 @@ public class LockerRoomManager : MonoBehaviour
             if(attributes.trait_type == "edition")
             {
                 currentCharacter.fighterEdition = attributes.value;
-
-                Debug.Log(currentCharacter.fighterEdition);
                 /*
                 stillBackground.sprite = Resources.Load(Path.Combine("DisplaySprites/UI/" + currentCharacter.fighterEdition + "/", "change"), typeof(Sprite)) as Sprite;
                 statsBackground.sprite = Resources.Load(Path.Combine("DisplaySprites/UI/" + currentCharacter.fighterEdition + "/", "icon design 4"), typeof(Sprite)) as Sprite;
@@ -411,7 +419,13 @@ public class LockerRoomManager : MonoBehaviour
             //slidersGreenUI[i].transform.GetChild(1).GetChild(0).GetComponent<Image>().DOColor(fighterEditionColors[fightType], 0.5f);
         }
 
-        
+        for (int i = 0; i < charcterPosesUI.Length; i++)
+        {
+            charcterPosesUI[i].image.DOColor(fighterEditionColors[fightType], 0.5f);
+
+            charcterPosesUI[i].transform.GetChild(0).GetComponent<Image>().DOColor(fighterEditionColors[fightType], 0.5f);
+        }
+
         foreach (GameObject objectImage in wearableButtons)
         {
             if(objectImage.transform.GetChild(0).GetComponent<Image>().color.a < 1)
@@ -607,6 +621,8 @@ public class LockerRoomManager : MonoBehaviour
                     }
                 }
             }
+
+            SetAttributeSliders(totalAttributes, true);
         }
         else
         {
@@ -636,8 +652,6 @@ public class LockerRoomManager : MonoBehaviour
             previewAttributes.Add(attributes.Key, attributes.Value);
         }
         
-
-        SetAttributeSliders(totalAttributes, true);
     }
 
     public void GetWearablesModelArray()
@@ -1052,6 +1066,8 @@ public class LockerRoomManager : MonoBehaviour
     {
         ChangeCharacterAnimation(true);
 
+        RightPressFeedback?.PlayFeedbacks();
+
         currentModel++;
 
         if(models.Count <= currentModel)
@@ -1106,6 +1122,8 @@ public class LockerRoomManager : MonoBehaviour
     public void ModelLeftButton()
     {
         ChangeCharacterAnimation(false);
+
+        LeftPressFeedback?.PlayFeedbacks();
 
         currentModel--;
 
@@ -2565,6 +2583,8 @@ public class LockerRoomManager : MonoBehaviour
                 {
                     WearableSwapper(belts[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]);
 
+                    DefaultWearableAnimation();
+
                     if (currentBelt[0] != -1)
                     {
                         previewAttributes["attack"] -= lockerRoomApi.wearableDatabase.GetAtk(currentBelt[0]);
@@ -2610,6 +2630,8 @@ public class LockerRoomManager : MonoBehaviour
 
                     WearableSwapper(glasses[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]);
 
+                    DefaultWearableAnimation();
+
                     wearableButtonSelected[1] = previouValue[0];
                     wearableButtonSelected[5] = previouValue[1];
 
@@ -2654,6 +2676,8 @@ public class LockerRoomManager : MonoBehaviour
 
                     WearableSwapper(masks[((wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))) - glasses.Count]);
 
+                    DefaultWearableAnimation();
+
                     wearableButtonSelected[1] = previouValue[0];
                     wearableButtonSelected[5] = previouValue[1];
 
@@ -2691,6 +2715,8 @@ public class LockerRoomManager : MonoBehaviour
                 if ((wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) < gloves.Count)
                 {
                     WearableSwapper(gloves[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]);
+
+                    GloveAnimation();
 
                     if (currentGloves[0] != -1)
                     {
@@ -2731,6 +2757,8 @@ public class LockerRoomManager : MonoBehaviour
                 {
                     WearableSwapper(shoes[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]);
 
+                    ShoeAnimation();
+
                     if (currentShoes[0] != -1)
                     {
                         previewAttributes["attack"] -= lockerRoomApi.wearableDatabase.GetAtk(currentShoes[0]);
@@ -2770,8 +2798,11 @@ public class LockerRoomManager : MonoBehaviour
                 {
                     WearableSwapper(shorts[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]);
 
+                    DefaultWearableAnimation();
+
                     if (currentShort[0] != -1)
                     {
+
                         previewAttributes["attack"] -= lockerRoomApi.wearableDatabase.GetAtk(currentShort[0]);
 
                         previewAttributes["defense"] -= lockerRoomApi.wearableDatabase.GetDef(currentShort[0]);
@@ -2809,6 +2840,8 @@ public class LockerRoomManager : MonoBehaviour
                 if ((wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1)) < trainers.Count)
                 {
                     WearableSwapper(trainers[(wearableNum - 2) + ((currentPage - 1) * (gridObject.transform.childCount - 1))]);
+
+                    DefaultWearableAnimation();
 
                     if (currentTrainers[0] != -1)
                     {
@@ -3137,6 +3170,8 @@ public class LockerRoomManager : MonoBehaviour
         {
             Account[] used = gameplayView.instance.currentNFTs;
 
+            SetupCharacterButtons(used);
+
             SetData(used);
 
             EmptyAllLists();
@@ -3203,6 +3238,131 @@ public class LockerRoomManager : MonoBehaviour
         }
     }
 
+    private void SetupCharacterButtons(Account[] nfts)
+    {
+        int loopLength = nfts.Length;
+
+        if(nfts.Length > 5)
+        {
+            right.gameObject.SetActive(true);
+            left.gameObject.SetActive(true);
+        }
+
+        if (loopLength > 1)
+        {
+            for (int i = 0; i < loopLength; i++)
+            {
+                if(i > 0)
+                {
+                    CharacterButton.Add(GameObject.Instantiate(CharacterButton[0], CharacterButton[0].transform.parent));
+
+                    CharacterButton[i].transform.SetSiblingIndex(CharacterButton[i - 1].transform.GetSiblingIndex() + 1);
+                }
+
+                CharacterButton[i].transform.GetChild(1).GetComponent<TMP_Text>().text = nfts[i].name.ToUpper();
+
+                CharacterButton[i].transform.GetChild(2).GetComponent<Image>().sprite = Resources.Load(Path.Combine("DisplaySprites/HeadShots/", NameToSlugConvert(nfts[i].name)), typeof(Sprite)) as Sprite;
+
+                foreach (Attribute2 attributes in nfts[i].attributes)
+                {
+                    if (attributes.trait_type == "edition")
+                    {
+                        CharacterButton[i].GetComponent<Image>().DOColor(fighterEditionColors[attributes.value], 0.5f);
+                    }
+                }
+
+                if(i > 5)
+                {
+                    CharacterButton[i].SetActive(false);
+                }
+            }
+        }
+
+        CharacterButton[0].transform.GetChild(3).gameObject.SetActive(true);
+    }
+
+    public void SelectCharacterButton(GameObject characterButtonSelected)
+    {
+        int index = characterButtonSelected.transform.GetSiblingIndex() - 1;
+
+        //Debug.Log(index);
+
+        TurnOffAllSelected();
+
+        characterButtonSelected.transform.GetChild(3).gameObject.SetActive(true);
+
+
+        if (currentModel != index)
+        {
+            if(currentModel < index)
+            {
+                ChangeCharacterAnimation(true);
+            }
+            else
+            {
+                ChangeCharacterAnimation(false);
+            }
+
+            currentModel = index;
+
+            if (models.Count <= currentModel)
+            {
+                currentModel = 0;
+            }
+
+            EmptyWearablesLists();
+
+            //currentNFT = gameplayView.instance.currentNFTs[currentModel].id;
+
+            currentCharacter.nftID = gameplayView.instance.currentNFTs[currentModel].id;
+
+            ResetCurrents();
+
+            gridSelectionNum = 0;
+
+            foreach (Slider slider in slidersUI)
+            {
+                slider.DOKill();
+                slider.value = 0;
+
+            }
+
+            foreach (Slider slider in slidersGreenUI)
+            {
+                slider.DOKill();
+                slider.value = 0;
+            }
+
+            DisableLeftRight();
+            lockerRoomApi.GetWearables(currentCharacter.nftID.ToString(), true);
+
+            KeyMaker.instance.getJuiceFromRestApi(currentCharacter.nftID);
+
+            GetCharacterAttributes(currentModel);
+
+
+            ActiveModelSwap(models[currentModel], 1);
+
+            /*
+            if (currentModel + 1 < models.Count)
+            {
+                ActiveModelSwap(models[currentModel + 1], 2);
+
+                ActiveModelSwap(models[models.Count - 1], 3);
+
+            }
+            */
+        }
+    }
+
+    private void TurnOffAllSelected()
+    {
+        foreach (GameObject charbutton in CharacterButton)
+        {
+            charbutton.transform.GetChild(3).gameObject.SetActive(false);
+        }
+    }
+
     private void AssignFighterColors()
     {
         fighterEditionColors.Add("Muay Thai", new Color32(0, 66, 145, 255));
@@ -3215,7 +3375,7 @@ public class LockerRoomManager : MonoBehaviour
         fighterEditionColors.Add("Karate", new Color32(223, 56, 156, 255));
         fighterEditionColors.Add("Jiu Jitsu", new Color32(28, 134, 210, 255));
         fighterEditionColors.Add("Judo", new Color32(101, 180, 74, 255));
-        fighterEditionColors.Add("free mint", new Color32(255, 255, 255, 255));
+        fighterEditionColors.Add("free mint", new Color32(172, 172, 172, 255));
         fighterEditionColors.Add("Default", new Color32(134, 0, 255, 255));
     }
 
@@ -3705,7 +3865,7 @@ public class LockerRoomManager : MonoBehaviour
 
         //playerBodyRectTransform.DOLocalMoveX(50, 0.5f);
 
-        baseObjectRectTransform.DOLocalMoveX(-80, 0.5f);
+        baseObjectRectTransform.DOLocalMoveX(baseObjectRectTransform.localPosition.x - 80, 0.5f);
 
         gridObjectCanvasGroup.DOFade(1.0f, 0.5f);
 
@@ -3723,7 +3883,7 @@ public class LockerRoomManager : MonoBehaviour
 
         //playerBodyRectTransform.DOLocalMoveX(0, 0.5f);
 
-        baseObjectRectTransform.DOLocalMoveX(0, 0.5f);
+        baseObjectRectTransform.DOLocalMoveX(baseObjectRectTransform.localPosition.x + 80, 0.5f);
 
         gridObjectCanvasGroup.DOFade(0.0f, 0.5f);
 
@@ -3735,10 +3895,14 @@ public class LockerRoomManager : MonoBehaviour
         if(isRight)
         {
             baseObjectRectTransform.DOLocalMoveX(-2000, 0.25f).OnComplete(RightAnimation);
+
+            BackgroundGrid.MoveRightCharacter();
         }
         else
         {
             baseObjectRectTransform.DOLocalMoveX(2000, 0.25f).OnComplete(LeftAnimation);
+
+            BackgroundGrid.MoveLeftCharacter();
         }
     }
 
@@ -3754,6 +3918,74 @@ public class LockerRoomManager : MonoBehaviour
         baseObjectRectTransform.localPosition = new Vector3(-2000, baseObjectRectTransform.localPosition.y, baseObjectRectTransform.localPosition.z);
 
         baseObjectRectTransform.DOLocalMoveX(0f, 0.25f);
+    }
+
+    public void TPoseAnimation()
+    {
+        playerAnimator.SetBool("isTPose", true);
+    }
+
+    public void IdleAnimation()
+    {
+        playerAnimator.SetBool("isTPose", false);
+    }
+
+    public void DefaultWearableAnimation()
+    {
+        string[] toDisable = { "GloveEquip", "ShoeEquip" };
+
+        foreach (string animationName in toDisable)
+        {
+            playerAnimator.SetBool(animationName, false);
+        }
+
+        playerAnimator.SetBool("DWearableEquip", true);
+
+        StartCoroutine(TurnAnimationOff(2.933f, "DWearableEquip", toDisable));
+    }
+
+    public void GloveAnimation()
+    {
+        string[] toDisable = { "ShoeEquip", "DWearableEquip" };
+
+        foreach (string animationName in toDisable)
+        {
+            playerAnimator.SetBool(animationName, false);
+        }
+
+        playerAnimator.SetBool("GloveEquip", true);
+
+        StartCoroutine(TurnAnimationOff(4.433f, "GloveEquip", toDisable));
+    }
+
+    public void ShoeAnimation()
+    {
+        string[] toDisable = { "GloveEquip", "DWearableEquip" };
+
+        foreach(string animationName in toDisable)
+        {
+            playerAnimator.SetBool(animationName, false);
+        }
+
+        playerAnimator.SetBool("ShoeEquip", true);
+
+        StartCoroutine(TurnAnimationOff(10.567f, "ShoeEquip", toDisable));
+    }
+
+    IEnumerator TurnAnimationOff(float secs, string animationName, string[] otherAnimationNames)
+    {
+        yield return new WaitForSeconds(secs);
+        /*
+        foreach (string otherAnimationName in otherAnimationNames)
+        {
+            if (playerAnimator.GetBool(otherAnimationName))
+            {
+                playerAnimator.SetBool(animationName, false);
+            }
+        }
+        */
+
+        playerAnimator.SetBool(animationName, false);
     }
 
     private List<string> ModelNames(string folderPath)

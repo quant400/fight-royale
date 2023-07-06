@@ -153,6 +153,6 @@ public class ButtonInfoHolder : MonoBehaviour
         fighterEditionColors.Add("Jiu Jitsu", new Color32(28, 134, 210, 255));
         fighterEditionColors.Add("Judo", new Color32(101, 180, 74, 255));
         fighterEditionColors.Add("free mint", new Color32(255, 255, 255, 255));
-        fighterEditionColors.Add("Default", new Color32(134, 0, 255, 255));
+        fighterEditionColors.Add("Default", new Color32(130, 130, 130, 255));
     }
 }

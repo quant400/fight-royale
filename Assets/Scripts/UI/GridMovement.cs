@@ -6,21 +6,29 @@ using DG.Tweening;
 public class GridMovement : MonoBehaviour
 {
 
-    private Vector3 initialPosition;
+    private Vector3 thisObjectInitialPosition, CharacterBaseInitialPosition;
 
     [SerializeField]
-    private RectTransform rectTransform;
+    private RectTransform thisObjectRectTransform, CharacterBaseRectTransform;
+
+    private bool isSelectionScreen = false;
 
     private void Awake()
     {
-        initialPosition = rectTransform.localPosition;
+        thisObjectInitialPosition = thisObjectRectTransform.localPosition;
+
+        CharacterBaseInitialPosition = CharacterBaseRectTransform.localPosition;
     }
 
     private void OnEnable()
     {
-        rectTransform.localPosition = new Vector3(initialPosition.x, initialPosition.y, initialPosition.z - 2000);
+        thisObjectRectTransform.localPosition = new Vector3(thisObjectInitialPosition.x, thisObjectInitialPosition.y, thisObjectInitialPosition.z - 2000);
 
-        rectTransform.DOLocalMoveZ(initialPosition.z, 2f).SetEase(Ease.OutExpo);
+        //CharacterBaseRectTransform.localPosition = new Vector3(CharacterBaseInitialPosition.x, CharacterBaseInitialPosition.y, CharacterBaseInitialPosition.z - 2000);
+
+        thisObjectRectTransform.DOLocalMoveZ(thisObjectInitialPosition.z, 2f).SetEase(Ease.OutExpo);
+
+        //CharacterBaseRectTransform.DOLocalMoveZ(CharacterBaseInitialPosition.z, 2f).SetEase(Ease.OutExpo);
     }
 
     // Start is called before the first frame update
@@ -35,17 +43,34 @@ public class GridMovement : MonoBehaviour
         
     }
 
-    public void MoveRight()
+    public void MoveRightCharacter()
     {
-        rectTransform.localPosition = new Vector3(rectTransform.localPosition.x + 1000, initialPosition.y, initialPosition.z);
+        thisObjectRectTransform.localPosition = new Vector3(thisObjectRectTransform.localPosition.x + 2000, thisObjectInitialPosition.y, thisObjectInitialPosition.z);
 
-        rectTransform.DOLocalMoveX(rectTransform.localPosition.x - 1000, 0.5f);
+        thisObjectRectTransform.DOLocalMoveX(thisObjectRectTransform.localPosition.x - 2000, 0.5f);
     }
 
-    public void MoveLeft()
+    public void MoveLeftCharacter()
     {
-        rectTransform.localPosition = new Vector3(rectTransform.localPosition.x - 1000, initialPosition.y, initialPosition.z);
+        thisObjectRectTransform.localPosition = new Vector3(thisObjectRectTransform.localPosition.x - 2000, thisObjectInitialPosition.y, thisObjectInitialPosition.z);
 
-        rectTransform.DOLocalMoveX(rectTransform.localPosition.x + 1000, 0.5f);
+        thisObjectRectTransform.DOLocalMoveX(thisObjectRectTransform.localPosition.x + 2000, 0.5f);
+    }
+
+    public void GoToSelectionScreen()
+    {
+        thisObjectRectTransform.DOLocalMoveX(thisObjectRectTransform.localPosition.x - 40, 0.5f);
+
+        isSelectionScreen = true;
+    }
+
+    public void BackFromSelectionScreen()
+    {
+        if(isSelectionScreen)
+        {
+            thisObjectRectTransform.DOLocalMoveX(thisObjectRectTransform.localPosition.x + 40, 0.5f);
+
+            isSelectionScreen = false;
+        }
     }
 }
